@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.app.alarmavecinal">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="false"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Usuario.Registro.RegistroView"
+            android:exported="true" />
+        <activity
+            android:name=".Usuario.Login.LoginView"
+            android:exported="true" />
+        <activity
+            android:name=".Tabs.AyudaGrupoTab"
+            android:label="@string/title_activity_ayuda_grupo_tab"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Variado.AyudaGrupo" />
+        <activity android:name=".Mapas.Ruta" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity android:name=".Mapas.MapaEmergencia" />
+        <activity
+            android:name=".ChatFb.SalaChat"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Transmision.ListaTransmision"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Transmision.VerTransmision"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Transmision.Grabacion"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".Grupos.ListaVecinos"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Sugerencias.SubirSugerencia"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AnunciosLocales.SubirAnuncio" />
+        <activity android:name=".AnunciosLocales.VerAnuncios" />
+        <activity android:name=".Debug.VisorTexto" />
+        <activity
+            android:name=".Chat.ChatWindow"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".EditarInfo.Datos" />
+        <activity android:name=".LoginPack.Recuperar" />
+        <activity android:name=".FuncioneAvisos.AvisosMensaje" />
+        <activity
+            android:name=".FuncioneAvisos.NewAvisos"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FuncioneAvisos.AvisosLista"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FuncionAlertas.NewAlerta"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".FuncionAlertas.AlertasMensaje" />
+        <activity
+            android:name=".FuncionAlertas.AlertasLista"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Grupos.Escaner" />
+        <activity
+            android:name=".Grupos.Grupo"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.app-lab.com.mx"
+                    android:pathPrefix="/Grupo.php"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".LoginPack.Registro" />
+        <activity android:name=".VerEmergencia" />
+        <activity
+            android:name=".Principal"
+            android:label="@string/title_activity_principal"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".LoginPack.Login" />
+        <activity
+            android:name=".Portada"
+            android:theme="@style/Theme.Transparent">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="true" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9864387520697583~5379774173" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/logo" />
+
+        <receiver android:name=".Servicios.Lanzador">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".Servicios.Emergencia"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".Servicios.Notificador"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".Notificaciones.Notificacionesfb"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+    </application>
+
+</manifest>

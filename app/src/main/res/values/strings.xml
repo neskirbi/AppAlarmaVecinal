@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">AlarmaVecinal</string>
+    <string name="title_activity_principal">Principal</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <string name="url">https://app-lab.com.mx/AVL/public/</string>
+    <string name="url_debug">http://192.168.1.121/AVL/public/</string>
+
+    <string name="url_registrar">api/usuarios</string>
+    <string name="url_login">api/login</string>
+    <string name="url_edit">api/usuarios</string>
+
+    <string name="url_crear_grupo">api/grupos</string>
+    <string name="url_unirse_grupo">api/unirse</string>
+    <string name="url_salir_grupo">api/salir</string>
+
+    <string name="url_prealertas">api/prealertas</string>
+
+
+    <string name="url_GetOneUser">api/GetOneUser</string>
+    <string name="url_SetUsuario">api/SetUsuario</string>
+    <string name="url_Recuperar">api/Recuperar</string>
+
+    <string name="url_GetInfoToEdit">api/GetInfoToEdit</string>
+    <string name="url_SetInfoEdit">api/SetInfoEdit</string>
+
+    <string name="url_SetChat">api/SetChat</string>
+    <string name="url_GetChat">api/GetChat2</string>
+
+    <string name="url_SetEmergencia">api/SetEmergencia</string>
+    <string name="url_GetNotificaciones">api/GetNotificaciones</string>
+
+    <string name="url_SetAlertas">api/SetAlertas</string>
+    <string name="url_GetAlertas">api/GetAlertas</string>
+    <string name="url_GetPreAlertas">api/GetPreAlertas</string>
+
+    <string name="url_SetAvisos">api/SetAvisos</string>
+    <string name="url_GetAvisos">api/GetAvisos</string>
+
+    <string name="url_GetGrupo">api/GetGrupo</string>
+    <string name="url_SetGrupo">api/SetGrupo</string>
+    <string name="url_SalirGrupo">api/SalirGrupo</string>
+
+    <string name="dir_audio_send">/AlarmaVecinal/AudioChat/send/</string>
+    <string name="dir_audio">/AlarmaVecinal/AudioChat/</string>
+
+    <string name="url_SetSugerencia">api/SetSugerencia</string>
+    <string name="url_GetVecinosGrupo">api/GetVecinosGrupo</string>
+
+    <string name="url_SetSacarGrupo">api/SetSacarGrupo</string>
+    <string name="url_SetBloqueo">api/SetBloqueo</string>
+
+    <string name="url_GetBloqueados">api/GetBloqueados</string>
+    <string name="url_SetDesbloqueo">api/SetDesbloqueo</string>
+    <string name="url_GetPuedoGrupo">api/GetPuedoGrupo</string>
+    <string name="url_CheckGrupo">api/CheckGrupo</string>
+
+    <string name="url_SetStreamming">api/SetStreamming</string>
+    <string name="url_GuardarStreamming">api/GuardarStreamming</string>
+    <string name="url_GetListaStreamming">api/GetListaStreamming</string>
+    <string name="url_GetStreamming">api/GetStreamming</string>
+    <string name="url_GetShots">streamming/</string>
+
+
+    <string name="dir_foto_send">/AlarmaVecinal/Transmision/send/</string>
+    <string name="url_CargarArchivo">api/CargarArchivo</string>
+    <string name="url_CargarAudio">api/CargarAudio</string>
+    <string name="url_DescargaAudio">chat/audios</string>
+    <string name="dir_imagen">/AlarmaVecinal/ImagenChat/</string>
+    <string name="url_DescargaImagen">chat/imagenes</string>
+    <string name="url_SendNotifications">api/SendNotifications</string>
+    <string name="url_UpdatefbToken">api/UpdatefbToken</string>
+
+    //Poner llave googlemaps(Recuerda poner la llave que es para la version de produccion)
+    <string name="google_maps_key">AIzaSRD1UpmBYBueQcmF_zwJ_iakT0CUXpRRDlQ</string>
+
+    <string name="id_banner_p">ca-app-pub-9864387520697583/7035351219</string>
+    <!--para la version de produccion debe tener la _p el de abajo-->
+    <string name="id_banner">ca-app-pub-3940256099942544/6300978111</string>
+
+
+    <string name="title_activity_ayuda_grupo_tab">AyudaGrupoTab</string>
+    <string name="tab_text_1">Crear</string>
+    <string name="tab_text_2">Unirse</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="url_SubirSugerencia">api/sugerencias</string>
+
+
+</resources>

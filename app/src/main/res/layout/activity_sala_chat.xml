@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChatFb.SalaChat">
+
+
+    <!--<FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="@color/colorPrimary"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:id="@+id/ngrupo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chat"
+            android:textStyle=""
+            android:textSize="15dp"
+            android:textColor="#fff"
+            android:layout_gravity="center_vertical|center_horizontal"/>
+    </FrameLayout>-->
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="120dp"
+        android:background="@drawable/f_chat">
+
+        <LinearLayout
+            android:id="@+id/chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/f_chat2"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="60dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/input_chat"
+            android:layout_gravity="center_vertical"
+            android:minHeight="45dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_marginLeft="15dp">
+            <FrameLayout
+                android:id="@+id/grabacion"
+                android:layout_width="150sp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical|right"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp">
+                    <TextView
+                        android:id="@+id/timerecord"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00:00"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/img_grabando"/>
+                </LinearLayout>
+
+
+                <ImageView
+                    android:id="@+id/cancelar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:src="@drawable/boton_cancel"/>
+
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/mensaje"
+                android:layout_height="wrap_content"
+                android:layout_width="150sp"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:background="@color/transparente"/>
+
+            <ImageView
+                android:id="@+id/attach"
+                android:src="@drawable/img_clip"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginLeft="15dp"
+                android:visibility="gone"/>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_gravity="center_vertical|right"
+                android:layout_marginLeft="20dp">
+
+                <ImageView
+                    android:id="@+id/cancel_img"
+                    android:src="@drawable/boton_cancel"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/cam"
+                    android:src="@drawable/ic_menu_camera"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+            </FrameLayout>
+
+
+
+
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/boton_chat">
+            <ImageView
+                android:id="@+id/grabar"
+                android:onClick="Enviar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:src="@drawable/boton_grabar"/>
+            <ImageView
+                android:id="@+id/enviar"
+                android:onClick="Enviar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:src="@drawable/ic_menu_send"
+                android:visibility="gone"/>
+        </FrameLayout>
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/preview_imagen"
+        android:layout_width="250dp"
+        android:layout_height="0dp"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="120dp"
+        android:padding="5dp"
+        android:background="@drawable/redondeado"/>
+
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/id_banner"></com.google.android.gms.ads.AdView>
+</FrameLayout>

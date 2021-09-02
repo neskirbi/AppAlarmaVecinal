@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "22998380621",
+    "firebase_url": "https://alarma-vecinal-9d84d.firebaseio.com",
+    "project_id": "alarma-vecinal-9d84d",
+    "storage_bucket": "alarma-vecinal-9d84d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:22998380621:android:03697165ff4865a3f26c04",
+        "android_client_info": {
+          "package_name": "com.app.alarmavecinal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "22998380621-0om8nve0os4i95tbgkths7ro1bu9cl7v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSRD1UpmBYBueQcmF_zwJ_iakT0CUXpRRDlQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "22998380621-0om8nve0os4i95tbgkths7ro1bu9cl7v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:22998380621:android:9898f12758ea2355f26c04",
+        "android_client_info": {
+          "package_name": "com.app.pruebas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "22998380621-0om8nve0os4i95tbgkths7ro1bu9cl7v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSRD1UpmBYBueQcmF_zwJ_iakT0CUXpRRDlQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "22998380621-0om8nve0os4i95tbgkths7ro1bu9cl7v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

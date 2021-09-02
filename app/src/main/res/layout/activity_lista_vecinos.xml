@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Grupos.ListaVecinos">
+
+
+
+    <LinearLayout
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="right"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="0dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:paddingBottom="15dp"
+        android:background="@drawable/redondeado"
+        android:visibility="gone">
+
+
+        <TextView
+            android:id="@+id/menu_grupo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vecinos"
+            android:textSize="15dp"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/menu_bloqueados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bloqueados"
+            android:textSize="15dp"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/menu_actualizar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actualizar"
+            android:textSize="15dp"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold"/>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dummy"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"/>
+
+
+    <FrameLayout
+        android:id="@+id/opciones"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#6F4A4A4A"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/marco"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:background="@drawable/redondeado"
+            android:padding="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/img_menu_datos"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:id="@+id/opcnombre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:maxWidth="250dp"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/opcdireccion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Direccion"
+                    android:layout_gravity="center_horizontal"
+                    android:maxWidth="250dp"
+                    android:textSize="13dp"/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp">
+                <LinearLayout
+                    android:id="@+id/quitar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/img_quitar"
+                        android:layout_gravity="center_horizontal"/>
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Quitar"
+                        android:maxWidth="250dp"
+                        android:textStyle="bold"
+                        android:textSize="18dp"
+                        android:layout_gravity="center_horizontal"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/bloquear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="50dp">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/img_bloqueo"
+                        android:layout_gravity="center_horizontal"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bloquear"
+                        android:maxWidth="250dp"
+                        android:textStyle="bold"
+                        android:textSize="18dp"
+                        android:layout_gravity="center_horizontal"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/desbloquear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/img_menu_palomita"
+                        android:layout_gravity="center_horizontal"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Desbloquear"
+                        android:maxWidth="250dp"
+                        android:textStyle="bold"
+                        android:textSize="18dp"
+                        android:layout_gravity="center_horizontal"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/titlebar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/abrir_menu"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/img_puntitos_blancos"/>
+
+            <TextView
+
+                android:id="@+id/titulog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:text="Mis Vecinos"
+                android:textColor="#fff"
+                android:textSize="20dp"
+                android:textStyle="" />
+        </FrameLayout>
+
+
+
+
+
+        <ScrollView
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="50dp"
+            android:background="@color/contraste">
+            <!--
+
+                    <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >-->
+
+            <LinearLayout
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+
+            </LinearLayout>
+
+
+            <!-- </HorizontalScrollView>-->
+
+        </ScrollView>
+
+        <com.google.android.gms.ads.AdView
+
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/banner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/id_banner"></com.google.android.gms.ads.AdView>
+    </FrameLayout>
+
+
+</FrameLayout>

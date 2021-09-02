@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Transmision.VerTransmision">
+
+    <ImageView
+        android:id="@+id/viewer"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/ip_cam"/>
+    <FrameLayout
+        android:id="@+id/contenedor"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="300dp">
+        <FrameLayout
+            android:id="@+id/avance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="300dp"/>
+
+    </FrameLayout>
+
+</FrameLayout>

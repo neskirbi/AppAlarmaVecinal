@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_datos"
+            android:icon="@drawable/img_menu_datos"
+            android:title="Datos" />
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/img_menu_chat"
+            android:title="Chat" />
+
+        <item
+            android:id="@+id/nav_emergencias"
+            android:icon="@drawable/boton_emergencia"
+            android:title="Emergencias" />
+        <item
+            android:id="@+id/nav_alertas"
+            android:icon="@drawable/img_menu_alerta"
+            android:title="Alertas" />
+        <item
+            android:id="@+id/nav_avisos"
+            android:icon="@drawable/img_menu_aviso"
+            android:title="Avisos" />
+        <item
+            android:id="@+id/nav_grupo"
+            android:icon="@drawable/img_menu_grupo"
+            android:title="Grupo" />
+
+        <!--<item
+            android:id="@+id/nav_camara"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Transmisiones" />-->
+
+
+    </group>
+
+    <item android:title="Comunícate">
+        <menu>
+
+            <item
+                android:id="@+id/nav_propinas"
+                android:icon="@drawable/icono_propinas"
+                android:title="Propinas" />
+
+            <item
+                android:id="@+id/nav_sugerencia"
+                android:icon="@drawable/img_menu_sugerencia"
+                android:title="Sugerencias" />
+
+
+            <item
+                android:id="@+id/nav_salir"
+                android:icon="@drawable/img_menu_salir"
+                android:title="Salir" />
+        </menu>
+    </item>
+
+</menu>

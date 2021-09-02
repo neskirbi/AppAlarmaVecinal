@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FuncionAlertas.NewAlerta">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimary">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crear Alerta"
+            android:textStyle=""
+            android:textSize="20dp"
+            android:textColor="#fff"
+            android:layout_marginLeft="18dp"
+            android:layout_gravity="center_vertical"/>
+
+    </FrameLayout>
+
+    <!--<ListView
+        android:id="@+id/alertas_lista"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="55dp"></ListView>-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/alertas_lista"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="55dp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"/>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/id_banner"></com.google.android.gms.ads.AdView>
+
+    <ImageView
+        android:onClick="Descargar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/icono_recycler"
+        android:layout_gravity="top|end"/>
+
+</FrameLayout>

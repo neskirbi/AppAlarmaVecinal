@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/redondeado">
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/sin_avatar"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="30dp">
+            <TextView
+                android:id="@+id/nombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:text="Nombre"
+
+                android:maxWidth="180dp"/>
+
+            <TextView
+                android:id="@+id/direccion"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:textSize="13dp"
+                android:text="direccion"
+                android:layout_marginTop="5dp"
+                android:maxWidth="180dp"/>
+
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/opcusuario"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/img_puntitos"
+            android:layout_gravity="right|center_vertical"/>
+
+    </FrameLayout>
+
+
+</FrameLayout>
