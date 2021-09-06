@@ -42,6 +42,10 @@ public class LoginInteractor implements Login.LoginInteractor{
                             loginPresenter.LoginError();
                         }else{
                             metodos.CreaLogin(response.body());
+
+                            Log.i("Login",response.body().getId_grupo());
+                            if(response.body().getId_grupo()!=null)
+                                metodos.GuardarGrupo(response.body());
                             loginPresenter.LoginOk();
                         }
 

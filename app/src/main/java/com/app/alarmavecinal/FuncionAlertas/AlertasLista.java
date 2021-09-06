@@ -37,7 +37,6 @@ import com.app.alarmavecinal.Estructuras.Alertas;
 import com.app.alarmavecinal.Estructuras.AlertasL;
 import com.app.alarmavecinal.Estructuras.Avisos;
 import com.app.alarmavecinal.Funciones;
-import com.app.alarmavecinal.LoginPack.Login;
 import com.app.alarmavecinal.Principal;
 import com.app.alarmavecinal.R;
 import com.google.android.gms.ads.AdRequest;

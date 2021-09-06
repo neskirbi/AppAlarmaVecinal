@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.app.alarmavecinal.LoginPack.Login;
+import com.app.alarmavecinal.Usuario.Login.Login;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class VerEmergencia extends AppCompatActivity {

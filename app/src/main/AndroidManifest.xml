@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -76,7 +77,6 @@
             android:name=".Chat.ChatWindow"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".EditarInfo.Datos" />
-        <activity android:name=".LoginPack.Recuperar" />
         <activity android:name=".FuncioneAvisos.AvisosMensaje" />
         <activity
             android:name=".FuncioneAvisos.NewAvisos"
@@ -107,13 +107,11 @@
                     android:scheme="http" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginPack.Registro" />
         <activity android:name=".VerEmergencia" />
         <activity
             android:name=".Principal"
             android:label="@string/title_activity_principal"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".LoginPack.Login" />
         <activity
             android:name=".Portada"
             android:theme="@style/Theme.Transparent">

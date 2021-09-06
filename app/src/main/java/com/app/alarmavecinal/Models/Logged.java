@@ -1,25 +1,23 @@
 package com.app.alarmavecinal.Models;
 
-public class Usuario {
+public class Logged {
     String id_usuario;
     String id_grupo;
     String nombres;
     String apellidos;
     String direccion;
     String mail;
-    String pass;
     String avatar;
     String ubicacion;
     String nombre;
 
-    public Usuario(String id_usuario, String id_grupo, String nombres, String apellidos, String direccion, String mail, String pass, String avatar, String ubicacion, String nombre) {
+    public Logged(String id_usuario, String id_grupo, String nombres, String apellidos, String direccion, String mail, String avatar, String ubicacion, String nombre) {
         this.id_usuario = id_usuario;
         this.id_grupo = id_grupo;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.direccion = direccion;
         this.mail = mail;
-        this.pass = pass;
         this.avatar = avatar;
         this.ubicacion = ubicacion;
         this.nombre = nombre;
@@ -71,14 +69,6 @@ public class Usuario {
 
     public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    public String getPass() {
-        return pass;
-    }
-
-    public void setPass(String pass) {
-        this.pass = pass;
     }
 
     public String getAvatar() {

@@ -64,7 +64,7 @@ public class RegistroPresenter implements Registro.RegistroPresenter{
 
             if(pass.equals(pass2)){
                 registroview.ShowDialog();
-                Usuario usuario=new Usuario("",nombre,apellido,direccion,mail,pass,"","");
+                Usuario usuario=new Usuario("","",nombre,apellido,direccion,mail,pass,"","","");
                 registroInteractor.Registrar(usuario);
             }else{
                 registroview.ErrorPass("Las contraseñas deben ser iguales");

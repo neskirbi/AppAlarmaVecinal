@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
 import android.os.Vibrator;
 import android.util.Log;
 
@@ -52,9 +53,9 @@ public class Metodos {
             String nombre=usuario.getNombres()+" "+ usuario.getApellidos();
             String direccion=usuario.getDireccion();
             ContentValues login = new ContentValues();
-            Log.i("Login",toutf8(id_usuario));
-            Log.i("Login",toutf8(nombre));
-            Log.i("Login",toutf8(direccion));
+            Log.i("Login","id_usuario: "+toutf8(id_usuario));
+            Log.i("Login","nombre: "+toutf8(nombre));
+            Log.i("Login","direccion: "+toutf8(direccion));
             login.put("id_usuario", toutf8(id_usuario));
             login.put("nombre",toutf8(nombre));
             login.put("direccion",toutf8(direccion));
@@ -71,9 +72,48 @@ public class Metodos {
     }
 
     public String toutf8(String texto){
-        byte[] bt = texto.getBytes();
+        if(texto==null)
+            return"";
 
+        byte[] bt = texto.getBytes();
         return new String(bt, Charset.forName("UTF-8"));
 
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
+    public void GuardarGrupo(Usuario usuario) {
+        try {
+            Base base = new Base(context);
+            SQLiteDatabase db = base.getWritableDatabase();
+
+            String id_usuario=usuario.getId_usuario();
+            String id_grupo=usuario.getId_grupo();
+            String nombre=usuario.getNombre();
+            int enviado=1;
+            ContentValues grupo = new ContentValues();
+
+            Log.i("Login","id_grupo: "+toutf8(id_grupo));
+            Log.i("Login","id_usuario: "+toutf8(id_usuario));
+            Log.i("Login","nombre: "+toutf8(nombre));
+            Log.i("Login","enviado: "+enviado+"");
+
+            grupo.put("id_grupo", toutf8(id_grupo));
+            grupo.put("id_usuario", toutf8(id_usuario));
+            grupo.put("nombre",toutf8(nombre));
+            grupo.put("enviado",enviado);
+
+
+            db.insert("grupo", null, grupo);
+
+            db.close();
+
+        } catch (Exception e) {
+            Log.i("login",e.getMessage());
+        }
     }
 }

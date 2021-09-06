@@ -16,7 +16,7 @@
     <string name="menu_send">Send</string>
 
     <string name="url">https://app-lab.com.mx/AVL/public/</string>
-    <string name="url_debug">http://192.168.1.121/AVL/public/</string>
+    <string name="url_debug">http://192.168.0.4/AVL/public/</string>
 
     <string name="url_registrar">api/usuarios</string>
     <string name="url_login">api/login</string>
@@ -84,7 +84,7 @@
     <string name="url_UpdatefbToken">api/UpdatefbToken</string>
 
     //Poner llave googlemaps(Recuerda poner la llave que es para la version de produccion)
-    <string name="google_maps_key">AIzaSRD1UpmBYBueQcmF_zwJ_iakT0CUXpRRDlQ</string>
+    <string name="google_maps_key">AIzaSyD1UpmBYBueQcmF_zwJ_iakT0CUXpyyDlQ</string>
 
     <string name="id_banner_p">ca-app-pub-9864387520697583/7035351219</string>
     <!--para la version de produccion debe tener la _p el de abajo-->

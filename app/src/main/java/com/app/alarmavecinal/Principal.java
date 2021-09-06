@@ -41,9 +41,10 @@ import com.app.alarmavecinal.ChatFb.SalaChat;
 import com.app.alarmavecinal.EditarInfo.Datos;
 import com.app.alarmavecinal.Estructuras.Emergencias;
 import com.app.alarmavecinal.Grupos.Grupo;
-import com.app.alarmavecinal.LoginPack.Login;
 import com.app.alarmavecinal.Mapas.MapaEmergencia;
 import com.app.alarmavecinal.Sugerencias.SubirSugerencia;
+import com.app.alarmavecinal.Usuario.Login.Login;
+import com.app.alarmavecinal.Usuario.Login.LoginView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -399,7 +400,8 @@ public class Principal extends AppCompatActivity
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             funciones.LogOut();
-                            startActivity(new Intent(context, Login.class));
+
+                            context.startActivity(new Intent(context.getApplicationContext(), LoginView.class));
 
                         }
                     });
