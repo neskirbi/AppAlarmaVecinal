@@ -6,7 +6,6 @@ import com.app.alarmavecinal.Models.Usuario;
 
 public interface Registro {
     interface LoginView{
-        void ShowDialog();
         void ErrorNombre();
         void ErrorApellido();
         void ErrorDireccion();
@@ -14,14 +13,14 @@ public interface Registro {
         void ErrorPass(String error);
         void ErrorPass2(String error);
         void RegistroOk();
-        void RegistroError();
+        void RegistroError(String error);
 
     }
 
     interface RegistroPresenter{
         void Registrar(EditText nombre, EditText apellido, EditText direccion, EditText mail, EditText pass, EditText pass2);
         void RegistroOk();
-        void RegistroError();
+        void RegistroError(String error);
     }
 
     interface RegistroInteractor{

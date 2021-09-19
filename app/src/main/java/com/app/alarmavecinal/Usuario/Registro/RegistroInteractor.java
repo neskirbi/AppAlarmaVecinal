@@ -31,33 +31,39 @@ public class RegistroInteractor implements Registro.RegistroInteractor {
     @Override
     public void Registrar(Usuario usuario) {
         Log.i("Registro","Url:"+metodos.GetUrl());
-        try{
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(metodos.GetUrl())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            Peticiones peticion=retrofit.create(Peticiones.class);
-            Call<Usuario> call= peticion.RegistroUsuario(usuario);
-            call.enqueue(new Callback<Usuario>() {
-                @Override
-                public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                    if(response.body()!=null){
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(metodos.GetUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        Peticiones peticion=retrofit.create(Peticiones.class);
+        Call<Usuario> call= peticion.RegistroUsuario(usuario);
+        call.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                if(response.body()!=null){
+                    if(response.body().getId_usuario()==null) {
+                        Log.i("Registro",response.body().getError());
+                        registroPresenter.RegistroError(response.body().getError());
+                    }else{
+                        Log.i("Registro",response.body().getId_usuario());
                         metodos.CreaLogin(response.body());
                         registroPresenter.RegistroOk();
                     }
-
+                }else{
+                    Log.i("Registro","Null response.");
+                    registroPresenter.RegistroError("Null response.");
                 }
 
-                @Override
-                public void onFailure(Call<Usuario> call, Throwable t) {
-                    Log.i("Registro",t.getMessage());
-                    registroPresenter.RegistroError();
-                }
-            });
-        }catch(Exception e){
-            Log.i("Registro",e.getMessage());
-            registroPresenter.RegistroError();
-        }
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                Log.i("Registro",t.getMessage());
+                registroPresenter.RegistroError("Error de conexión");
+            }
+        });
+
 
     }
 

@@ -28,21 +28,21 @@ public class LoginPresenter implements Login.LoginPresenter{
             String pass=etpass.getText().toString();
 
             if(mail.trim().length()==0) {
-                loginView.ErrorMail("Este campo no puede quedar vacío.");
+                loginView.ErrorMail();
                 return;
             }
 
             if(!Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
-                loginView.ErrorMail("No es una dirección valida de correo.");
+                loginView.ErrorMail();
                 return;
             }
 
             if(pass.trim().length()==0) {
-                loginView.ErrorPass("Este campo no puede quedar vacío.");
+                loginView.ErrorPass();
                 return;
             }
 
-            loginInteractor.HacerLogin(new Usuario("","","","","",mail,pass,"","",""));
+            loginInteractor.HacerLogin(new Usuario("","","","","",mail,pass,"","","",""));
         }
     }
 
@@ -54,9 +54,9 @@ public class LoginPresenter implements Login.LoginPresenter{
     }
 
     @Override
-    public void LoginError() {
+    public void LoginError(String error) {
         if(loginView!=null){
-            loginView.LoginError();
+            loginView.LoginError(error);
         }
     }
 }

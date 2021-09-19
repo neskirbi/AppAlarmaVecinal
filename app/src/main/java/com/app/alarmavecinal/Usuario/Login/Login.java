@@ -6,15 +6,15 @@ import com.app.alarmavecinal.Models.Usuario;
 
 public interface Login {
     interface LoginView{
-        void ErrorMail(String error);
-        void ErrorPass(String error);
+        void ErrorMail();
+        void ErrorPass();
         void LoginOk();
-        void LoginError();
+        void LoginError(String error);
     }
     interface LoginPresenter{
         void HacerLogin(EditText mail,EditText pass);
         void LoginOk();
-        void LoginError();
+        void LoginError(String error);
     }
     interface LoginInteractor{
         void HacerLogin(Usuario usuario);

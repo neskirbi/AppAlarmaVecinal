@@ -11,8 +11,9 @@ public class Usuario {
     String avatar;
     String ubicacion;
     String nombre;
+    String error;
 
-    public Usuario(String id_usuario, String id_grupo, String nombres, String apellidos, String direccion, String mail, String pass, String avatar, String ubicacion, String nombre) {
+    public Usuario(String id_usuario, String id_grupo, String nombres, String apellidos, String direccion, String mail, String pass, String avatar, String ubicacion, String nombre, String error) {
         this.id_usuario = id_usuario;
         this.id_grupo = id_grupo;
         this.nombres = nombres;
@@ -23,6 +24,7 @@ public class Usuario {
         this.avatar = avatar;
         this.ubicacion = ubicacion;
         this.nombre = nombre;
+        this.error = error;
     }
 
     public String getId_usuario() {
@@ -102,6 +104,14 @@ public class Usuario {
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.error = nombre;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

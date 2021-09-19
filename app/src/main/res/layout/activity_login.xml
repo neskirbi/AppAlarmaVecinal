@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginPack.Login"
     android:background="@drawable/fondo_login">
 
     <LinearLayout
@@ -87,7 +86,7 @@
             android:textSize="20dp"
             android:text="¿Nuevo?   ¡Registrate aqui!"
             android:layout_marginTop="20dp"
-            android:textColor="#fff"
+            android:textColor="#666"
             android:padding="5dp"/>
 
 

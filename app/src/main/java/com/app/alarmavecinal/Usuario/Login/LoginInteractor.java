@@ -38,14 +38,14 @@ public class LoginInteractor implements Login.LoginInteractor{
                     Log.i("Login", String.valueOf(response.code()));
                     if(response.body()!=null){
                         Log.i("Login",response.body().toString());
-                        if(response.body().getId_usuario()==null){
-                            loginPresenter.LoginError();
+                        if(response.body().getError()!=null){
+                            loginPresenter.LoginError(response.body().getError());
                         }else{
                             metodos.CreaLogin(response.body());
 
                             Log.i("Login",response.body().getId_grupo());
                             if(response.body().getId_grupo()!=null)
-                                metodos.GuardarGrupo(response.body());
+                                metodos.GuardarGrupoLogin(response.body());
                             loginPresenter.LoginOk();
                         }
 
