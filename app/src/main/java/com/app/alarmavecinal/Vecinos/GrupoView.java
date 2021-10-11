@@ -1,4 +1,4 @@
-package com.app.alarmavecinal.Grupos;
+package com.app.alarmavecinal.Vecinos;
 
 import android.Manifest;
 import android.app.Activity;
@@ -19,10 +19,8 @@ import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,41 +28,30 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.app.alarmavecinal.BuildConfig;
 import com.app.alarmavecinal.Funciones;
-import com.app.alarmavecinal.Principal;
+import com.app.alarmavecinal.Grupost.Escaner;
+import com.app.alarmavecinal.Grupost.ListaVecinos;
+import com.app.alarmavecinal.Models.Grupo;
+import com.app.alarmavecinal.Principal.PrincipalView;
 import com.app.alarmavecinal.R;
 import com.app.alarmavecinal.Tabs.AyudaGrupoTab;
-import com.app.alarmavecinal.Variado.AyudaGrupo;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-public class Grupo extends AppCompatActivity {
+public class GrupoView extends AppCompatActivity implements GrupoInteface.GrupoView {
+    GrupoPresenter grupoPresenter;
     LinearLayout crear,unirse,botones;
     LinearLayout grupo_lay;
     Funciones funciones;
     Context context;
     ImageView QR;
     String SQR="";
-    TextView titulogrupo,menu_salir,menu_ayuda;
+    TextView titulogrupo,menu_ayuda;
     LinearLayout menu;
     static TextView nota;
-
     ProgressDialog dialog;
 
     private static final int CODIGO_PERMISOS_CAMARA = 1, CODIGO_INTENT = 2;
@@ -79,12 +66,12 @@ public class Grupo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grupo);
         context=this;
+        grupoPresenter=new GrupoPresenter(this,this);
         funciones=new Funciones(context);
         titulogrupo=findViewById(R.id.titugrupo);
         abrir_menu=findViewById(R.id.abrir_menu);
         dummy=findViewById(R.id.dummy);
         menu=findViewById(R.id.menu);
-        menu_salir=findViewById(R.id.menu_salir);
         menu_ayuda=findViewById(R.id.menu_ayuda);
         nota=findViewById(R.id.nota);
 
@@ -101,7 +88,7 @@ public class Grupo extends AppCompatActivity {
         grupo_lay=findViewById(R.id.grupo_lay);
         botones=findViewById(R.id.botones);
         QR=findViewById(R.id.QR);
-
+        funciones.VerificarServicios();
         abrir_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,13 +112,7 @@ public class Grupo extends AppCompatActivity {
             }
         });
 
-        menu_salir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                funciones.Vibrar(funciones.VibrarPush());
-                SalirGrupo();
-            }
-        });
+
 
 
 
@@ -165,10 +146,15 @@ public class Grupo extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        SQR=funciones.GetIdGrupo();
 
         OcultarMenu();
 
+        PrepararBotones();
+
+    }
+
+    private void PrepararBotones() {
+        SQR=funciones.GetIdGrupo();
         if(SQR!=""){
 
             QuitarBotton();
@@ -182,19 +168,18 @@ public class Grupo extends AppCompatActivity {
                 funciones.Logo("Getgrupo",data.toString());
                 String[] array = data.toString().split("=");
                 funciones.Logo("Getgrupo",array[1]);
-                UnirseGrupo(array[1]);
+
                 SQR=array[1];
             }catch (Exception e){
                 Log.i("Getgrupo",e.getMessage().toString());
             }
             OcultarItemsMenu();
         }
-        funciones.VerificarServicios();
     }
 
-    public void Pop(View view) {
+    public void DialogoCrearGrupo(View view) {
         funciones.Vibrar(funciones.VibrarPush());
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Grupo.this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(GrupoView.this);
         alertDialog.setTitle("Crear Grupo");
         alertDialog.setMessage("Nombre del grupo?");
 
@@ -213,10 +198,7 @@ public class Grupo extends AppCompatActivity {
         alertDialog.setPositiveButton("Crear",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        EnviarGrupo(nombre.getText().toString());
-
-
-
+                        grupoPresenter.CrearGrupo(nombre.getText().toString());
                     }
                 });
 
@@ -231,130 +213,34 @@ public class Grupo extends AppCompatActivity {
     }
 
 
-    void EnviarGrupo(final String nombre){
-        dialog = ProgressDialog.show(Grupo.this, "", "Verificando...", true);
-
-        funciones.AbrirConexion();
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url =funciones.GetUrl()+getString(R.string.url_crear_grupo);
-
-        // Request a string response from the provided URL.
-        try {
-            JSONObject data= new JSONObject("{\"id_usuario\":\""+funciones.GetIdUsuario()+"\",\"nombre\":\""+nombre+"\"}");
-            funciones.Logo("CrearGrupo",data.toString());
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url,data,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            dialog.dismiss();
-                            funciones.Logo("CrearGrupo",response.toString());
-                            try {
-                                SQR = funciones.GuardarGrupo(response.getString("id_grupo"),nombre);
-                                QR.setImageBitmap(funciones.GetQR(SQR));
-                                titulogrupo.setText(funciones.GetNombreGrupo());
-                                QuitarBotton();
-                                MostrarItemsMenu();
-                                nota.setVisibility(View.GONE);
-
-                            } catch (JSONException e) {
-                                funciones.Logo("CrearGrupo",e.getMessage());
-                            }
 
 
 
-                        }
+    public void DejarGrupo(View view){
+        funciones.Vibrar(funciones.VibrarPush());
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(GrupoView.this);
+        alertDialog.setTitle("Dejar Grupo");
+        alertDialog.setMessage("Quiere salir del grupo?");
 
+        alertDialog.setIcon(R.drawable.img_menu_grupo);
 
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    dialog.dismiss();
-                    funciones.Logo("CrearGrupo","That didn't work!: "+error.getMessage());
-                    Toast.makeText(getApplicationContext(), "¡Error de conexion!", Toast.LENGTH_SHORT).show();
-
-                }
-            });
-
-            // Add the request to the RequestQueue.
-            queue.add(jsonObjectRequest);
-        } catch (JSONException e) {
-            funciones.Logo("CrearGrupo","That didn't work!: "+e.getMessage());
-        }
-    }
-
-    void UnirseGrupo(String id_grupo){
-        dialog = ProgressDialog.show(Grupo.this, "", "Verificando...", true);
-
-        funciones.AbrirConexion();
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url =funciones.GetUrl()+getString(R.string.url_unirse_grupo)+"/"+funciones.GetIdUsuario()+"/"+id_grupo;
-        funciones.Logo("Escanear",url);
-        // Request a string response from the provided URL.
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        dialog.dismiss();
-                        funciones.Logo("Escanear",response.toString());
-                        SQR=funciones.GuardarGrupoCamara(response);
-                        if(SQR!=""){
-                            QuitarBotton();
-                            QR.setImageBitmap(funciones.GetQR(SQR));
-                            titulogrupo.setText(funciones.GetNombreGrupo());
-                        }else{
-                            Toast.makeText(context, "Error al crear el grupo.", Toast.LENGTH_SHORT).show();
-                        }
+        alertDialog.setPositiveButton("Salir",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                      grupoPresenter.DejarGrupo();
                     }
+                });
 
-
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                dialog.dismiss();
-                funciones.Logo("Escanear","That didn't work!: "+error.getMessage());
-                Toast.makeText(getApplicationContext(), "¡Error de conexion!", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(jsonObjectRequest);
-    }
-
-    void SalirGrupo(){
-        dialog = ProgressDialog.show(Grupo.this, "", "Verificando...", true);
-
-        funciones.AbrirConexion();
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url =funciones.GetUrl()+getString(R.string.url_salir_grupo)+"/"+funciones.GetIdUsuario();
-        funciones.Logo("Salir",url);
-        // Request a string response from the provided URL.
-        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        dialog.dismiss();
-                        funciones.SalirGrupo();
-                        funciones.VerificarServicios();
-                        startActivity(new Intent(context,Grupo.class));
+        alertDialog.setNegativeButton("Cancelar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
                     }
+                });
+
+        alertDialog.show();
 
 
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                dialog.dismiss();
-                funciones.Logo("Salir","That didn't work!: "+error.getMessage());
-                Toast.makeText(getApplicationContext(), "¡Error de conexion!", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(jsonObjectRequest);
     }
     void QuitarBotton(){
 
@@ -367,17 +253,17 @@ public class Grupo extends AppCompatActivity {
 
 
 
-    public void Leer(View view){
+    public void UnirseGrupo(View view){
         funciones.Vibrar(funciones.VibrarPush());
         if(PedirPermiso()) {
-            escanear();
+            Escanear();
         }
     }
 
 
-    public void escanear() {
+    public void Escanear() {
 
-        Intent i = new Intent(Grupo.this, Escaner.class);
+        Intent i = new Intent(GrupoView.this, Escaner.class);
         startActivityForResult(i, CODIGO_INTENT);
     }
 
@@ -390,7 +276,7 @@ public class Grupo extends AppCompatActivity {
                 if (data != null) {
                     String codigo = data.getStringExtra("codigo");
                     funciones.Logo("Escaner2", codigo);
-                    UnirseGrupo(codigo);
+
                     //Guardar(codigo);
                 }
             }
@@ -404,7 +290,7 @@ public class Grupo extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Escanear directamten solo si fue pedido desde el botón
                     if (permisoSolicitadoDesdeBoton) {
-                        escanear();
+                        Escanear();
                     }
                     permisoCamaraConcedido = true;
                 } else {
@@ -420,7 +306,7 @@ public class Grupo extends AppCompatActivity {
     private void permisoDeCamaraDenegado() {
         // Esto se llama cuando el usuario hace click en "Denegar" o
         // cuando lo denegó anteriormente
-        Toast.makeText(Grupo.this, "No puedes escanear si no das permiso", Toast.LENGTH_SHORT).show();
+        Toast.makeText(GrupoView.this, "No puedes escanear si no das permiso", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -475,7 +361,7 @@ public class Grupo extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(context, Principal.class));
+        startActivity(new Intent(context, PrincipalView.class));
         finish();
     }
 
@@ -484,6 +370,18 @@ public class Grupo extends AppCompatActivity {
         //this.finish();
     }
 
+
+
+
+    @Override
+    public void Error(String error) {
+        Toast.makeText(context, ""+error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void IraGrupo() {
+        startActivity(new Intent(context, GrupoView.class));
+    }
 
 
 }

@@ -5,7 +5,15 @@
       <map>
         <entry key="..\:/Users/CSMX/Documents/AlarmaVecinal/AlarmaVecinal/app/src/main/res/layout/activity_login.xml" value="0.11956521739130435" />
         <entry key="..\:/Users/CSMX/Documents/AlarmaVecinal/AlarmaVecinal/app/src/main/res/layout/activity_registro.xml" value="0.1796875" />
+        <entry key="..\:/Users/CSMX/Documents/AndroidStudio/AppAlarmaVecinal/app/src/main/res/layout/activity_ayuda_grupo.xml" value="0.1796875" />
+        <entry key="..\:/Users/CSMX/Documents/AndroidStudio/AppAlarmaVecinal/app/src/main/res/layout/activity_grupo.xml" value="0.1480978260869565" />
         <entry key="..\:/Users/CSMX/Documents/AndroidStudio/AppAlarmaVecinal/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Users/CSMX/Documents/AndroidStudio/AppAlarmaVecinal/app/src/main/res/layout/activity_principal.xml" value="0.1796875" />
+        <entry key="..\:/Users/CSMX/Documents/AndroidStudio/AppAlarmaVecinal/app/src/main/res/layout/content_principal.xml" value="0.1480978260869565" />
+        <entry key="..\:/Users/CSMX/Documents/AndroidStudio/AppAlarmaVecinal/app/src/main/res/layout/fragment_unirse.xml" value="0.1796875" />
+        <entry key="..\:/Users/CSMX/Documents/AndroidStudio/AppAlarmaVecinal/app/src/main/res/layout/nav_header_principal.xml" value="0.1480978260869565" />
+        <entry key="..\:/Users/CSMX/Documents/AndroidStudio/AppAlarmaVecinal/app/src/main/res/menu/activity_principal_drawer.xml" value="0.1796875" />
+        <entry key="..\:/Users/CSMX/Documents/AndroidStudio/AppAlarmaVecinal/app/src/main/res/menu/principal.xml" value="0.1796875" />
       </map>
     </option>
   </component>

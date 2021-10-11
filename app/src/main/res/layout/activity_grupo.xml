@@ -5,7 +5,7 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Grupos.Grupo">
+    tools:context=".Vecinos.GrupoView">
 
     <TextView
         android:id="@+id/nota"
@@ -56,6 +56,7 @@
 
         <TextView
             android:id="@+id/menu_salir"
+            android:onClick="DejarGrupo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Salir del Grupo"
@@ -103,14 +104,14 @@
 
     <LinearLayout
         android:id="@+id/botones"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center_horizontal|center_vertical"
         android:visibility="visible">
 
         <LinearLayout
-            android:onClick="Pop"
+            android:onClick="DialogoCrearGrupo"
             android:id="@+id/crear"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -125,17 +126,16 @@
                 android:src="@drawable/plus"/>
 
             <TextView
-                android:layout_gravity="center_vertical"
-                android:gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:text="Crear Grupo"
                 android:textSize="20dp"
                 android:layout_marginLeft="10dp"/>
         </LinearLayout>
 
         <LinearLayout
-            android:onClick="Leer"
+            android:onClick="UnirseGrupo"
             android:id="@+id/unirse"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -154,7 +154,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Escanear Código QR"
+                android:text="Unirse"
                 android:textSize="20dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="5dp"/>

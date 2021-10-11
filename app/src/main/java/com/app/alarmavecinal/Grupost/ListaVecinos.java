@@ -1,4 +1,4 @@
-package com.app.alarmavecinal.Grupos;
+package com.app.alarmavecinal.Grupost;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,12 +18,11 @@ import android.widget.Toast;
 
 import com.app.alarmavecinal.BuildConfig;
 import com.app.alarmavecinal.Funciones;
-import com.app.alarmavecinal.Principal;
+import com.app.alarmavecinal.Vecinos.GrupoView;
 import com.app.alarmavecinal.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -314,7 +312,7 @@ public class ListaVecinos extends AppCompatActivity {
     }
     public void Invitar(){
         funciones.Vibrar(funciones.VibrarPush());
-        startActivity(new Intent(context,Grupo.class));
+        startActivity(new Intent(context, GrupoView.class));
     }
 
     class CargarVecinos extends AsyncTask {

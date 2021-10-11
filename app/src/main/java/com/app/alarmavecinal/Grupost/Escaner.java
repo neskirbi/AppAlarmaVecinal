@@ -1,20 +1,17 @@
-package com.app.alarmavecinal.Grupos;
+package com.app.alarmavecinal.Grupost;
 
 import android.content.Context;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.app.alarmavecinal.Funciones;
+import com.app.alarmavecinal.Vecinos.GrupoView;
 import com.app.alarmavecinal.R;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.zxing.Result;
-
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class Escaner extends AppCompatActivity implements ZXingScannerView.ResultHandler{
     private ZXingScannerView escanerZXing;
@@ -59,7 +56,7 @@ public class Escaner extends AppCompatActivity implements ZXingScannerView.Resul
         // Preparar un Intent para regresar datos a la actividad que nos llamó
         Intent intentRegreso = new Intent();
         intentRegreso.putExtra("codigo", codigo);
-        setResult(Grupo.RESULT_OK, intentRegreso);
+        setResult(GrupoView.RESULT_OK, intentRegreso);
         funciones.Logo("Escaner1",codigo);
         // Cerrar la actividad. Ahora mira onActivityResult de MainActivity
         finish();

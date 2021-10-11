@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.app.alarmavecinal.Principal;
+import com.app.alarmavecinal.Principal.PrincipalView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,7 +20,6 @@ import com.android.volley.toolbox.Volley;
 import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.R;
 import com.app.alarmavecinal.Usuario.Login.Login;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,7 +81,7 @@ public class Datos extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getApplicationContext(), "¡Sin Servicio!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(),Principal.class));
+                startActivity(new Intent(getApplicationContext(), PrincipalView.class));
                 dialog.dismiss();
                 funciones.Logo("login","That didn't work!");
 

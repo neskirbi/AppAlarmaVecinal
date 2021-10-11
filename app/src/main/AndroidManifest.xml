@@ -65,7 +65,7 @@
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".Grupos.ListaVecinos"
+            android:name=".Grupost.ListaVecinos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Sugerencias.SubirSugerencia"
@@ -91,9 +91,9 @@
         <activity
             android:name=".FuncionAlertas.AlertasLista"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Grupos.Escaner" />
+        <activity android:name=".Grupost.Escaner" />
         <activity
-            android:name=".Grupos.Grupo"
+            android:name=".Vecinos.GrupoView"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -109,7 +109,7 @@
         </activity>
         <activity android:name=".VerEmergencia" />
         <activity
-            android:name=".Principal"
+            android:name=".Principal.PrincipalView"
             android:label="@string/title_activity_principal"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

@@ -4,14 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.MailTo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.app.alarmavecinal.Metodos;
-import com.app.alarmavecinal.Principal;
+import com.app.alarmavecinal.Principal.PrincipalView;
 import com.app.alarmavecinal.R;
 
 public class RegistroView extends AppCompatActivity implements Registro.LoginView {
@@ -84,7 +83,7 @@ public class RegistroView extends AppCompatActivity implements Registro.LoginVie
     @Override
     public void RegistroOk() {
         dialog.dismiss();
-        startActivity(new Intent(getApplicationContext(), Principal.class));
+        startActivity(new Intent(getApplicationContext(), PrincipalView.class));
     }
 
     @Override

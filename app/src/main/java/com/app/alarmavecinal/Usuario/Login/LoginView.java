@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.app.alarmavecinal.Metodos;
-import com.app.alarmavecinal.Principal;
+import com.app.alarmavecinal.Principal.PrincipalView;
 import com.app.alarmavecinal.R;
 import com.app.alarmavecinal.Usuario.Registro.RegistroView;
 
@@ -58,7 +58,7 @@ public class LoginView extends AppCompatActivity implements Login.LoginView{
     @Override
     public void LoginOk() {
         dialog.dismiss();
-        startActivity(new Intent(getApplicationContext(), Principal.class));
+        startActivity(new Intent(getApplicationContext(), PrincipalView.class));
     }
 
     @Override

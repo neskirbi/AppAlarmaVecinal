@@ -6,8 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Principal"
+    tools:context=".Principal.PrincipalView"
     tools:showIn="@layout/app_bar_principal">
+
+    <TextView
+        android:id="@+id/direccion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cargando dirección..."
+        android:layout_gravity="top"
+        android:padding="5dp"
+        android:background="#302C2C"
+        android:textColor="#ffffff"
+        android:visibility="gone"
+        />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -42,55 +54,10 @@
 
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="right"
-        android:gravity="center_vertical"
-        android:layout_margin="10dp">
-        <TextView
-            android:id="@+id/nota"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Guardar ubicación."
-            android:textStyle="bold"
-            android:textSize="15dp"
-            android:layout_margin="5dp"
-            android:textColor="@color/error"/>
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switchgps"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:theme="@style/FilterSwitchThemeGreen"
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/localizar_on"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/icono_location"
-            app:tint="@color/colorPrimary"
-            android:visibility="visible"
-            android:layout_margin="5dp"/>
 
 
 
-    </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/direccion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cargando dirección..."
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="60dp"
-        android:padding="5dp"
-        android:background="#302C2C"
-        android:textColor="#ffffff"
-        android:visibility="visible"/>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/banner"

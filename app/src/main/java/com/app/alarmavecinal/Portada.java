@@ -7,6 +7,7 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.app.alarmavecinal.Principal.PrincipalView;
 import com.app.alarmavecinal.Sqlite.Base;
 import com.app.alarmavecinal.Usuario.Login.LoginView;
 
@@ -25,7 +26,7 @@ public class Portada extends AppCompatActivity {
             public void run(){
                 // Cuando pasen los 3 segundos, pasamos a la actividad principal de la aplicación
                 if( Check_Log()){
-                    startActivity(new Intent(Portada.this,Principal.class));
+                    startActivity(new Intent(Portada.this, PrincipalView.class));
                 }else{
                     Intent intent = new Intent(Portada.this, LoginView.class);
                     startActivity(intent);

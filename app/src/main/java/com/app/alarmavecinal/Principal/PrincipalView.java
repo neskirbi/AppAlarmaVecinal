@@ -1,13 +1,10 @@
-package com.app.alarmavecinal;
+package com.app.alarmavecinal.Principal;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -22,26 +19,26 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.view.Menu;
 import android.view.WindowManager;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.alarmavecinal.BuildConfig;
 import com.app.alarmavecinal.FuncionAlertas.AlertasLista;
 import com.app.alarmavecinal.FuncioneAvisos.AvisosLista;
 import com.app.alarmavecinal.ChatFb.SalaChat;
 import com.app.alarmavecinal.EditarInfo.Datos;
 import com.app.alarmavecinal.Estructuras.Emergencias;
-import com.app.alarmavecinal.Grupos.Grupo;
+import com.app.alarmavecinal.Funciones;
+import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Vecinos.GrupoView;
 import com.app.alarmavecinal.Mapas.MapaEmergencia;
+import com.app.alarmavecinal.R;
 import com.app.alarmavecinal.Sugerencias.SubirSugerencia;
 import com.app.alarmavecinal.Usuario.Login.Login;
 import com.app.alarmavecinal.Usuario.Login.LoginView;
@@ -49,30 +46,27 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
-
-public class Principal extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class PrincipalView extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Principal.PrincipalView {
+    NavigationView navigationView;
+    Menu nav_Menu;
+    Toolbar toolbar;
+    DrawerLayout drawer;
     ImageButton emergencia;
     long then = 0;
     Funciones funciones;
+    Metodos metodos;
     Boolean vi = false;
     View headerView;
     TextView nombre,nota,direccion;
     Context context;
     double lat=0,lon=0;
-    ImageView localizar_on;
-    SwitchMaterial switchgps;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
@@ -84,19 +78,16 @@ public class Principal extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         context = this;
         funciones = new Funciones(context);
+        metodos = new Metodos(context);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        localizar_on = findViewById(R.id.localizar_on);
         nota = findViewById(R.id.nota);
-        switchgps = findViewById(R.id.switchgps);
         direccion=findViewById(R.id.direccion);
         direccion.setText(funciones.GetDireccionAntes());
-
-
 
 
         //borrar el registro del grupo si  esta en ""  por que guardaba el grupo vacio
@@ -116,8 +107,32 @@ public class Principal extends AppCompatActivity
         }
         m.loadAd(adRequest);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        nav_Menu = navigationView.getMenu();
+        //Oculatando botones si no se esta en un grupo
+        CrearMenu();
+
+        IniciandoFuncionDelmenu();
+        VerificandoLogin();
+        setNombre();
+
+        metodos.VerificarServicios();
+
+        emergencia = findViewById(R.id.emergencia);
+
+        then = 0;
+        BotonEmergencia();
+
+    }
+
+    private void VerificandoLogin() {
+        if (!funciones.Check_Log()) {
+            startActivity(new Intent(this, Login.class));
+        }
+    }
+
+    private void IniciandoFuncionDelmenu() {
         navigationView.setItemIconTintList(null);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -126,16 +141,9 @@ public class Principal extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         headerView = navigationView.getHeaderView(0);
         nombre = headerView.findViewById(R.id.nombre);
-        if (!funciones.Check_Log()) {
-            startActivity(new Intent(this, Login.class));
-        }
-        setNombre();
+    }
 
-        funciones.VerificarServicios();
-
-        emergencia = findViewById(R.id.emergencia);
-
-        then = 0;
+    private void BotonEmergencia() {
         emergencia.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -180,81 +188,21 @@ public class Principal extends AppCompatActivity
                 return false;
             }
         });
-
-        localizar_on.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                funciones.Vibrar(funciones.VibrarPush());
-                localizar_on.setEnabled(false);
-
-
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    PedirPermisoLocation();
-                } else {
-
-                    VerificarUbicacion();
-                    mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                    locationListener = new LocationListener() {
-                        @Override
-                        public void onLocationChanged(Location location) {
-                            lat=location.getLatitude();
-                            lon=location.getLongitude();
-                            funciones.SetUbicacion("{\"lat\":\""+lat+"\",\"lon\":\""+lon+"\"}");
-                            if(funciones.GetUbicacion().replace(" ","").length()>0){
-                                nota.setText("Ubicación guardada.");
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                    nota.setTextColor(getColor(R.color.colorPrimary));
-                                }
-                            }
-
-                            direccion.setText(funciones.GetDireccionAhora(lat,lon));
-
-                        }
-
-                        @Override
-                        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-
-
-                        }
-
-                        @Override
-                        public void onProviderEnabled(String provider) {
-                            VerificarUbicacion();
-                        }
-
-                        @Override
-                        public void onProviderDisabled(String provider) {
-                            VerificarUbicacion();
-                        }
-                    };
-
-                    if (locationListener != null) {
-                        proovedor=LocationManager.GPS_PROVIDER;
-                        mLocationManager.requestLocationUpdates(proovedor, 0, 0, locationListener);
-                    } else {
-                        Toast.makeText(context, "listener null", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-
-        switchgps.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    Toast.makeText(context, "Encendido.", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(context, "Apagado.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
     }
 
 
 
+
+
+    private void CrearMenu() {
+        if (funciones.GetIdGrupo().replace(" ", "").length() != 32) {
+            nav_Menu.findItem(R.id.nav_chat).setVisible(false);
+            nav_Menu.findItem(R.id.nav_alertas).setVisible(false);
+            nav_Menu.findItem(R.id.nav_avisos).setVisible(false);
+            nav_Menu.findItem(R.id.nav_emergencias).setVisible(false);
+            nav_Menu.findItem(R.id.nav_grupo).setTitle("Crear Grupo");
+        }
+    }
 
 
     void Vibrando() {
@@ -287,7 +235,6 @@ public class Principal extends AppCompatActivity
         super.onPostResume();
         funciones.ForzarEnviador();
         VerificarUbicacion();
-        localizar_on.setEnabled(true);
     }
 
     private void VerificarUbicacion() {
@@ -365,7 +312,7 @@ public class Principal extends AppCompatActivity
                 funciones.SinGrupo();
             }
         } else if (id == R.id.nav_grupo) {
-            startActivity(new Intent(this, Grupo.class));
+            startActivity(new Intent(this, GrupoView.class));
         }
         else if (id == R.id.nav_emergencias) {
             if (funciones.GetIdGrupo() != "") {
