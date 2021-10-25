@@ -26,9 +26,11 @@ import java.nio.charset.StandardCharsets;
 
 public class Metodos {
     Context context;
+
     public Metodos(Context context) {
         this.context = context;
     }
+
     public String GetUrl(){
         String URL="";
         if(BuildConfig.DEBUG){
@@ -37,6 +39,7 @@ public class Metodos {
         }else{
             URL=context.getString(R.string.url);
         }
+        Log.i("URL",URL);
         return URL;
     }
 

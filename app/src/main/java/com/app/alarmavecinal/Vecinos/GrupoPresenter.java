@@ -36,6 +36,11 @@ public class GrupoPresenter implements GrupoInteface.GrupoPresenter {
     }
 
     @Override
+    public void UnirseGrupo(String id) {
+        grupoInteractor.UnirseGrupo(id);
+    }
+
+    @Override
     public void DejarGrupo() {
         grupoInteractor.DejarGrupo();
     }

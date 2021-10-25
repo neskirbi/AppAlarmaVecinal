@@ -30,7 +30,7 @@ public class GrupoInteractor implements GrupoInteface.GrupoInteractor {
                 .baseUrl(metodos.GetUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        Peticiones peticion=retrofit.create(Peticiones.class);
+        GrupoPeticiones peticion=retrofit.create(GrupoPeticiones.class);
         Call<Grupo> call= peticion.GuardarGrupo(grupo);
         call.enqueue(new Callback<Grupo>() {
             @Override
@@ -61,14 +61,52 @@ public class GrupoInteractor implements GrupoInteface.GrupoInteractor {
     }
 
     @Override
-    public void DejarGrupo() {
-        Log.i("DejarGrupo",metodos.GetIdUsuario());
-        Grupo grupo=new Grupo(metodos.GetIdGrupo(), metodos.GetIdUsuario(), "","");
+    public void UnirseGrupo(String id) {
+        Log.i("UnirseGrupo","interactor");
+        Grupo grupo=new Grupo(id, metodos.GetIdUsuario(), "","");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(metodos.GetUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        Peticiones peticion=retrofit.create(Peticiones.class);
+        GrupoPeticiones peticion=retrofit.create(GrupoPeticiones.class);
+        Call<Grupo> call= peticion.UnirseGrupo(grupo);
+        call.enqueue(new Callback<Grupo>() {
+            @Override
+            public void onResponse(Call<Grupo> call, Response<Grupo> response) {
+                Log.i("UnirseGrupo", String.valueOf(response.code()));
+                if(response.body()!=null){
+                    if(response.body().getError()!=null){
+                        grupoPresenter.Error(response.body().getError());
+                    }else{
+                        Log.i("UnirseGrupo",response.body().getId_grupo()+"");
+                        metodos.GuardarGrupoCreado(response.body());
+                        metodos.VerificarServicios();
+                        grupoPresenter.IraGrupo();
+                    }
+
+
+                }else{
+                    grupoPresenter.Error("Body nulo");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Grupo> call, Throwable t) {
+                Log.i("Login","Erro:"+t.getMessage());
+                grupoPresenter.Error("Erro:"+t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void DejarGrupo() {
+        Log.i("DejarGrupo",metodos.GetIdUsuario());
+        Grupo grupo=new Grupo("", metodos.GetIdUsuario(), "","");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(metodos.GetUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        GrupoPeticiones peticion=retrofit.create(GrupoPeticiones.class);
         Call<Grupo> call= peticion.DejarGrupo(grupo);
         call.enqueue(new Callback<Grupo>() {
             @Override

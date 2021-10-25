@@ -168,7 +168,7 @@ public class GrupoView extends AppCompatActivity implements GrupoInteface.GrupoV
                 funciones.Logo("Getgrupo",data.toString());
                 String[] array = data.toString().split("=");
                 funciones.Logo("Getgrupo",array[1]);
-
+                grupoPresenter.UnirseGrupo(array[1]);
                 SQR=array[1];
             }catch (Exception e){
                 Log.i("Getgrupo",e.getMessage().toString());
@@ -275,9 +275,11 @@ public class GrupoView extends AppCompatActivity implements GrupoInteface.GrupoV
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
                     String codigo = data.getStringExtra("codigo");
-                    funciones.Logo("Escaner2", codigo);
-
+                    Log.i("Escaner", codigo);
+                    grupoPresenter.UnirseGrupo(codigo);
                     //Guardar(codigo);
+                }else{
+                    Error("Error al leer el código.");
                 }
             }
         }

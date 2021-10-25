@@ -49,12 +49,15 @@ public class LoginInteractor implements Login.LoginInteractor{
                             loginPresenter.LoginOk();
                         }
 
+                    }else{
+                        loginPresenter.LoginError(response.body().getError());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Usuario> call, Throwable t) {
                     Log.i("Login","Erro:"+t.getMessage());
+                    loginPresenter.LoginError("Erro:"+t.getMessage());
                 }
             });
         }catch(Exception e){

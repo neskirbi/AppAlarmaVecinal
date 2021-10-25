@@ -12,12 +12,14 @@ public interface GrupoInteface {
     interface GrupoPresenter{
         void CrearGrupo(String Grupo);
         void Error(String error);
+        void UnirseGrupo(String id);
         void DejarGrupo();
         void IraGrupo();
     }
 
     interface GrupoInteractor{
         void GuardarGrupo(String nombre);
+        void UnirseGrupo(String id);
         void DejarGrupo();
     }
 
