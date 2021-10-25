@@ -55,6 +55,7 @@ public class GrupoInteractor implements GrupoInteface.GrupoInteractor {
             @Override
             public void onFailure(Call<Grupo> call, Throwable t) {
                 Log.i("Login","Erro:"+t.getMessage());
+                grupoPresenter.Error("Erro:"+t.getMessage());
             }
         });
     }
@@ -93,6 +94,7 @@ public class GrupoInteractor implements GrupoInteface.GrupoInteractor {
             @Override
             public void onFailure(Call<Grupo> call, Throwable t) {
                 Log.i("Login","Erro:"+t.getMessage());
+                grupoPresenter.Error("Erro:"+t.getMessage());
             }
         });
     }

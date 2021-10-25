@@ -16,7 +16,7 @@
     <string name="menu_send">Send</string>
 
     <string name="url">https://app-lab.com.mx/AVL/public/</string>
-    <string name="url_debug">http://192.168.0.6/AVL/public/</string>
+    <string name="url_debug">http://192.168.1.6/AVL/public/</string>
 
     <string name="url_registrar">api/usuarios</string>
     <string name="url_login">api/login</string>
