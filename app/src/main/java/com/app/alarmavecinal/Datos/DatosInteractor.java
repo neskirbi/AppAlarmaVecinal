@@ -92,6 +92,10 @@ public class DatosInteractor implements Datos.DatosInteractor {
             metodos.Toast( "Debe ingresar su dirección o numero de casa.");
             cont++;
         }
+        if (ubicacion.length() == 0) {
+            metodos.Toast( "Espere a cargar su ubicación.");
+            cont++;
+        }
 
 
 

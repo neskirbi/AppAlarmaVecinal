@@ -18,13 +18,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="250dp">
+        android:layout_marginTop="250dp"
+        android:padding="15dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nota: Se guardará la ubicación actual."
-            android:textColor="#ff0000"
-            android:padding="15dp"/>
+            android:textColor="#ff0000"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilnombre"
@@ -108,7 +108,7 @@
 
         <Button
             android:onClick="Actualizar"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
