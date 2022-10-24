@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.app.alarmavecinal.Metodos;
 import com.app.alarmavecinal.Models.Usuario;
+import com.google.gson.JsonArray;
+
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,6 +29,8 @@ public class LoginInteractor implements Login.LoginInteractor{
     public void HacerLogin(Usuario usuario) {
         Log.i("Login","Url:"+metodos.GetUrl());
         try{
+
+
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(metodos.GetUrl())
                     .addConverterFactory(GsonConverterFactory.create())
@@ -35,15 +40,15 @@ public class LoginInteractor implements Login.LoginInteractor{
             call.enqueue(new Callback<Usuario>() {
                 @Override
                 public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                    Log.i("Login", String.valueOf(response.code()));
+                    Log.i("Logueo", String.valueOf(response.code()));
                     if(response.body()!=null){
-                        Log.i("Login",response.body().toString());
+                        Log.i("Logueo",response.body().toString());
                         if(response.body().getError()!=null){
                             loginPresenter.LoginError(response.body().getError());
                         }else{
                             metodos.CreaLogin(response.body());
 
-                            Log.i("Login",response.body().getId_grupo());
+                            Log.i("Logueo",response.body().getId_grupo());
                             if(response.body().getId_grupo()!=null)
                                 metodos.GuardarGrupoLogin(response.body());
                             loginPresenter.LoginOk();
@@ -56,12 +61,12 @@ public class LoginInteractor implements Login.LoginInteractor{
 
                 @Override
                 public void onFailure(Call<Usuario> call, Throwable t) {
-                    Log.i("Login","Erro:"+t.getMessage());
+                    Log.i("Logueo","Erro:"+t.getMessage());
                     loginPresenter.LoginError("Erro:"+t.getMessage());
                 }
             });
         }catch(Exception e){
-            Log.i("Login",e.getMessage());
+            Log.i("Logueo",e.getMessage());
         }
     }
 

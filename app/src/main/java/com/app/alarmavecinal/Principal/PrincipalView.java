@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
@@ -45,6 +46,12 @@ import com.app.alarmavecinal.Usuario.Login.LoginView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -53,7 +60,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class PrincipalView extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Principal.PrincipalView {
+public class PrincipalView extends AppCompatActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener, Principal.PrincipalView {
     NavigationView navigationView;
     Menu nav_Menu;
     Toolbar toolbar;
@@ -69,6 +76,7 @@ public class PrincipalView extends AppCompatActivity implements NavigationView.O
     double lat=0,lon=0;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    GoogleMap googleMap;
 
     LocationManager mLocationManager = null;
     LocationListener locationListener = null;
@@ -88,7 +96,9 @@ public class PrincipalView extends AppCompatActivity implements NavigationView.O
         nota = findViewById(R.id.nota);
         direccion=findViewById(R.id.direccion);
         direccion.setText(funciones.GetDireccionAntes());
-
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapa);
+        mapFragment.getMapAsync(this);
 
         //borrar el registro del grupo si  esta en ""  por que guardaba el grupo vacio
         if (funciones.GetIdGrupo().replace(" ", "").length() != 32) {
@@ -402,6 +412,25 @@ public class PrincipalView extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        googleMap = map;
+
+        UiSettings set=googleMap.getUiSettings();
+        set.setZoomControlsEnabled(true);
+
+        Log.i("Moviendo", "Mapa listo");
+        googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+
+                Log.i("Moviendo", cameraPosition+"");
+            }
+        });
+
+
+    }
 
 
 

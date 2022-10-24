@@ -41,7 +41,7 @@ public class LoginView extends AppCompatActivity implements Login.LoginView{
     }
 
     public void ShowDialog() {
-        dialog = ProgressDialog.show(this, "", "Registrando...", true);
+        dialog = ProgressDialog.show(this, "", "Enviando...", true);
     }
 
 
