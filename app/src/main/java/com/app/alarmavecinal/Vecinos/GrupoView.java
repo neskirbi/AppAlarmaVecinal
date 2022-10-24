@@ -24,16 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Grupost.Escaner;
-import com.app.alarmavecinal.Grupost.ListaVecinos;
-import com.app.alarmavecinal.Models.Grupo;
+import com.app.alarmavecinal.Grupost.VecinosView;
 import com.app.alarmavecinal.Principal.PrincipalView;
 import com.app.alarmavecinal.R;
 import com.app.alarmavecinal.Tabs.AyudaGrupoTab;
@@ -368,7 +361,7 @@ public class GrupoView extends AppCompatActivity implements GrupoInteface.GrupoV
     }
 
     public void VerListaVecinos(View view){
-        startActivity(new Intent(this, ListaVecinos.class));
+        startActivity(new Intent(this, VecinosView.class));
         //this.finish();
     }
 

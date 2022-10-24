@@ -31,6 +31,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Yo.Pass.PassView"
+            android:exported="false" />
+        <activity
+            android:name=".Yo.YoView"
+            android:exported="false"/>
+        <activity
             android:name=".Usuario.Registro.RegistroView"
             android:exported="true" />
         <activity
@@ -65,7 +71,7 @@
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".Grupost.ListaVecinos"
+            android:name=".Grupost.VecinosView"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Sugerencias.SubirSugerencia"
@@ -76,7 +82,7 @@
         <activity
             android:name=".Chat.ChatWindow"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Datos.DatosView" />
+        <activity android:name=".Yo.Datos.DatosView" />
         <activity android:name=".FuncioneAvisos.AvisosMensaje" />
         <activity
             android:name=".FuncioneAvisos.NewAvisos"

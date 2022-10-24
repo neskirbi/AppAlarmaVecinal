@@ -10,38 +10,19 @@
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/banner"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|center_horizontal"
+        android:layout_height="100dp"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/id_banner"></com.google.android.gms.ads.AdView>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:background="@color/colorPrimary"
-        android:layout_marginTop="50dp">
-        <TextView
-            android:id="@+id/ngrupo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chat"
-            android:textStyle=""
-            android:textSize="15dp"
-            android:textColor="#fff"
-            android:layout_gravity="center_vertical|center_horizontal"/>
-    </FrameLayout>
+        android:layout_gravity="top"
+        ads:adUnitId="@string/id_banner"/>
+
     <ScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="100dp"
         android:layout_marginBottom="60dp"
-        android:background="@drawable/f_chat"
-        >
-<!--
+        android:background="@drawable/f_chat">
 
-        <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >-->
 
             <LinearLayout
                 android:id="@+id/chat"
@@ -143,5 +124,14 @@
         </FrameLayout>
 
     </FrameLayout>
+    <ImageView
+        android:id="@+id/preview_imagen"
+        android:layout_width="250dp"
+        android:layout_height="0dp"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="120dp"
+        android:padding="5dp"
+        android:background="@drawable/redondeado"/>
 
 </FrameLayout>

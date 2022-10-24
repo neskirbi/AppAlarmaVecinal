@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -18,11 +19,13 @@ import android.widget.Toast;
 
 import com.app.alarmavecinal.BuildConfig;
 import com.app.alarmavecinal.Funciones;
+import com.app.alarmavecinal.Metodos;
 import com.app.alarmavecinal.Vecinos.GrupoView;
 import com.app.alarmavecinal.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,9 +37,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class ListaVecinos extends AppCompatActivity {
+public class VecinosView extends AppCompatActivity implements Vecinos.VecinosView {
+    VecinosPresenter vecinosPresenter;
     Context context;
     Funciones funciones;
+    Metodos metodos;
     FrameLayout opciones,titlebar;
     LinearLayout content,menu,dummy,quitar,bloquear,desbloquear;
     ImageView abrir_menu;
@@ -57,6 +62,9 @@ public class ListaVecinos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_vecinos);
+        context=this;
+        metodos=new Metodos(context);
+        vecinosPresenter=new VecinosPresenter(this,context);
         titlebar=findViewById(R.id.titlebar);
         opciones=findViewById(R.id.opciones);
         opciones.bringToFront();
@@ -76,7 +84,6 @@ public class ListaVecinos extends AppCompatActivity {
         menu=findViewById(R.id.menu);
         context=this;
         funciones=new Funciones(context);
-        titulog.setText(funciones.GetNombreGrupo());
 
         MobileAds.initialize(this);
         AdView m = findViewById(R.id.banner);
@@ -194,35 +201,18 @@ public class ListaVecinos extends AppCompatActivity {
         bloquear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                funciones.Vibrar(funciones.VibrarPush());
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                 alertDialog.setTitle("Bloquear");
                 alertDialog.setMessage("¿Seguro que quiere bloquear a "+nombrev+" del grupo?");
-
-
 
                 alertDialog.setIcon(R.drawable.img_bloqueo);
 
                 alertDialog.setPositiveButton("Sí",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                if(idv.equals(funciones.GetIdUsuario())){
-                                    Toast.makeText(context, "No puedes bloquearte tu mismo del grupo.", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    String respuesta=funciones.Conexion("{\"id_usuario\":\""+idv+"\",\"id_grupo\":\""+funciones.GetIdGrupo()+"\"}",funciones.GetUrl()+getString(R.string.url_SetBloqueo),"POST");
-                                    try {
-                                        JSONObject jsonObject=new JSONObject(respuesta);
-                                        if (jsonObject.get("response").toString().contains("1")){
-                                            Toast.makeText(context, nombrev+" se ha bloquedo del grupo.", Toast.LENGTH_SHORT).show();
-                                            ActualizarVecinos();
-                                            opciones.setVisibility(View.GONE);
-                                        }else{
-                                            Toast.makeText(context, nombrev+" no se pudo bloquear del grupo.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    } catch (JSONException e) {
-                                        Toast.makeText(context, "Error al procesar la respuesta.", Toast.LENGTH_SHORT).show();
-                                        e.printStackTrace();
-                                    }
-                                }
+                                funciones.Vibrar(funciones.VibrarPush());
+                                vecinosPresenter.BloquearVecino(idv);
 
                             }
                         });
@@ -242,32 +232,18 @@ public class ListaVecinos extends AppCompatActivity {
         desbloquear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                funciones.Vibrar(funciones.VibrarPush());
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                 alertDialog.setTitle("Desbloquear");
                 alertDialog.setMessage("¿Seguro que quiere desbloquear a "+nombrev+" del grupo?");
-
-
 
                 alertDialog.setIcon(R.drawable.img_menu_palomita);
 
                 alertDialog.setPositiveButton("Sí",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                String respuesta=funciones.Conexion("{\"id_usuario\":\""+idv+"\",\"id_grupo\":\""+funciones.GetIdGrupo()+"\"}",funciones.GetUrl()+getString(R.string.url_SetDesbloqueo),"POST");
-                                try {
-                                    JSONObject jsonObject=new JSONObject(respuesta);
-                                    if (jsonObject.get("response").toString().contains("1")){
-                                        Toast.makeText(context, nombrev+" se ha debloquedo del grupo.", Toast.LENGTH_SHORT).show();
-                                        ActualizarVecinos();
-                                        opciones.setVisibility(View.GONE);
-                                    }else{
-                                        Toast.makeText(context, nombrev+" no se pudo debloquear del grupo.", Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (JSONException e) {
-                                    Toast.makeText(context, "Error al procesar la respuesta.", Toast.LENGTH_SHORT).show();
-                                    e.printStackTrace();
-                                }
-
+                                funciones.Vibrar(funciones.VibrarPush());
+                               vecinosPresenter.DesbloquearVecino(idv);
                             }
                         });
 
@@ -292,19 +268,20 @@ public class ListaVecinos extends AppCompatActivity {
 
     private void ActualizarVecinos() {
         if(vista){
-            titlebar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
             funciones.Vibrar(funciones.VibrarPush());
-            CargarVecinos cargarVecinos=new CargarVecinos();
-            cargarVecinos.executeOnExecutor(threadPoolExecutor);
+
+            vecinosPresenter.GetVecinos();
         }else{
-            titlebar.setBackgroundColor(getResources().getColor(R.color.colorSecondary));
+
             funciones.Vibrar(funciones.VibrarPush());
-            CargarBloqueados cargarBloqueados=new CargarBloqueados();
-            cargarBloqueados.executeOnExecutor(threadPoolExecutor);
+
+            vecinosPresenter.GetBloqueados();
         }
 
         OcultarMenu();
     }
+
 
     public void OcultarMenu(){
         menu.setVisibility(View.GONE);
@@ -315,45 +292,47 @@ public class ListaVecinos extends AppCompatActivity {
         startActivity(new Intent(context, GrupoView.class));
     }
 
-    class CargarVecinos extends AsyncTask {
-        @Override
-        protected void onProgressUpdate(Object[] values) {
-            super.onProgressUpdate(values);
+    @Override
+    public void OcultarOpciones() {
+        opciones.setVisibility(View.GONE);
+    }
 
+    @Override
+    public void LlenarVecinos(JsonArray jsonArray) {
+        titlebar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
-            View  item=null;
+        titulog.setText("Vecinos");
+        content.removeAllViews();
+        for(int i=0;i<jsonArray.size();i++ ){
 
+            LayoutInflater inflater = getLayoutInflater();
+            View item = inflater.inflate(R.layout.vecinos_card, null);
 
             try {
-                JSONArray jsonArray=new JSONArray(values[0].toString());
-                content.removeAllViews();
-                Toast.makeText(context, "Lista actualizada.", Toast.LENGTH_SHORT).show();
-                for(int i=0;i<jsonArray.length();i++ ){
+                JSONObject jsonObject= null;
+                jsonObject = new JSONObject(jsonArray.get(i).toString());
+                TextView nombre=item.findViewById(R.id.nombre);
+                nombre.setText(jsonObject.get("nombre").toString());
 
-                    LayoutInflater inflater = getLayoutInflater();
-                    item = inflater.inflate(R.layout.vecinos_card, null);
-                    final JSONObject jsonObject=new JSONObject(jsonArray.get(i).toString());
-
-
-                    TextView nombre=item.findViewById(R.id.nombre);
-                    nombre.setText(jsonObject.get("nombre").toString());
-
-                    TextView direccion=item.findViewById(R.id.direccion);
-                    direccion.setText(jsonObject.get("direccion").toString());
+                TextView direccion=item.findViewById(R.id.direccion);
+                direccion.setText(jsonObject.get("direccion").toString());
 
 
 
-                    ImageView opcusuario=item.findViewById(R.id.opcusuario);
-                    if(funciones.GetIdUsuario().contains(funciones.GetIdUsuarioGrupo())){
+                ImageView opcusuario=item.findViewById(R.id.opcusuario);
+                Log.i("Poner",jsonObject.get("id_usuario").toString()+"---"+funciones.GetIdUsuario());
+                if(funciones.GetIdUsuario().equals(funciones.GetIdUsuarioGrupo()) && !jsonObject.get("id_usuario").toString().equals(funciones.GetIdUsuario())){
+
+                        JSONObject finalJsonObject = jsonObject;
                         opcusuario.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 funciones.Vibrar(funciones.VibrarPush());
                                 try {
-                                    nombrev=jsonObject.get("nombre").toString();
-                                    idv=jsonObject.get("id_usuario").toString();
-                                    opcnombre.setText(jsonObject.get("nombre").toString());
-                                    opcdireccion.setText(jsonObject.get("direccion").toString());
+                                    nombrev= finalJsonObject.get("nombre").toString();
+                                    idv= finalJsonObject.get("id_usuario").toString();
+                                    opcnombre.setText(finalJsonObject.get("nombre").toString());
+                                    opcdireccion.setText(finalJsonObject.get("direccion").toString());
 
                                     VerOpciones();
 
@@ -362,28 +341,83 @@ public class ListaVecinos extends AppCompatActivity {
                                 }
                             }
                         });
-                    }else{
-                        opcusuario.setVisibility(View.GONE);
-                    }
 
-                    content.addView(item);
 
+                }else{
+                    opcusuario.setVisibility(View.GONE);
                 }
 
-                if(jsonArray.length()==0){
-                }
+                content.addView(item);
             } catch (JSONException e) {
-                funciones.Logo("lista_vecinos",e.getMessage());
+                e.printStackTrace();
+                Log.i("GetBloqueados", e.getMessage());
             }
-        }
 
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            String respuesta=funciones.Conexion("{\"id_grupo\":\""+funciones.GetIdGrupo()+"\"}",funciones.GetUrl()+getString(R.string.url_GetVecinosGrupo),"POST");
-            publishProgress(respuesta);
-            return null;
+
+
+
         }
     }
+
+    @Override
+    public void Llenabloqueados(JsonArray jsonArray) {
+        titlebar.setBackgroundColor(getResources().getColor(R.color.colorSecondary));
+
+        titulog.setText("Bloqueados");
+        content.removeAllViews();
+        for(int i=0;i<jsonArray.size();i++ ){
+
+            LayoutInflater inflater = getLayoutInflater();
+            View item = inflater.inflate(R.layout.vecinos_card, null);
+
+            try {
+                JSONObject jsonObject= null;
+                jsonObject = new JSONObject(jsonArray.get(i).toString());
+                TextView nombre=item.findViewById(R.id.nombre);
+                nombre.setText(jsonObject.get("nombre").toString());
+
+                TextView direccion=item.findViewById(R.id.direccion);
+                direccion.setText(jsonObject.get("direccion").toString());
+
+
+
+                ImageView opcusuario=item.findViewById(R.id.opcusuario);
+                if(funciones.GetIdUsuario().contains(funciones.GetIdUsuarioGrupo())){
+                    JSONObject finalJsonObject = jsonObject;
+                    opcusuario.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            funciones.Vibrar(funciones.VibrarPush());
+                            try {
+                                nombrev= finalJsonObject.get("nombre").toString();
+                                idv= finalJsonObject.get("id_usuario").toString();
+                                opcnombre.setText(finalJsonObject.get("nombre").toString());
+                                opcdireccion.setText(finalJsonObject.get("direccion").toString());
+
+                                VerOpciones();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }else{
+                    opcusuario.setVisibility(View.GONE);
+                }
+
+                content.addView(item);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.i("GetBloqueados", e.getMessage());
+            }
+
+
+
+
+        }
+    }
+
+
 
     private void VerOpciones() {
         if(vista){
@@ -398,74 +432,7 @@ public class ListaVecinos extends AppCompatActivity {
         opciones.setVisibility(View.VISIBLE);
     }
 
-    class CargarBloqueados extends AsyncTask {
-        @Override
-        protected void onProgressUpdate(Object[] values) {
-            super.onProgressUpdate(values);
 
-
-            View  item=null;
-
-
-            try {
-                JSONArray jsonArray=new JSONArray(values[0].toString());
-                content.removeAllViews();
-                Toast.makeText(context, "Lista actualizada.", Toast.LENGTH_SHORT).show();
-                for(int i=0;i<jsonArray.length();i++ ){
-
-                    LayoutInflater inflater = getLayoutInflater();
-                    item = inflater.inflate(R.layout.vecinos_card, null);
-                    final JSONObject jsonObject=new JSONObject(jsonArray.get(i).toString());
-
-
-                    TextView nombre=item.findViewById(R.id.nombre);
-                    nombre.setText(jsonObject.get("nombre").toString());
-
-                    TextView direccion=item.findViewById(R.id.direccion);
-                    direccion.setText(jsonObject.get("direccion").toString());
-
-
-
-                    ImageView opcusuario=item.findViewById(R.id.opcusuario);
-                    if(funciones.GetIdUsuario().contains(funciones.GetIdUsuarioGrupo())){
-                        opcusuario.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                funciones.Vibrar(funciones.VibrarPush());
-                                try {
-                                    nombrev=jsonObject.get("nombre").toString();
-                                    idv=jsonObject.get("id_usuario").toString();
-                                    opcnombre.setText(jsonObject.get("nombre").toString());
-                                    opcdireccion.setText(jsonObject.get("direccion").toString());
-                                    VerOpciones();
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                    }else{
-                        opcusuario.setVisibility(View.GONE);
-                    }
-
-                    content.addView(item);
-
-                }
-
-                if(jsonArray.length()==0){
-                }
-            } catch (JSONException e) {
-                funciones.Logo("lista_vecinos",e.getMessage());
-            }
-        }
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            String respuesta=funciones.Conexion("{\"id_grupo\":\""+funciones.GetIdGrupo()+"\"}",funciones.GetUrl()+getString(R.string.url_GetBloqueados),"POST");
-            publishProgress(respuesta);
-            return null;
-        }
-    }
 
 
     @Override

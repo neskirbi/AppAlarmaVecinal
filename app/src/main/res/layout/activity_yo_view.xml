@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Yo.YoView">
+
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginTop="10dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+
+      <LinearLayout
+          android:id="@+id/datos"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:padding="5dp"
+          android:background="@drawable/redondeado">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+          android:src="@drawable/sin_avatar"/>
+        <TextView
+            android:id="@+id/nombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical|center"
+            android:text="Nombre"
+            android:textSize="17dp"/>
+
+        =
+
+      </LinearLayout>
+
+
+
+      <LinearLayout
+          android:id="@+id/pass"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:padding="5dp"
+          android:background="@drawable/redondeado"
+          android:layout_marginTop="10dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/candado"/>
+
+        <TextView
+            android:id="@+id/cambiopass"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical|center"
+            android:gravity="center_vertical"
+            android:text="Cambiar Contraseña"
+            android:textSize="17dp"/>
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:id="@+id/propinas"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:padding="5dp"
+          android:background="@drawable/redondeado"
+          android:layout_marginTop="10dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/icono_propinas"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical|center"
+            android:gravity="center_vertical"
+            android:text="Hacer Donaciones"
+            android:textSize="17dp"/>
+
+      </LinearLayout>
+
+
+    </LinearLayout>
+  </ScrollView>
+
+  </FrameLayout>

@@ -1,9 +1,8 @@
-package com.app.alarmavecinal.Datos;
+package com.app.alarmavecinal.Yo.Datos;
 
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -13,18 +12,10 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Metodos;
 import com.app.alarmavecinal.R;
-import com.app.alarmavecinal.Usuario.Login.Login;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,9 +23,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonArray;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class DatosView extends AppCompatActivity implements OnMapReadyCallback, Datos.DatosView {
     EditText nombres, apellidos, direccion,ubicacion;

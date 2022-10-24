@@ -66,7 +66,7 @@ public class ChatWindow extends AppCompatActivity {
     String ultimo="2020-01-01 00:00:00";
     ScrollView scroll;
     ImageView enviar,grabar,cancelar;
-    TextView ngrupo,timerecord;
+    TextView timerecord;
     MediaPlayer mPlayer = new  MediaPlayer();
     MediaRecorder recorder;
     File archivo;
@@ -94,10 +94,8 @@ public class ChatWindow extends AppCompatActivity {
         enviar=findViewById(R.id.enviar);
         grabar=findViewById(R.id.grabar);
         cancelar=findViewById(R.id.cancelar);
-        ngrupo=findViewById(R.id.ngrupo);
         timerecord=findViewById(R.id.timerecord);
         grabacion=findViewById(R.id.grabacion);
-        ngrupo.setText(funciones.GetNombreGrupo());
 
 
 

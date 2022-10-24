@@ -310,15 +310,36 @@ public class Metodos {
     }
 
 
+    public Boolean PedirPermisoArchivos(Activity view) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int permsRequestCode = 100;
+            String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE};
+
+            int archivos = context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+
+            if (archivos == PackageManager.PERMISSION_GRANTED) {
+
+                return true;
+            } else {
+
+                view.requestPermissions(perms, permsRequestCode);
+                return false;
+            }
+
+        }
+        return true;
+    }
+
     public Boolean PedirPermisoLocation(Activity view) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int permsRequestCode = 100;
             String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
 
-            int camara = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            int gps = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
 
-            if (camara == PackageManager.PERMISSION_GRANTED) {
+            if (gps == PackageManager.PERMISSION_GRANTED) {
 
                 return true;
             } else {

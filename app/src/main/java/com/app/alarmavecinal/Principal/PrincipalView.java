@@ -7,7 +7,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -32,7 +31,7 @@ import com.app.alarmavecinal.BuildConfig;
 import com.app.alarmavecinal.FuncionAlertas.AlertasLista;
 import com.app.alarmavecinal.FuncioneAvisos.AvisosLista;
 import com.app.alarmavecinal.ChatFb.SalaChat;
-import com.app.alarmavecinal.Datos.DatosView;
+import com.app.alarmavecinal.Yo.Datos.DatosView;
 import com.app.alarmavecinal.Estructuras.Emergencias;
 import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Metodos;
@@ -42,6 +41,7 @@ import com.app.alarmavecinal.R;
 import com.app.alarmavecinal.Sugerencias.SubirSugerencia;
 import com.app.alarmavecinal.Usuario.Login.Login;
 import com.app.alarmavecinal.Usuario.Login.LoginView;
+import com.app.alarmavecinal.Yo.YoView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -142,11 +142,11 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
                 funciones.Vibrar(funciones.VibrarPush());
                 switch(item.getItemId()){
                     case R.id.datos:
-                        startActivity(new Intent(context, DatosView.class));
+                        startActivity(new Intent(context, YoView.class));
                         break;
                     case R.id.chat:
                         if (funciones.GetIdGrupo() != "") {
-                            //startActivity(new Intent(this, ChatWindow.class));
+                            //startActivity(new Intent(context, ChatWindow.class));
                             startActivity(new Intent(context, SalaChat.class));
                         } else {
                             funciones.SinGrupo();
@@ -266,19 +266,9 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
     protected void onPostResume() {
         super.onPostResume();
         funciones.ForzarEnviador();
-        VerificarUbicacion();
     }
 
-    private void VerificarUbicacion() {
-        if(!funciones.VerificarSwitchGPS()){
-            nota.setText("Encender GPS.");
-            Toast.makeText(context, "Encender GPS.", Toast.LENGTH_SHORT).show();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                nota.setTextColor(getColor(R.color.error));
-            }
-        }
 
-    }
 
     @Override
     protected void onPause() {
@@ -383,15 +373,8 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
                     });
 
             alertDialog.show();
-        }/*else if (id == R.id.nav_camara) {
-            if(funciones.GetIdGrupo()!=""){
-                if(PedirPermisoCamara()) {
-                    startActivity(new Intent(this, ListaTransmision.class));
-                }
-            }else{
-                funciones.SinGrupo();
-            }
-        }*/
+        }
+
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

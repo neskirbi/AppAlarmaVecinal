@@ -1,6 +1,5 @@
-package com.app.alarmavecinal.Datos;
+package com.app.alarmavecinal.Yo.Datos;
 
-import com.app.alarmavecinal.Models.Usuario;
 import com.google.gson.JsonArray;
 
 import retrofit2.Call;
