@@ -1,10 +1,8 @@
 package com.app.alarmavecinal.Principal;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -16,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +32,7 @@ import com.app.alarmavecinal.BuildConfig;
 import com.app.alarmavecinal.FuncionAlertas.AlertasLista;
 import com.app.alarmavecinal.FuncioneAvisos.AvisosLista;
 import com.app.alarmavecinal.ChatFb.SalaChat;
-import com.app.alarmavecinal.EditarInfo.Datos;
+import com.app.alarmavecinal.Datos.DatosView;
 import com.app.alarmavecinal.Estructuras.Emergencias;
 import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Metodos;
@@ -48,10 +47,9 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -81,6 +79,7 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
     LocationManager mLocationManager = null;
     LocationListener locationListener = null;
     private String proovedor;
+    BottomNavigationView bottom_navigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,14 +90,17 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
         context = this;
         funciones = new Funciones(context);
         metodos = new Metodos(context);
+        bottom_navigation=findViewById(R.id.bottom_navigation);
 
+
+        metodos.PedirPermisoLocation(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         nota = findViewById(R.id.nota);
         direccion=findViewById(R.id.direccion);
         direccion.setText(funciones.GetDireccionAntes());
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapa);
-        mapFragment.getMapAsync(this);
+        mapFragment.getMapAsync(this);*/
 
         //borrar el registro del grupo si  esta en ""  por que guardaba el grupo vacio
         if (funciones.GetIdGrupo().replace(" ", "").length() != 32) {
@@ -133,6 +135,27 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
 
         then = 0;
         BotonEmergencia();
+
+        bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                funciones.Vibrar(funciones.VibrarPush());
+                switch(item.getItemId()){
+                    case R.id.datos:
+                        startActivity(new Intent(context, DatosView.class));
+                        break;
+                    case R.id.chat:
+                        if (funciones.GetIdGrupo() != "") {
+                            //startActivity(new Intent(this, ChatWindow.class));
+                            startActivity(new Intent(context, SalaChat.class));
+                        } else {
+                            funciones.SinGrupo();
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
 
     }
 
@@ -206,7 +229,6 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
 
     private void CrearMenu() {
         if (funciones.GetIdGrupo().replace(" ", "").length() != 32) {
-            nav_Menu.findItem(R.id.nav_chat).setVisible(false);
             nav_Menu.findItem(R.id.nav_alertas).setVisible(false);
             nav_Menu.findItem(R.id.nav_avisos).setVisible(false);
             nav_Menu.findItem(R.id.nav_emergencias).setVisible(false);
@@ -297,7 +319,7 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -305,17 +327,7 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
         funciones.Vibrar(funciones.VibrarPush());
 
 
-        if (id == R.id.nav_datos) {
-            startActivity(new Intent(this, Datos.class));
-        } else if (id == R.id.nav_chat) {
-            if (funciones.GetIdGrupo() != "") {
-                //startActivity(new Intent(this, ChatWindow.class));
-                startActivity(new Intent(this, SalaChat.class));
-            } else {
-                funciones.SinGrupo();
-            }
-
-        } else if (id == R.id.nav_alertas) {
+        if (id == R.id.nav_alertas) {
             if (funciones.GetIdGrupo() != "") {
                 startActivity(new Intent(this, AlertasLista.class));
             } else {
@@ -391,26 +403,6 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
         nombre.setText(funciones.GetNombre());
     }
 
-    public Boolean PedirPermisoLocation() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int permsRequestCode = 100;
-            String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
-
-            int camara = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-
-            if (camara == PackageManager.PERMISSION_GRANTED) {
-
-                return true;
-            } else {
-
-                requestPermissions(perms, permsRequestCode);
-                return false;
-            }
-
-        }
-        return true;
-    }
 
 
     @Override

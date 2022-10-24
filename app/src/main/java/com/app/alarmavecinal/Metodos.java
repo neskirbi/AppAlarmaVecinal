@@ -2,17 +2,23 @@ package com.app.alarmavecinal;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.os.Build;
+import android.os.StrictMode;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.app.alarmavecinal.Models.Grupo;
 import com.app.alarmavecinal.Models.Usuario;
@@ -20,6 +26,10 @@ import com.app.alarmavecinal.Servicios.Emergencia;
 import com.app.alarmavecinal.Servicios.Notificador;
 import com.app.alarmavecinal.Sqlite.Base;
 import com.app.alarmavecinal.Usuario.Registro.RegistroView;
+import com.google.gson.JsonArray;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +40,10 @@ public class Metodos {
     public Metodos(Context context) {
         this.context = context;
     }
-
+    public void AbrirConexion(){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+    }
     public String GetUrl(){
         String URL="";
         if(BuildConfig.DEBUG){
@@ -286,4 +299,60 @@ public class Metodos {
 
 
     }
+
+
+    public Boolean PedirPermisoLocation(Activity view) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int permsRequestCode = 100;
+            String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
+
+            int camara = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+
+            if (camara == PackageManager.PERMISSION_GRANTED) {
+
+                return true;
+            } else {
+
+                view.requestPermissions(perms, permsRequestCode);
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+    public void Toast(String msn) {
+        Toast.makeText(context, msn, Toast.LENGTH_SHORT).show();
+    }
+
+    public boolean IsSuccess(JsonArray body) {
+        if(Integer.parseInt(body.get(0).getAsJsonObject().get("status").toString())==1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public String GetMsn(JsonArray body) {
+        try {
+            JSONObject jsonObject=new JSONObject(body.get(0).toString());
+            return jsonObject.getString("msn");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public String GetIndex(JsonArray body,String index) {
+        try {
+            JSONObject jsonObject=new JSONObject(body.get(0).getAsJsonObject().get("datos").toString());
+            return jsonObject.getString(index);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
 }

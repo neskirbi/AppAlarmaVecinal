@@ -76,7 +76,7 @@
         <activity
             android:name=".Chat.ChatWindow"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EditarInfo.Datos" />
+        <activity android:name=".Datos.DatosView" />
         <activity android:name=".FuncioneAvisos.AvisosMensaje" />
         <activity
             android:name=".FuncioneAvisos.NewAvisos"
