@@ -73,7 +73,7 @@ public class DatosInteractor implements Datos.DatosInteractor {
 
 
     @Override
-    public void Actualizar(String nombres,String apellidos,String direccion) {
+    public void Actualizar(String nombres,String apellidos,String direccion,String ubicacion) {
 
         metodos.AbrirConexion();
 
@@ -104,6 +104,7 @@ public class DatosInteractor implements Datos.DatosInteractor {
             jsonObject.addProperty("nombres",nombres);
             jsonObject.addProperty("apellidos",apellidos);
             jsonObject.addProperty("direccion",direccion);
+            jsonObject.addProperty("ubicacion",ubicacion);
             jsonArray.add(jsonObject);
 
             Retrofit retrofit = new Retrofit.Builder()
@@ -122,13 +123,14 @@ public class DatosInteractor implements Datos.DatosInteractor {
                         Log.i("Actualizar",response.body().get(0).getAsJsonObject().get("status").toString());
                         if(metodos.IsSuccess(response.body())){
                             metodos.Toast(metodos.GetMsn(response.body()));
+                            metodos.UpdateDatos(nombres+" "+apellidos,direccion,ubicacion);
                         }else{
                             metodos.Toast(metodos.GetMsn(response.body()));
                         }
 
 
                     }else{
-                        metodos.Toast(metodos.GetMsn(response.body()));
+                        metodos.Toast("Error de servidor.");
                     }
                 }
 

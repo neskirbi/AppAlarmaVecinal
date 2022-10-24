@@ -37,7 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DatosView extends AppCompatActivity implements OnMapReadyCallback, Datos.DatosView {
-    EditText nombres, apellidos, direccion;
+    EditText nombres, apellidos, direccion,ubicacion;
     Context context;
     Funciones funciones;
     ProgressDialog dialog;
@@ -45,6 +45,7 @@ public class DatosView extends AppCompatActivity implements OnMapReadyCallback, 
     boolean unavez = true;
     DatosPresenter datosPresenter;
     Metodos metodos;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,8 @@ public class DatosView extends AppCompatActivity implements OnMapReadyCallback, 
         apellidos = findViewById(R.id.apellidos);
         direccion = findViewById(R.id.direccion);
 
+        ubicacion = findViewById(R.id.ubicacion);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapa);
         mapFragment.getMapAsync(this);
@@ -73,7 +76,7 @@ public class DatosView extends AppCompatActivity implements OnMapReadyCallback, 
     public void Actualizar(View view){
 
         metodos.Vibrar(metodos.VibrarPush());
-        datosPresenter.Actualizar(nombres.getText().toString(),apellidos.getText().toString(),direccion.getText().toString());
+        datosPresenter.Actualizar(nombres.getText().toString(),apellidos.getText().toString(),direccion.getText().toString(),ubicacion.getText().toString());
     }
 
     @Override
@@ -92,6 +95,7 @@ public class DatosView extends AppCompatActivity implements OnMapReadyCallback, 
 
                 if(unavez){
                     CamaraPosition(arg0.getLatitude(),arg0.getLongitude());
+                    ubicacion.setText("{\"lat\":\""+arg0.getLatitude()+"\",\"lon\":\""+arg0.getLongitude()+"\"}");
                     unavez=false;
                 }
 

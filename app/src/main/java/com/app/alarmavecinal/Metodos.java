@@ -96,6 +96,15 @@ public class Metodos {
 
     }
 
+    public void UpdateDatos(String nombre,String direccion,String ubicacion) {
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+
+        db.execSQL("UPDATE login SET nombre='"+nombre+"',direccion='"+direccion+"',ubicacion='"+ubicacion+"' ");
+
+        db.close();
+    }
+
     public String ToUtf8(String texto){
         if(texto==null)
             return"";

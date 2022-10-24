@@ -11,11 +11,11 @@ public interface Datos {
     interface Datospresenter{
         void GetDatos();
         void MostrarDatos(JsonArray body);
-        void Actualizar(String nombres,String apellidos,String direccion);
+        void Actualizar(String nombres,String apellidos,String direccion,String ubicacion);
     }
 
     interface DatosInteractor{
         void GetDatos();
-        void Actualizar(String nombres,String apellidos,String direccion);
+        void Actualizar(String nombres,String apellidos,String direccion,String ubicacion);
     }
 }

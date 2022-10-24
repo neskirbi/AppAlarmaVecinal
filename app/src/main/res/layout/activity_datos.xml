@@ -19,6 +19,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="250dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nota: Se guardará la ubicación actual."
+            android:textColor="#ff0000"
+            android:padding="15dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilnombre"
@@ -80,6 +86,26 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilubicacion"
+            android:hint="Ubicación"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="150"
+            app:boxBackgroundMode="outline"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ubicacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
         <Button
             android:onClick="Actualizar"
             android:layout_width="300dp"
@@ -87,7 +113,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:background="@drawable/boton_azul"
-            android:text="Actualizar"
+            android:text="Guardar"
             android:textColor="#fff"
             android:textSize="20dp"
             android:textStyle="bold" />

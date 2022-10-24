@@ -29,8 +29,8 @@ public class DatosPresenter implements Datos.Datospresenter {
     }
 
     @Override
-    public void Actualizar(String nombres, String apellidos, String direccion) {
-        datosInteractor.Actualizar(nombres,apellidos,direccion);
+    public void Actualizar(String nombres, String apellidos, String direccion,String ubicacion ) {
+        datosInteractor.Actualizar(nombres,apellidos,direccion,ubicacion);
     }
 
 
