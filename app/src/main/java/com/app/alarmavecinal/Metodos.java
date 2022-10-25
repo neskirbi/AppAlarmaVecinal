@@ -172,6 +172,24 @@ public class Metodos {
         return id_usuario;
     }
 
+
+    public void GuardarGrupoCreadoArray(JsonArray jsonArray) {
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+
+        String id_usuario=GetIdUsuario();
+
+        ContentValues grupos = new ContentValues();
+
+        grupos.put("id_grupo", GetIndex(jsonArray,"id_grupo"));
+        grupos.put("id_usuario",GetIndex(jsonArray,"id_grupo"));
+        grupos.put("nombre", ToUtf8(GetIndex(jsonArray,"nombre")));
+        grupos.put("enviado", 1);
+
+
+        db.insert("grupo", null, grupos);
+        db.close();
+    }
     public void GuardarGrupoCreado(Grupo grupo) {
         Base base = new Base(context);
         SQLiteDatabase db = base.getWritableDatabase();
@@ -383,6 +401,7 @@ public class Metodos {
         }
         return "";
     }
+
 
 
 }

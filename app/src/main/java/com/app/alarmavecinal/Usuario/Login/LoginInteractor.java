@@ -6,6 +6,7 @@ import android.util.Log;
 import com.app.alarmavecinal.Metodos;
 import com.app.alarmavecinal.Models.Usuario;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
@@ -25,49 +26,46 @@ public class LoginInteractor implements Login.LoginInteractor{
         this.loginPresenter=loginPresenter;
     }
 
+
+
     @Override
     public void HacerLogin(Usuario usuario) {
-        Log.i("Login","Url:"+metodos.GetUrl());
-        try{
 
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(metodos.GetUrl())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            Peticiones peticion=retrofit.create(Peticiones.class);
-            Call<Usuario> call= peticion.Login(usuario);
-            call.enqueue(new Callback<Usuario>() {
-                @Override
-                public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                    Log.i("Logueo", String.valueOf(response.code()));
-                    if(response.body()!=null){
-                        Log.i("Logueo",response.body().toString());
-                        if(response.body().getError()!=null){
-                            loginPresenter.LoginError(response.body().getError());
-                        }else{
-                            metodos.CreaLogin(response.body());
-
-                            Log.i("Logueo",response.body().getId_grupo());
-                            if(response.body().getId_grupo()!=null)
-                                metodos.GuardarGrupoLogin(response.body());
-                            loginPresenter.LoginOk();
-                        }
-
-                    }else{
+        metodos.AbrirConexion();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(metodos.GetUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        Peticiones peticion=retrofit.create(Peticiones.class);
+        Call<Usuario> call= peticion.Login(usuario);
+        call.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                Log.i("Logueo", String.valueOf(response.code()));
+                if(response.body()!=null){
+                    Log.i("Logueo",response.body().toString());
+                    if(response.body().getError()!=null){
                         loginPresenter.LoginError(response.body().getError());
-                    }
-                }
+                    }else{
+                        metodos.CreaLogin(response.body());
 
-                @Override
-                public void onFailure(Call<Usuario> call, Throwable t) {
-                    Log.i("Logueo","Erro:"+t.getMessage());
-                    loginPresenter.LoginError("Erro:"+t.getMessage());
+                        Log.i("Logueo",response.body().getId_grupo());
+                        if(response.body().getId_grupo()!=null)
+                            metodos.GuardarGrupoLogin(response.body());
+                        loginPresenter.LoginOk();
+                    }
+
+                }else{
+                    loginPresenter.LoginError(response.body().getError());
                 }
-            });
-        }catch(Exception e){
-            Log.i("Logueo",e.getMessage());
-        }
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                Log.i("Logueo","Erro:"+t.getMessage());
+                loginPresenter.LoginError("Erro:"+t.getMessage());
+            }
+        });
     }
 
 

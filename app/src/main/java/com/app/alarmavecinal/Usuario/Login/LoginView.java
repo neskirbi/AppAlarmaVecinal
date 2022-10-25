@@ -27,6 +27,9 @@ public class LoginView extends AppCompatActivity implements Login.LoginView{
         mail=findViewById(R.id.mail);
         pass=findViewById(R.id.pass);
         loginPresenter=new LoginPresenter(this,this);
+
+
+
     }
 
     public void Login(View view){

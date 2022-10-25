@@ -98,9 +98,6 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
         nota = findViewById(R.id.nota);
         direccion=findViewById(R.id.direccion);
         direccion.setText(funciones.GetDireccionAntes());
-        /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapa);
-        mapFragment.getMapAsync(this);*/
 
         //borrar el registro del grupo si  esta en ""  por que guardaba el grupo vacio
         if (funciones.GetIdGrupo().replace(" ", "").length() != 32) {

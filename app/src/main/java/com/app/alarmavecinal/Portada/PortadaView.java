@@ -1,5 +1,6 @@
-package com.app.alarmavecinal;
+package com.app.alarmavecinal.Portada;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,17 +8,25 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.app.alarmavecinal.Metodos;
 import com.app.alarmavecinal.Principal.PrincipalView;
+import com.app.alarmavecinal.R;
 import com.app.alarmavecinal.Sqlite.Base;
 import com.app.alarmavecinal.Usuario.Login.LoginView;
 
-public class Portada extends AppCompatActivity {
+public class PortadaView extends AppCompatActivity implements Portada.PortadaView {
 
 
+    PortadaPresenter portadaPresenter;
+    Context context;
+    Metodos metodos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_portada);
+        context=this;
+        metodos=new Metodos(this);
+        portadaPresenter=new PortadaPresenter(this,context);
         Empezar();
     }
 
@@ -25,10 +34,11 @@ public class Portada extends AppCompatActivity {
         new Handler().postDelayed(new Runnable(){
             public void run(){
                 // Cuando pasen los 3 segundos, pasamos a la actividad principal de la aplicación
-                if( Check_Log()){
-                    startActivity(new Intent(Portada.this, PrincipalView.class));
+                if( metodos.Check_Log()){
+                    portadaPresenter.GetGrupo();
+
                 }else{
-                    Intent intent = new Intent(Portada.this, LoginView.class);
+                    Intent intent = new Intent(PortadaView.this, LoginView.class);
                     startActivity(intent);
                 }
 
@@ -37,31 +47,11 @@ public class Portada extends AppCompatActivity {
         }, 1000);
     }
 
-    public boolean Check_Log() {
-
-        try {
-            Base base = new Base(this);
-            SQLiteDatabase db = base.getWritableDatabase();
 
 
-            String nombre="";
 
-            Cursor c =  db.rawQuery("SELECT * from login ",null);
-            c.moveToFirst();
-            int cont=c.getCount();
-            c.close();
-            db.close();
-
-
-            if(cont>0)
-            {
-                return true;
-            }
-        }catch (Exception e){}
-
-
-        return false;
-
-
+    @Override
+    public void IrPrincipal() {
+        startActivity(new Intent(PortadaView.this, PrincipalView.class));
     }
 }

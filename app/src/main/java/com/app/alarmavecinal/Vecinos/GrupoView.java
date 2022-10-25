@@ -30,6 +30,7 @@ import com.app.alarmavecinal.Grupost.VecinosView;
 import com.app.alarmavecinal.Principal.PrincipalView;
 import com.app.alarmavecinal.R;
 import com.app.alarmavecinal.Tabs.AyudaGrupoTab;
+import com.app.alarmavecinal.Usuario.Login.Login;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -355,7 +356,7 @@ public class GrupoView extends AppCompatActivity implements GrupoInteface.GrupoV
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
         startActivity(new Intent(context, PrincipalView.class));
         finish();
     }
@@ -377,6 +378,9 @@ public class GrupoView extends AppCompatActivity implements GrupoInteface.GrupoV
     public void IraGrupo() {
         startActivity(new Intent(context, GrupoView.class));
     }
+
+
+
 
 
 }

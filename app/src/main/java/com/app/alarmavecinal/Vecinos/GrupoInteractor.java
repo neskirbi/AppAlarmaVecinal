@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.app.alarmavecinal.Metodos;
 import com.app.alarmavecinal.Models.Grupo;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,28 +63,36 @@ public class GrupoInteractor implements GrupoInteface.GrupoInteractor {
     }
 
     @Override
-    public void UnirseGrupo(String id) {
-        Log.i("UnirseGrupo","interactor");
-        Grupo grupo=new Grupo(id, metodos.GetIdUsuario(), "","");
+    public void UnirseGrupo(String id_grupo) {
+        JsonArray jsonArray=new JsonArray();
+        JsonObject jsonObject=new JsonObject();
+        jsonObject.addProperty("id_usuario",metodos.GetIdUsuario());
+        jsonObject.addProperty("id_grupo",id_grupo);
+        jsonArray.add(jsonObject);
+        //Grupo grupo=new Grupo(id, metodos.GetIdUsuario(), "","");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(metodos.GetUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+        Log.i("UnirseGrupo", jsonArray.toString());
         GrupoPeticiones peticion=retrofit.create(GrupoPeticiones.class);
-        Call<Grupo> call= peticion.UnirseGrupo(grupo);
-        call.enqueue(new Callback<Grupo>() {
+        Call<JsonArray> call= peticion.UnirseGrupo(jsonArray);
+        call.enqueue(new Callback<JsonArray>() {
             @Override
-            public void onResponse(Call<Grupo> call, Response<Grupo> response) {
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 Log.i("UnirseGrupo", String.valueOf(response.code()));
                 if(response.body()!=null){
-                    if(response.body().getError()!=null){
-                        grupoPresenter.Error(response.body().getError());
-                    }else{
-                        Log.i("UnirseGrupo",response.body().getId_grupo()+"");
-                        metodos.GuardarGrupoCreado(response.body());
-                        metodos.VerificarServicios();
-                        grupoPresenter.IraGrupo();
+                    if (metodos.IsSuccess(response.body())) {
+                        Log.i("UnirseGrupo",response.body()+"");
+                            metodos.GuardarGrupoCreadoArray(response.body());
+                            metodos.VerificarServicios();
+                            grupoPresenter.IraGrupo();
+
+                    } else {
+                        metodos.Toast(metodos.GetMsn(response.body()));
                     }
+
+
 
 
                 }else{
@@ -91,7 +101,7 @@ public class GrupoInteractor implements GrupoInteface.GrupoInteractor {
             }
 
             @Override
-            public void onFailure(Call<Grupo> call, Throwable t) {
+            public void onFailure(Call<JsonArray> call, Throwable t) {
                 Log.i("Login","Erro:"+t.getMessage());
                 grupoPresenter.Error("Erro:"+t.getMessage());
             }
