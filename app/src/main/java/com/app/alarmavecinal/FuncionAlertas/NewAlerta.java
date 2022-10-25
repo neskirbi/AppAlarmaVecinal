@@ -115,54 +115,6 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
 
 
 
-    public void Descargar(){
-        dialog = ProgressDialog.show(NewAlerta.this, "", "Verificando...", true);
-        funciones.AbrirConexion();
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url =funciones.GetUrl()+getString(R.string.url_prealertas);
-        funciones.Logo("prealertas",url);
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        dialog.dismiss();
-                        alertas.clear();
-
-                        funciones.Logo("prealertas",response);
-                        try {
-
-                            JSONArray jsonArray=new JSONArray(response);
-                            if(jsonArray.length()!=0){
-                                for (int i =0; i < jsonArray.length();i++){
-                                    JSONObject jsonObject=new JSONObject(jsonArray.get(i).toString());
-                                    alertas.add(new Alertas(jsonObject.get("id_alerta").toString(),jsonObject.get("imagen").toString(),jsonObject.get("asunto").toString(),jsonObject.get("created_at").toString(),jsonObject.toString()));
-                                }
-
-                                Cargar();
-
-                            }
-                        } catch (JSONException e) {
-                            funciones.Logo("prealertas","Error: "+e.getMessage());
-                        }
-
-
-                    }
-
-
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                dialog.dismiss();
-                funciones.Logo("prealertas","That didn't work!");
-                Toast.makeText(getApplicationContext(), "¡Error de conexion!", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
 
     void Cargar(){
 
@@ -246,7 +198,7 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
 
         if(metodos.GetData(jsonArray).size()!=0){
             for (int i =0; i < metodos.GetData(jsonArray).size();i++){
-                alertas.add(new Alertas(metodos.GetIndex2(metodos.GetData(jsonArray),i,"id_alerta"),metodos.GetIndex2(metodos.GetData(jsonArray),i,"imagen") ,metodos.GetIndex2(metodos.GetData(jsonArray),i,"asunto"), metodos.GetIndex2(metodos.GetData(jsonArray),i,"created_at"),""));
+                alertas.add(new Alertas(metodos.GetIndex2(metodos.GetData(jsonArray),i,"id_alerta"),metodos.GetIndex2(metodos.GetData(jsonArray),i,"imagen") ,metodos.GetIndex2(metodos.GetData(jsonArray),i,"asunto"), metodos.GetIndex2(metodos.GetData(jsonArray),i,"created_at"),metodos.GetData(jsonArray).get(i).toString()));
             }
 
             Cargar();
