@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v7.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,11 +34,13 @@ import com.app.alarmavecinal.Estructuras.Alertas;
 import com.app.alarmavecinal.Estructuras.AlertasL;
 import com.app.alarmavecinal.Estructuras.Mensaje;
 import com.app.alarmavecinal.Funciones;
+import com.app.alarmavecinal.Metodos;
 import com.app.alarmavecinal.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,12 +53,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class NewAlerta extends AppCompatActivity implements AdapterAlertas.RecyclerItemClick {
+public class NewAlerta extends AppCompatActivity implements AdapterAlertas.RecyclerItemClick, com.app.alarmavecinal.FuncionAlertas.Alertas.AlertasView {
     Funciones funciones;
     ImageView agregar;
     RecyclerView alertas_lista;
     ArrayList<Alertas> alertas = new ArrayList();
+    AlertasPresenter alertasPresenter;
     Context context;
+    Metodos metodos;
     ProgressDialog dialog;
     FirebaseDatabase firebaseDatabaseAlerta;
     DatabaseReference databaseReferenceAlerta;
@@ -71,6 +76,8 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
         setContentView(R.layout.activity_new_alerta);
         context=this;
         funciones=new Funciones(context);
+        metodos=new Metodos(context);
+        alertasPresenter=new AlertasPresenter(this,context);
 
         AdView m = findViewById(R.id.banner);
         AdRequest adRequest = null;
@@ -92,7 +99,7 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
     @Override
     protected void onResume() {
         super.onResume();
-        Descarga();
+        alertasPresenter.GetAlertas();
     }
 
     public void Agregar(View view){
@@ -103,13 +110,12 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
 
     public void Descargar(View view){
         funciones.Vibrar(funciones.VibrarPush());
-
-        Descarga();
+        alertasPresenter.GetAlertas();
     }
 
 
 
-    public void Descarga(){
+    public void Descargar(){
         dialog = ProgressDialog.show(NewAlerta.this, "", "Verificando...", true);
         funciones.AbrirConexion();
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -210,7 +216,8 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
             JSONObject jsonObject0=new JSONObject(json);
             databaseReferenceAlerta.push().setValue(new AlertasL(funciones.GetUIID(),funciones.GetIdUsuario(),jsonObject0.get("imagen").toString(),jsonObject0.get("asunto").toString(),funciones.GetNombre(),funciones.GetDate(),""));
 
-            String response="", data="{\"id_alerta\":\""+jsonObject0.get("id_alerta").toString()+"\",\"id_grupo\":\""+funciones.GetIdGrupo()+"\",\"id_usuario\":\""+funciones.GetIdUsuario()+"\",\"imagen\":\""+jsonObject0.get("imagen").toString()+"\",\"asunto\":\""+jsonObject0.get("asunto").toString()+"\",\"mensaje\":\"\"}";
+            Log.i("SetAlerta","Alertas-"+funciones.GetIdGrupo());
+            /*String response="", data="{\"id_alerta\":\""+jsonObject0.get("id_alerta").toString()+"\",\"id_grupo\":\""+funciones.GetIdGrupo()+"\",\"id_usuario\":\""+funciones.GetIdUsuario()+"\",\"imagen\":\""+jsonObject0.get("imagen").toString()+"\",\"asunto\":\""+jsonObject0.get("asunto").toString()+"\",\"mensaje\":\"\"}";
 
             String url =funciones.GetUrl()+getString(R.string.url_SetAlertas);
             response=funciones.Conexion(data,url,"POST");
@@ -221,9 +228,9 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
                 finish();
             }else{
                 Toast.makeText(context, "¡Error al guardar!", Toast.LENGTH_SHORT).show();
-            }
+            }*/
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.i("SetAlerta","AError:"+e.getMessage());
         }
 
     }
@@ -234,4 +241,16 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
     }
 
 
+    @Override
+    public void LlenarLista(JsonArray jsonArray) {
+
+        if(metodos.GetData(jsonArray).size()!=0){
+            for (int i =0; i < metodos.GetData(jsonArray).size();i++){
+                alertas.add(new Alertas(metodos.GetIndex2(metodos.GetData(jsonArray),i,"id_alerta"),metodos.GetIndex2(metodos.GetData(jsonArray),i,"imagen") ,metodos.GetIndex2(metodos.GetData(jsonArray),i,"asunto"), metodos.GetIndex2(metodos.GetData(jsonArray),i,"created_at"),""));
+            }
+
+            Cargar();
+
+        }
+    }
 }

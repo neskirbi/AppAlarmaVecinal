@@ -27,6 +27,8 @@ import com.app.alarmavecinal.Servicios.Notificador;
 import com.app.alarmavecinal.Sqlite.Base;
 import com.app.alarmavecinal.Usuario.Registro.RegistroView;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -403,5 +405,20 @@ public class Metodos {
     }
 
 
+    public String GetIndex2(JsonArray body,int i,String index) {
+        Log.i("GetAlertas",body.get(i).toString());
+        try {
+            JSONObject jsonObject=new JSONObject(body.get(i).toString());
+            return jsonObject.getString(index);
+        } catch (JSONException e) {
 
+            Log.i("GetAlertas","Error:"+e.getMessage());
+            //return "";
+        }
+        return "";
+    }
+
+    public JsonArray GetData(JsonArray jsonArray) {
+        return jsonArray.get(0).getAsJsonObject().get("datos").getAsJsonArray();
+    }
 }
