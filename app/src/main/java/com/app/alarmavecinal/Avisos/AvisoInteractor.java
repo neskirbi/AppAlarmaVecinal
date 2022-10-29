@@ -85,7 +85,7 @@ public class AvisoInteractor implements Aviso.AvisosInterface {
         try {
 
             //JSONObject jsonObject0=new JSONObject(json);
-            databaseReferenceAlerta.push().setValue(new Ordenes(i,"","","","","",""));
+            databaseReferenceAlerta.setValue(new Ordenes(i,"","","","","",""));
 
 
 

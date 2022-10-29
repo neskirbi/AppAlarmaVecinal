@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonArray;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -96,11 +97,13 @@ public class AlertasLista extends AppCompatActivity {
             TextView titulo=item.findViewById(R.id.titulo);
             titulo.setText(funciones.GetIndex2(jsonArray,i,"asunto"));
 
-            TextView mensaje=item.findViewById(R.id.mensaje);
-            mensaje.setText(funciones.GetIndex2(jsonArray,i,"mensaje"));
+
 
             TextView fecha=item.findViewById(R.id.fecha);
             fecha.setText(funciones.GetIndex2(jsonArray,i,"created_at"));
+
+            ImageView imagen=item.findViewById(R.id.imagen);
+            Picasso.with(context).load(funciones.GetIndex2(jsonArray,i,"imagen")).into(imagen);
             avisos_lista.addView(item);
         }
 

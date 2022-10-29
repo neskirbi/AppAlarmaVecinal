@@ -840,7 +840,7 @@ public class Funciones {
                     jsonObject.addProperty("id_alerta", c.getString(c.getColumnIndex("id_alerta")));
                     jsonObject.addProperty("created_at", c.getString(c.getColumnIndex("created_at")));
                     jsonObject.addProperty("asunto", c.getString(c.getColumnIndex("asunto")));
-                    jsonObject.addProperty("mensaje", c.getString(c.getColumnIndex("mensaje")));
+                    jsonObject.addProperty("imagen", c.getString(c.getColumnIndex("imagen")));
                     jsonArray.add(jsonObject);
                 } catch (Exception e) {
 

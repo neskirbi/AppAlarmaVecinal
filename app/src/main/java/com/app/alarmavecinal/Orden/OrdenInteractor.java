@@ -79,7 +79,7 @@ public class OrdenInteractor  implements Orden.OrdenInteractor {
             //funciones.Logo("GuardarAlertas",funciones.GetIndex2(funciones.GetData(body),i,"id_alerta"));
 
             try{
-                if(!EstaAlerta(funciones.GetIndex2(funciones.GetData(body),i,"id_alerta"))){
+                if(!EstaAviso(funciones.GetIndex2(funciones.GetData(body),i,"id_alerta"))){
                     ContentValues aviso = new ContentValues();
 
                     aviso.put("id_aviso", funciones.GetIndex2(funciones.GetData(body),i,"id_aviso"));
@@ -96,7 +96,7 @@ public class OrdenInteractor  implements Orden.OrdenInteractor {
                 }
 
             }catch(Exception e){
-                funciones.Logo("GuardarAlertas",e.getMessage());
+                funciones.Logo("GuardarAvisos",e.getMessage());
             }
 
 
@@ -208,7 +208,7 @@ public class OrdenInteractor  implements Orden.OrdenInteractor {
                 }
 
             }catch(Exception e){
-                funciones.Logo("GuardarAlertas",e.getMessage());
+                funciones.Logo("GuardarAlertas","Error:"+e.getMessage());
             }
 
 
@@ -223,8 +223,6 @@ public class OrdenInteractor  implements Orden.OrdenInteractor {
         JsonArray jsonArray=new JsonArray();
         Base base = new Base(context);
         SQLiteDatabase db = base.getWritableDatabase();
-
-
 
 
         Cursor c =  db.rawQuery("SELECT * from alertas ",null);
@@ -260,6 +258,29 @@ public class OrdenInteractor  implements Orden.OrdenInteractor {
 
         if(c.getCount()>0){
            return true;
+        }
+
+
+
+        c.close();
+        db.close();
+        return false;
+
+    }
+
+    private boolean EstaAviso(String id_aviso) {
+
+
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+
+
+
+
+        Cursor c =  db.rawQuery("SELECT * from avisos where id_aviso='"+id_aviso+"' ",null);
+
+        if(c.getCount()>0){
+            return true;
         }
 
 

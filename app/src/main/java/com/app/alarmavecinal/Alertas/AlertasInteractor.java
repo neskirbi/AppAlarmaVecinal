@@ -75,7 +75,7 @@ public class AlertasInteractor implements Alertas.AlertasInteractor {
         try {
 
             //JSONObject jsonObject0=new JSONObject(json);
-            databaseReferenceAlerta.push().setValue(new Ordenes(i,id_alerta,"","","","",""));
+            databaseReferenceAlerta.setValue(new Ordenes(i,id_alerta,"","","","",""));
 
 
 
