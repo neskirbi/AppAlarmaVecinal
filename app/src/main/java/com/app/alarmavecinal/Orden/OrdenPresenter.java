@@ -63,7 +63,8 @@ public class OrdenPresenter implements Orden.OrdenPresenter {
 
 
                     case 2://Avisos
-                        //Emergencia(orden);
+
+                        ordenInteractor.GetAvisos();
                         break;
 
 

@@ -9,13 +9,13 @@ public interface Alertas {
     }
 
     interface AlertasPresenter{
-        void GetAlertas();
+        void GetPreAlertas();
         void LlenarLista(JsonArray jsonArray);
         void EnviarAlerta(com.app.alarmavecinal.Estructuras.Alertas json);
     }
 
     interface AlertasInteractor{
-        void GetAlertas();
+        void GetPreAlertas();
         void EnviarAlerta(com.app.alarmavecinal.Estructuras.Alertas json);
     }
 }

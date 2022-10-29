@@ -12,6 +12,7 @@ public interface Orden {
     interface OrdenInteractor{
 
         void GetAlerta();
+        void GetAvisos();
 
     }
 }

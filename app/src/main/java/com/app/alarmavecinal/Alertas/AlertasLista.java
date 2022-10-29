@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.app.alarmavecinal.Adapters.AdapterAlertasLista;
 import com.app.alarmavecinal.BuildConfig;
@@ -27,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,32 +43,26 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class AlertasLista extends AppCompatActivity implements AdapterAlertasLista.RecyclerItemClick {
+public class AlertasLista extends AppCompatActivity {
     Funciones funciones;
     ImageView agregar;
-    RecyclerView alertas_lista;
+    LinearLayout alertas_lista;
     ArrayList<AlertasL> alertas = new ArrayList();
     Context context;
 
-    FirebaseDatabase firebaseDatabaseAlerta;
-    DatabaseReference databaseReferenceAlerta;
-    ChildEventListener listenerAlerta;
 
-    int corePoolSize = 60;
-    int maximumPoolSize = 80;
-    int keepAliveTime = 10;
-    BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
-    Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
-    private AdapterAlertasLista.RecyclerItemClick algo;
+
+    LinearLayout avisos_lista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alertas_lista);
         context=this;
-        algo=this;
+
         funciones=new Funciones(context);
 
+        avisos_lista=findViewById(R.id.avisos_lista);
 
         AdView m = findViewById(R.id.banner);
         AdRequest adRequest = null;
@@ -87,6 +85,30 @@ public class AlertasLista extends AppCompatActivity implements AdapterAlertasLis
         Cargar();
     }
 
+    private void Cargar() {
+        JsonArray jsonArray=funciones.GetAlertas();
+        funciones.Logo("ListaAlertas",jsonArray+"");
+        for (int i=0;i<jsonArray.size();i++){
+
+            LayoutInflater inflater = getLayoutInflater();
+            View item = inflater.inflate(R.layout.row_alerta, null);
+
+            TextView titulo=item.findViewById(R.id.titulo);
+            titulo.setText(funciones.GetIndex2(jsonArray,i,"asunto"));
+
+            TextView mensaje=item.findViewById(R.id.mensaje);
+            mensaje.setText(funciones.GetIndex2(jsonArray,i,"mensaje"));
+
+            TextView fecha=item.findViewById(R.id.fecha);
+            fecha.setText(funciones.GetIndex2(jsonArray,i,"created_at"));
+            avisos_lista.addView(item);
+        }
+
+
+
+
+    }
+
     public void Agregar(View view){
         funciones.Vibrar(funciones.VibrarPush());
         startActivity(new Intent(context,NewAlerta.class));
@@ -97,116 +119,15 @@ public class AlertasLista extends AppCompatActivity implements AdapterAlertasLis
         funciones.Vibrar(funciones.VibrarPush());
 
     }
-    ProgressDialog dialog;
-    class Descarga2 extends AsyncTask{
-        @Override
-        protected void onPreExecute() {
-
-            dialog=ProgressDialog.show(context, "",
-                    "Cargando...", true);
-            dialog.setCancelable(true);
-        }
-
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-            if(dialog!=null)
-                dialog.dismiss();
-        }
-        @Override
-        protected void onProgressUpdate(Object[] values) {
-
-            Cargar();
-        }
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            alertas.clear();
-
-            String data="{\"id_grupo\":\""+funciones.GetIdGrupo()+"\"}";
-            String respuesta=funciones.Conexion(data,funciones.GetUrl()+getString(R.string.url_GetAlertas),"POST");
-            try {
-
-                JSONArray jsonArray=new JSONArray(respuesta);
-                if(jsonArray.length()!=0){
-                    for (int i =0; i < jsonArray.length();i++){
-                        JSONObject jsonObject=new JSONObject(jsonArray.get(i).toString());
-                        alertas.add(new AlertasL(jsonObject.get("id_alerta").toString(),jsonObject.get("id_usuario").toString(),jsonObject.get("imagen").toString(),jsonObject.get("asunto").toString(),jsonObject.get("nombre").toString(),jsonObject.get("fecha").toString(),jsonObject.toString()));
-                    }
 
 
-                }
-            } catch (JSONException e) {
-               funciones.Logo("carga","Error: "+e.getMessage());
-            }
-            publishProgress();
-            return null;
-        }
-    }
 
 
-    void Cargar(){
-
-        firebaseDatabaseAlerta = FirebaseDatabase.getInstance();
-        databaseReferenceAlerta = firebaseDatabaseAlerta.getReference("Alertas-"+funciones.GetIdGrupo());
-        listenerAlerta=new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                funciones.Logo("Notificaciones", snapshot.getValue()+"");
-                AlertasL alerta=snapshot.getValue(AlertasL.class);
-                alertas.add(0,new AlertasL(alerta.getId_alerta(),alerta.getId_usuario(),alerta.getImagen(),alerta.getTitulo(),alerta.getNombre(),alerta.getFecha(),alerta.getJson()));
-
-
-                alertas_lista=findViewById(R.id.alertas_lista);
-
-                alertas_lista.setLayoutManager(new LinearLayoutManager(context));
-                alertas_lista.setAdapter(new AdapterAlertasLista(alertas,algo));
-                if(alertas.size()==0){
-                    funciones.VerificaConexion();
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                funciones.Logo("Notificaciones","onChildChanged");
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                funciones.Logo("Notificaciones","onChildRemoved");
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                funciones.Logo("Notificaciones","onChildMoved");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                funciones.Logo("Notificaciones","onCancelled");
-            }
-        };
-
-        databaseReferenceAlerta.addChildEventListener(listenerAlerta);
-
-
-       
-
-    }
-    @Override
-    public void itemClick(AlertasL alertas) {
-        funciones.Vibrar(funciones.VibrarPush());
-        //startActivity(new Intent(context,AlertasMensaje.class).putExtra("mensaje",alertas.get(position).getJson()));
-    }
 
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        if(databaseReferenceAlerta!=null){
-            databaseReferenceAlerta.removeEventListener(listenerAlerta);
-        }
     }
 }

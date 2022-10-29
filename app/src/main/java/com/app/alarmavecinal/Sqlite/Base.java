@@ -15,7 +15,7 @@ public class Base extends SQLiteOpenHelper {
     private static  String CHAT_IN_TABLE_CREATE ="" ;
     private static  String LOGIN_TABLE_CREATE= "",GRUPO_TABLE_CREATE= "",ALERTAS_TABLE_CREATE= "",AVISOS_TABLE_CREATE= "",AVISO_NOTIFICA ="",ALERTA_NOTIFICA ="",CHAT_NOTIFICA="",EMERGENCIA_NOTIFICA="";
     private static  String DB_NAME = "alerta.sqlite";
-    private static  int DB_VERSION = 7;
+    private static  int DB_VERSION = 8;
 
 
 
@@ -40,21 +40,28 @@ public class Base extends SQLiteOpenHelper {
                 "nombre TEXT NOT NULL," +
                 "enviado int not null)" ;
 
+
+
         ALERTAS_TABLE_CREATE= "CREATE TABLE IF NOT EXISTS  alertas(" +
-                "id_alerta TEXT PRIMARY KEY NOT NULL)" ;
+                "id_alerta TEXT not null,"+
+                "id_grupo TEXT not null,"+
+                "id_usuario TEXT not null,"+
+                "imagen TEXT not null,"+
+                "created_at TEXT not null,"+
+                "asunto TEXT not null,"+
+                "mensaje TEXT not null);" ;
 
         AVISOS_TABLE_CREATE= "CREATE TABLE IF NOT EXISTS  avisos(" +
-                "id_aviso TEXT PRIMARY KEY NOT NULL)" ;
+                "id_aviso TEXT not null,"+
+                "id_grupo TEXT not null,"+
+                "id_usuario TEXT not null,"+
+                "created_at TEXT not null,"+
+                "asunto TEXT not null,"+
+                "mensaje TEXT not null);" ;
 
 
 
-        CHAT_NOTIFICA= "CREATE TABLE IF NOT EXISTS  chat_notifica(" +
-                "id_mensaje TEXT PRIMARY KEY NOT NULL)" ;
 
-        AVISO_NOTIFICA= "CREATE TABLE IF NOT EXISTS  aviso_notifica(" +
-                "id_aviso TEXT PRIMARY KEY NOT NULL)" ;
-        ALERTA_NOTIFICA= "CREATE TABLE IF NOT EXISTS  alerta_notifica(" +
-                "id_alerta TEXT PRIMARY KEY NOT NULL)" ;
 
         EMERGENCIA_NOTIFICA= "CREATE TABLE IF NOT EXISTS  emergencias(" +
                 "id_emergencia TEXT PRIMARY KEY NOT NULL)" ;
@@ -65,9 +72,8 @@ public class Base extends SQLiteOpenHelper {
         db.execSQL(GRUPO_TABLE_CREATE);
         db.execSQL(ALERTAS_TABLE_CREATE);
         db.execSQL(AVISOS_TABLE_CREATE);
-        db.execSQL(CHAT_NOTIFICA);
-        db.execSQL(AVISO_NOTIFICA);
-        db.execSQL(ALERTA_NOTIFICA);
+
+
         db.execSQL(EMERGENCIA_NOTIFICA);
 
     }
@@ -202,13 +208,33 @@ public class Base extends SQLiteOpenHelper {
 
             db.execSQL("DROP table alertas");
             ALERTAS_TABLE_CREATE= "CREATE TABLE IF NOT EXISTS  alertas(" +
-                    "id_alerta TEXT PRIMARY KEY NOT NULL)" ;
+                    "id_alerta TEXT not null,"+
+                    "id_grupo TEXT not null,"+
+                    "id_usuario TEXT not null,"+
+                    "imagen TEXT not null,"+
+                    "asunto TEXT not null,"+
+                    "mensaje TEXT not null,"+
+                    "created_at TEXT not null);" ;
+
             db.execSQL(ALERTAS_TABLE_CREATE);
 
+            db.execSQL("DROP table avisos");
             AVISOS_TABLE_CREATE= "CREATE TABLE IF NOT EXISTS  avisos(" +
-                    "id_aviso TEXT PRIMARY KEY NOT NULL)" ;
+                    "id_aviso TEXT not null,"+
+                    "id_grupo TEXT not null,"+
+                    "id_usuario TEXT not null,"+
+                    "imagen TEXT not null,"+
+                    "asunto TEXT not null,"+
+                    "mensaje TEXT not null,"+
+                    "created_at TEXT not null);" ;
 
             db.execSQL(AVISOS_TABLE_CREATE);
+
+            db.execSQL("DROP table chat_notifica");
+
+            db.execSQL("DROP table aviso_notifica");
+
+            db.execSQL("DROP table alerta_notifica");
 
 
         }

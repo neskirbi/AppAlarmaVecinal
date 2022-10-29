@@ -14,7 +14,7 @@ import com.app.alarmavecinal.Estructuras.AlertasL;
 import com.app.alarmavecinal.Estructuras.Avisos;
 import com.app.alarmavecinal.Estructuras.Mensaje;
 import com.app.alarmavecinal.Alertas.AlertasLista;
-import com.app.alarmavecinal.FuncioneAvisos.AvisosLista;
+import com.app.alarmavecinal.Avisos.AvisosLista;
 import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.R;
 import com.google.firebase.database.ChildEventListener;

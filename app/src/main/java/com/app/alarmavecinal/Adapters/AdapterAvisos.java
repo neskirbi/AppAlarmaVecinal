@@ -61,7 +61,6 @@ public class AdapterAvisos extends RecyclerView.Adapter<AdapterAvisos.AvisosView
         public AvisosViewHolder(@NonNull View itemView) {
             super(itemView);
             titulo= itemView.findViewById(R.id.titulo);
-            resumen= itemView.findViewById(R.id.resumen);
             fecha= itemView.findViewById(R.id.fecha);
         }
     }

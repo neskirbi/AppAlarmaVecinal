@@ -18,9 +18,9 @@ public class AlertasPresenter implements Alertas.AlertasPresenter {
     }
 
     @Override
-    public void GetAlertas() {
+    public void GetPreAlertas() {
 
-        alertasInteractor.GetAlertas();
+        alertasInteractor.GetPreAlertas();
     }
 
     @Override

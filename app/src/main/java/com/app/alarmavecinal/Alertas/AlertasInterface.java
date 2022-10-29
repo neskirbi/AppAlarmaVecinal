@@ -8,8 +8,8 @@ import retrofit2.http.POST;
 
 public interface AlertasInterface {
 
-    @POST("api/GetAlertas")
-    Call<JsonArray> GetAlertas(@Body JsonArray jsonArray);
+    @POST("api/GetPreAlertas")
+    Call<JsonArray> GetPreAlertas(@Body JsonArray jsonArray);
 
     @POST("api/EnviarAlertas")
     Call<JsonArray> EnviarAlertas(@Body JsonArray jsonArray);

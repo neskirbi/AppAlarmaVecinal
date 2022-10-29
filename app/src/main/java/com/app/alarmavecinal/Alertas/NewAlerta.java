@@ -73,7 +73,7 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
     @Override
     protected void onResume() {
         super.onResume();
-        alertasPresenter.GetAlertas();
+        alertasPresenter.GetPreAlertas();
     }
 
     public void Agregar(View view){
@@ -84,7 +84,7 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
 
     public void Descargar(View view){
         funciones.Vibrar(funciones.VibrarPush());
-        alertasPresenter.GetAlertas();
+        alertasPresenter.GetPreAlertas();
     }
 
 

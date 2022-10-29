@@ -83,12 +83,12 @@
             android:name=".Chat.ChatWindow"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Yo.Datos.DatosView" />
-        <activity android:name=".FuncioneAvisos.AvisosMensaje" />
+        <activity android:name=".Avisos.AvisosMensaje" />
         <activity
-            android:name=".FuncioneAvisos.NewAvisos"
+            android:name=".Avisos.NewAvisos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".FuncioneAvisos.AvisosLista"
+            android:name=".Avisos.AvisosLista"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Alertas.NewAlerta"

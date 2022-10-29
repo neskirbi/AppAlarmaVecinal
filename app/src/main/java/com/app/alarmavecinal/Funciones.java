@@ -49,6 +49,7 @@ import com.app.alarmavecinal.Servicios.Notificador;
 import com.app.alarmavecinal.Sqlite.Base;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import net.glxn.qrgen.android.QRCode;
 
@@ -823,63 +824,73 @@ public class Funciones {
 
     }
 
-    public Boolean GetAlertas(String json){
-        try {
-            JSONObject jsonObject = new JSONObject(json);
-            if(!GetIdAlerta().contains(jsonObject.get("id_alerta").toString())){
-                Base base = new Base(context);
-                SQLiteDatabase db = base.getWritableDatabase();
-
-                if(GetIdAlerta()==""){
-                    ContentValues alerta = new ContentValues();
-
-                    alerta.put("id_alerta", jsonObject.get("id_alerta").toString());
+    public JsonArray GetAlertas(){
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+        JsonArray jsonArray = new JsonArray();
 
 
-                    db.insert("alertas", null, alerta);
-                }else{
-                    db.execSQL("UPDATE alertas SET id_alerta='"+jsonObject.get("id_alerta").toString()+"' " );
+        Cursor c =  db.rawQuery("SELECT * from alertas order by created_at desc ",null);
+        Logo("ListaAlertas","Cont:"+c.getCount());
+        if(c.getCount()>0){
+            c.moveToFirst();
+            while (!c.isLast()){
+                JsonObject jsonObject=new JsonObject();
+                try {
+                    jsonObject.addProperty("id_alerta", c.getString(c.getColumnIndex("id_alerta")));
+                    jsonObject.addProperty("created_at", c.getString(c.getColumnIndex("created_at")));
+                    jsonObject.addProperty("asunto", c.getString(c.getColumnIndex("asunto")));
+                    jsonObject.addProperty("mensaje", c.getString(c.getColumnIndex("mensaje")));
+                    jsonArray.add(jsonObject);
+                } catch (Exception e) {
+
+                    Logo("Avisos","Errorrrrrrrr:"+e.getMessage());
                 }
-                db.close();
-                return true;
+                c.moveToNext();
+
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+
         }
 
-        return false;
+        c.close();
+        db.close();
+        return jsonArray;
     }
 
 
-    public Boolean GetAvisos(String json){
-        try{
-            JSONObject jsonObject=new JSONObject(json);
-            if(!GetIdAviso().contains(jsonObject.get("id_aviso").toString())) {
-                Base base = new Base(context);
-                SQLiteDatabase db = base.getWritableDatabase();
-
-                if (GetIdAviso() == "") {
-                    ContentValues avisos = new ContentValues();
-
-                    avisos.put("id_aviso", jsonObject.get("id_aviso").toString());
+    public JsonArray GetAvisos(){
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+        JsonArray jsonArray = new JsonArray();
 
 
-                    db.insert("avisos", null, avisos);
-                } else {
-                    db.execSQL("UPDATE avisos SET id_aviso='" + jsonObject.get("id_aviso").toString() + "' ");
+        Cursor c =  db.rawQuery("SELECT * from avisos order by created_at desc ",null);
+        Logo("Avisos","Cont:"+c.getCount());
+        if(c.getCount()>0){
+            c.moveToFirst();
+            while (!c.isLast()){
+                JsonObject jsonObject=new JsonObject();
+                try {
+                    jsonObject.addProperty("id_alerta", c.getString(c.getColumnIndex("id_aviso")));
+                    jsonObject.addProperty("created_at", c.getString(c.getColumnIndex("created_at")));
+                    jsonObject.addProperty("asunto", c.getString(c.getColumnIndex("asunto")));
+                    jsonObject.addProperty("mensaje", c.getString(c.getColumnIndex("mensaje")));
+                    jsonArray.add(jsonObject);
+                } catch (Exception e) {
+
+                    Logo("Avisos","Errorrrrrrrr:"+e.getMessage());
                 }
-                db.close();
-                return true;
-            }
-        }catch (Exception e){
-            Logo("Error",e.toString());
+                c.moveToNext();
 
+            }
 
 
         }
 
-
-        return false;
+        c.close();
+        db.close();
+        return jsonArray;
     }
     public void Logo(String tag,String men)
     {
@@ -2020,13 +2031,13 @@ public class Funciones {
 
 
     public String GetIndex2(JsonArray body,int i,String index) {
-        Log.i("GetAlertas",body.get(i).toString());
+        //Log.i("GetAlertas",body.get(i).toString());
         try {
             JSONObject jsonObject=new JSONObject(body.get(i).toString());
             return jsonObject.getString(index);
         } catch (JSONException e) {
 
-            Log.i("GetAlertas","Error:"+e.getMessage());
+            Log.i("ErrorGetIndex2","Error:"+e.getMessage());
             //return "";
         }
         return "";

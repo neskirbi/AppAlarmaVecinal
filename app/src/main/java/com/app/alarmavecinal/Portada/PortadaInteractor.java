@@ -43,8 +43,10 @@ public class PortadaInteractor implements Portada.PortadaInteractor {
         call.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                Log.i("Logueo", response.body().toString());
+
+                Log.i("Logueo", response.code()+"");
                 if(response.body()!=null) {
+                    Log.i("Logueo", response.body().toString());
                     if(funciones.IsSuccess(response.body())) {
                         if (funciones.GetIndex(response.body(), "id_grupo").length() == 0) {
                             funciones.SalirGrupo();

@@ -41,7 +41,7 @@ public class OrdenService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"MyApp::MyWakelockTag");
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"MyApp::AlarmaVecinal");
         wakeLock.acquire();
 
 

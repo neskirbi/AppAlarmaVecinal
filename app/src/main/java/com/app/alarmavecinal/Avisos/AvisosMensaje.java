@@ -1,4 +1,4 @@
-package com.app.alarmavecinal.FuncioneAvisos;
+package com.app.alarmavecinal.Avisos;
 
 import android.content.Context;
 import android.content.Intent;

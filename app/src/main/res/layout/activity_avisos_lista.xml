@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    tools:context=".FuncioneAvisos.AvisosLista">
+    tools:context=".Avisos.AvisosLista">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -32,19 +32,25 @@
             android:textStyle="" />
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/avisos_lista"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="60dp"
-        android:layout_marginBottom="55dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/contraste"/>
+        android:layout_marginBottom="55dp">
+
+        <LinearLayout
+            android:id="@+id/avisos_lista"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/contraste"/>
+    </ScrollView>
+
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/banner"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:layout_gravity="bottom|center_horizontal"
         ads:adSize="SMART_BANNER"
         ads:adUnitId="@string/id_banner"></com.google.android.gms.ads.AdView>

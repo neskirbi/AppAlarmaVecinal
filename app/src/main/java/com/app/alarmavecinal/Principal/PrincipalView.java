@@ -29,7 +29,7 @@ import android.widget.Toast;
 
 import com.app.alarmavecinal.BuildConfig;
 import com.app.alarmavecinal.Alertas.AlertasLista;
-import com.app.alarmavecinal.FuncioneAvisos.AvisosLista;
+import com.app.alarmavecinal.Avisos.AvisosLista;
 import com.app.alarmavecinal.ChatFb.SalaChat;
 import com.app.alarmavecinal.Models.Ordenes;
 import com.app.alarmavecinal.Funciones;

@@ -8,6 +8,9 @@ import retrofit2.http.POST;
 
 public interface OrdenInterface {
 
-    @POST("api/GetAlerta")
-    Call<JsonArray> GetAlerta(@Body JsonArray jsonArray);
+    @POST("api/GetAlertas")
+    Call<JsonArray> GetAlertas(@Body JsonArray jsonArray);
+
+    @POST("api/GetAvisos")
+    Call<JsonArray> GetAvisos(@Body JsonArray jsonArray);
 }

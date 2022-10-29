@@ -30,7 +30,7 @@ public class AlertasInteractor implements Alertas.AlertasInteractor {
     }
 
     @Override
-    public void GetAlertas() {
+    public void GetPreAlertas() {
         funciones.AbrirConexion();
 
         JsonArray jsonArray=new JsonArray();
@@ -42,7 +42,7 @@ public class AlertasInteractor implements Alertas.AlertasInteractor {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         AlertasInterface peticion=retrofit.create(AlertasInterface.class);
-        Call<JsonArray> call= peticion.GetAlertas(jsonArray);
+        Call<JsonArray> call= peticion.GetPreAlertas(jsonArray);
         Log.i("GetAlertas", jsonArray.toString());
         call.enqueue(new Callback<JsonArray>() {
             @Override
