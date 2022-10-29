@@ -15,7 +15,7 @@ public class Base extends SQLiteOpenHelper {
     private static  String CHAT_IN_TABLE_CREATE ="" ;
     private static  String LOGIN_TABLE_CREATE= "",GRUPO_TABLE_CREATE= "",ALERTAS_TABLE_CREATE= "",AVISOS_TABLE_CREATE= "",AVISO_NOTIFICA ="",ALERTA_NOTIFICA ="",CHAT_NOTIFICA="",EMERGENCIA_NOTIFICA="";
     private static  String DB_NAME = "alerta.sqlite";
-    private static  int DB_VERSION = 6;
+    private static  int DB_VERSION = 7;
 
 
 
@@ -195,6 +195,22 @@ public class Base extends SQLiteOpenHelper {
 
             db.execSQL(AVISO_NOTIFICA);
             db.execSQL(ALERTA_NOTIFICA);
+        }
+
+        if(oldVersion==6 && newVersion==7) {
+
+
+            db.execSQL("DROP table alertas");
+            ALERTAS_TABLE_CREATE= "CREATE TABLE IF NOT EXISTS  alertas(" +
+                    "id_alerta TEXT PRIMARY KEY NOT NULL)" ;
+            db.execSQL(ALERTAS_TABLE_CREATE);
+
+            AVISOS_TABLE_CREATE= "CREATE TABLE IF NOT EXISTS  avisos(" +
+                    "id_aviso TEXT PRIMARY KEY NOT NULL)" ;
+
+            db.execSQL(AVISOS_TABLE_CREATE);
+
+
         }
 
     }

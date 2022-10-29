@@ -3,8 +3,7 @@ package com.app.alarmavecinal.Yo.Datos;
 import android.content.Context;
 import android.util.Log;
 
-import com.app.alarmavecinal.Metodos;
-
+import com.app.alarmavecinal.Funciones;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -18,26 +17,26 @@ public class DatosInteractor implements Datos.DatosInteractor {
 
     DatosPresenter datosPresenter;
     Context context;
-    Metodos metodos;
+    Funciones funciones;
     public DatosInteractor(DatosPresenter datosPresenter, Context context) {
         this.datosPresenter=datosPresenter;
         this.context=context;
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
     }
 
     @Override
     public void GetDatos() {
 
-        metodos.AbrirConexion();
+        funciones.AbrirConexion();
 
         JsonArray jsonArray=new JsonArray();
         JsonObject jsonObject=new JsonObject();
 
-        jsonObject.addProperty("id",metodos.GetIdUsuario());
+        jsonObject.addProperty("id",funciones.GetIdUsuario());
         jsonArray.add(jsonObject);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(metodos.GetUrl())
+                .baseUrl(funciones.GetUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         DatosInterface peticion=retrofit.create(DatosInterface.class);
@@ -50,22 +49,22 @@ public class DatosInteractor implements Datos.DatosInteractor {
                 if(response.body()!=null){
                     Log.i("GetDatos",response.body().toString());
                     Log.i("GetDatos",response.body().get(0).getAsJsonObject().get("status").toString());
-                    if(metodos.IsSuccess(response.body())){
+                    if(funciones.IsSuccess(response.body())){
                           datosPresenter.MostrarDatos(response.body());
                     }else{
-                          metodos.Toast(metodos.GetMsn(response.body()));
+                          funciones.Toast(funciones.GetMsn(response.body()));
                     }
 
 
                 }else{
-                    metodos.Toast(metodos.GetMsn(response.body()));
+                    funciones.Toast(funciones.GetMsn(response.body()));
                 }
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
                 Log.i("GetDatos","Erro:"+t.getMessage());
-                metodos.Toast("Erro:"+t.getMessage());
+                funciones.Toast("Erro:"+t.getMessage());
             }
         });
     }
@@ -75,25 +74,25 @@ public class DatosInteractor implements Datos.DatosInteractor {
     @Override
     public void Actualizar(String nombres,String apellidos,String direccion,String ubicacion) {
 
-        metodos.AbrirConexion();
+        funciones.AbrirConexion();
 
         int cont = 0;
         if (nombres.length() == 0) {
-            metodos.Toast("Debe ingresar su nombre.");
+            funciones.Toast("Debe ingresar su nombre.");
             cont++;
         }
 
         if (apellidos.length() == 0) {
-            metodos.Toast( "Debe ingresar sus apellidos.");
+            funciones.Toast( "Debe ingresar sus apellidos.");
             cont++;
         }
 
         if (direccion.length() == 0) {
-            metodos.Toast( "Debe ingresar su dirección o numero de casa.");
+            funciones.Toast( "Debe ingresar su dirección o numero de casa.");
             cont++;
         }
         if (ubicacion.length() == 0) {
-            metodos.Toast( "Espere a cargar su ubicación.");
+            funciones.Toast( "Espere a cargar su ubicación.");
             cont++;
         }
 
@@ -104,7 +103,7 @@ public class DatosInteractor implements Datos.DatosInteractor {
             JsonArray jsonArray=new JsonArray();
             JsonObject jsonObject=new JsonObject();
 
-            jsonObject.addProperty("id",metodos.GetIdUsuario());
+            jsonObject.addProperty("id",funciones.GetIdUsuario());
             jsonObject.addProperty("nombres",nombres);
             jsonObject.addProperty("apellidos",apellidos);
             jsonObject.addProperty("direccion",direccion);
@@ -112,7 +111,7 @@ public class DatosInteractor implements Datos.DatosInteractor {
             jsonArray.add(jsonObject);
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(metodos.GetUrl())
+                    .baseUrl(funciones.GetUrl())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             DatosInterface peticion=retrofit.create(DatosInterface.class);
@@ -125,23 +124,23 @@ public class DatosInteractor implements Datos.DatosInteractor {
                     if(response.body()!=null){
                         Log.i("Actualizar",response.body().toString());
                         Log.i("Actualizar",response.body().get(0).getAsJsonObject().get("status").toString());
-                        if(metodos.IsSuccess(response.body())){
-                            metodos.Toast(metodos.GetMsn(response.body()));
-                            metodos.UpdateDatos(nombres+" "+apellidos,direccion,ubicacion);
+                        if(funciones.IsSuccess(response.body())){
+                            funciones.Toast(funciones.GetMsn(response.body()));
+                            funciones.UpdateDatos(nombres+" "+apellidos,direccion,ubicacion);
                         }else{
-                            metodos.Toast(metodos.GetMsn(response.body()));
+                            funciones.Toast(funciones.GetMsn(response.body()));
                         }
 
 
                     }else{
-                        metodos.Toast("Error de servidor.");
+                        funciones.Toast("Error de servidor.");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
                     Log.i("Actualizar","Erro:"+t.getMessage());
-                    metodos.Toast("Erro:"+t.getMessage());
+                    funciones.Toast("Erro:"+t.getMessage());
                 }
             });
 

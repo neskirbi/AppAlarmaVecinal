@@ -3,7 +3,7 @@ package com.app.alarmavecinal.Vecinos;
 import android.content.Context;
 import android.util.Log;
 
-import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Models.Grupo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -17,19 +17,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class GrupoInteractor implements GrupoInteface.GrupoInteractor {
     Context context;
     GrupoPresenter grupoPresenter;
-    Metodos metodos;
+    Funciones funciones;
     public GrupoInteractor(GrupoPresenter grupoPresenter, Context context) {
         this.context=context;
         this.grupoPresenter= grupoPresenter;
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
     }
 
     @Override
     public void GuardarGrupo(String nombre) {
         Log.i("CrearGrupo","interactor");
-        Grupo grupo=new Grupo("", metodos.GetIdUsuario(), nombre,"");
+        Grupo grupo=new Grupo("", funciones.GetIdUsuario(), nombre,"");
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(metodos.GetUrl())
+                .baseUrl(funciones.GetUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         GrupoPeticiones peticion=retrofit.create(GrupoPeticiones.class);
@@ -43,8 +43,8 @@ public class GrupoInteractor implements GrupoInteface.GrupoInteractor {
                         grupoPresenter.Error(response.body().getError());
                     }else{
                         Log.i("CrearGrupo",response.body().getId_grupo()+"");
-                        metodos.GuardarGrupoCreado(response.body());
-                        metodos.VerificarServicios();
+                        funciones.GuardarGrupoCreado(response.body());
+                        funciones.VerificarServicios();
                         grupoPresenter.IraGrupo();
                     }
 
@@ -66,12 +66,12 @@ public class GrupoInteractor implements GrupoInteface.GrupoInteractor {
     public void UnirseGrupo(String id_grupo) {
         JsonArray jsonArray=new JsonArray();
         JsonObject jsonObject=new JsonObject();
-        jsonObject.addProperty("id_usuario",metodos.GetIdUsuario());
+        jsonObject.addProperty("id_usuario",funciones.GetIdUsuario());
         jsonObject.addProperty("id_grupo",id_grupo);
         jsonArray.add(jsonObject);
-        //Grupo grupo=new Grupo(id, metodos.GetIdUsuario(), "","");
+        //Grupo grupo=new Grupo(id, funciones.GetIdUsuario(), "","");
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(metodos.GetUrl())
+                .baseUrl(funciones.GetUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         Log.i("UnirseGrupo", jsonArray.toString());
@@ -82,14 +82,14 @@ public class GrupoInteractor implements GrupoInteface.GrupoInteractor {
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 Log.i("UnirseGrupo", String.valueOf(response.code()));
                 if(response.body()!=null){
-                    if (metodos.IsSuccess(response.body())) {
+                    if (funciones.IsSuccess(response.body())) {
                         Log.i("UnirseGrupo",response.body()+"");
-                            metodos.GuardarGrupoCreadoArray(response.body());
-                            metodos.VerificarServicios();
+                            funciones.GuardarGrupoCreadoArray(response.body());
+                            funciones.VerificarServicios();
                             grupoPresenter.IraGrupo();
 
                     } else {
-                        metodos.Toast(metodos.GetMsn(response.body()));
+                        funciones.Toast(funciones.GetMsn(response.body()));
                     }
 
 
@@ -110,10 +110,10 @@ public class GrupoInteractor implements GrupoInteface.GrupoInteractor {
 
     @Override
     public void DejarGrupo() {
-        Log.i("DejarGrupo",metodos.GetIdUsuario());
-        Grupo grupo=new Grupo("", metodos.GetIdUsuario(), "","");
+        Log.i("DejarGrupo",funciones.GetIdUsuario());
+        Grupo grupo=new Grupo("", funciones.GetIdUsuario(), "","");
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(metodos.GetUrl())
+                .baseUrl(funciones.GetUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         GrupoPeticiones peticion=retrofit.create(GrupoPeticiones.class);
@@ -127,8 +127,8 @@ public class GrupoInteractor implements GrupoInteface.GrupoInteractor {
                         grupoPresenter.Error(response.body().getError());
                     }else{
                         Log.i("DejarGrupo",response.body()+"");
-                        metodos.SalirGrupo();
-                        metodos.VerificarServicios();
+                        funciones.SalirGrupo();
+                        funciones.VerificarServicios();
                         grupoPresenter.IraGrupo();
 
                     }

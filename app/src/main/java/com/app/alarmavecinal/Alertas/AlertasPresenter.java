@@ -1,19 +1,19 @@
-package com.app.alarmavecinal.FuncionAlertas;
+package com.app.alarmavecinal.Alertas;
 
 import android.content.Context;
 
-import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Funciones;
 import com.google.gson.JsonArray;
 
 public class AlertasPresenter implements Alertas.AlertasPresenter {
     NewAlerta newAlerta;
     AlertasInteractor alertasInteractor;
     Context context;
-    Metodos metodos;
+    Funciones funciones;
     public AlertasPresenter(NewAlerta newAlerta, Context context) {
         this.newAlerta=newAlerta;
         this.context=context;
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
         alertasInteractor=new AlertasInteractor(this,context);
     }
 
@@ -26,5 +26,10 @@ public class AlertasPresenter implements Alertas.AlertasPresenter {
     @Override
     public void LlenarLista(JsonArray jsonArray) {
         newAlerta.LlenarLista(jsonArray);
+    }
+
+    @Override
+    public void EnviarAlerta(com.app.alarmavecinal.Estructuras.Alertas json) {
+        alertasInteractor.EnviarAlerta(json);
     }
 }

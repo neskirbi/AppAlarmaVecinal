@@ -40,7 +40,6 @@ import android.widget.Toast;
 import com.app.alarmavecinal.BuildConfig;
 import com.app.alarmavecinal.Estructuras.Mensaje;
 import com.app.alarmavecinal.Funciones;
-import com.app.alarmavecinal.Metodos;
 import com.app.alarmavecinal.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -50,7 +49,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
 
 
 import java.io.File;
@@ -89,7 +87,7 @@ public class SalaChat extends AppCompatActivity {
     Tiempo tiempo;
     ArrayList<String> ids=new ArrayList<>();
     SeekBar onPlay;
-    Metodos metodos;
+
 
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -107,7 +105,6 @@ public class SalaChat extends AppCompatActivity {
         setContentView(R.layout.activity_sala_chat);
         context=this;
         funciones=new Funciones(context);
-        metodos=new Metodos(context);
         id_grupo=funciones.GetIdGrupo();
         id_usuario=funciones.GetIdUsuario();
         nombre=funciones.GetNombre();
@@ -294,7 +291,7 @@ public class SalaChat extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 funciones.Vibrar(funciones.VibrarPush());
-                if(metodos.PedirPermisoArchivos(SalaChat.this)){
+                if(funciones.PedirPermisoArchivos(SalaChat.this)){
                     AbrirGaleria();
                 }
 

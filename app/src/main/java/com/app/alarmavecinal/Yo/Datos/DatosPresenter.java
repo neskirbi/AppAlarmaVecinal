@@ -2,18 +2,18 @@ package com.app.alarmavecinal.Yo.Datos;
 
 import android.content.Context;
 
-import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Funciones;
 import com.google.gson.JsonArray;
 
 public class DatosPresenter implements Datos.Datospresenter {
     DatosView datosView;
     Context context;
-    Metodos metodos;
+    Funciones funciones;
     DatosInteractor datosInteractor;
     public DatosPresenter(DatosView datosView,Context context) {
         this.datosView=datosView;
         this.context=context;
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
         datosInteractor=new DatosInteractor(this,context);
     }
 

@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.app.alarmavecinal.Funciones;
-import com.app.alarmavecinal.Metodos;
 import com.app.alarmavecinal.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,7 +31,6 @@ public class DatosView extends AppCompatActivity implements OnMapReadyCallback, 
     GoogleMap googleMap;
     boolean unavez = true;
     DatosPresenter datosPresenter;
-    Metodos metodos;
 
 
     @Override
@@ -41,7 +39,6 @@ public class DatosView extends AppCompatActivity implements OnMapReadyCallback, 
         setContentView(R.layout.activity_datos);
         setTitle("Editar Info.");
         context = this;
-        metodos=new Metodos(context);
         funciones = new Funciones(context);
         datosPresenter=new DatosPresenter(this,context);
         datosPresenter.GetDatos();
@@ -63,7 +60,7 @@ public class DatosView extends AppCompatActivity implements OnMapReadyCallback, 
 
     public void Actualizar(View view){
 
-        metodos.Vibrar(metodos.VibrarPush());
+        funciones.Vibrar(funciones.VibrarPush());
         datosPresenter.Actualizar(nombres.getText().toString(),apellidos.getText().toString(),direccion.getText().toString(),ubicacion.getText().toString());
     }
 
@@ -108,8 +105,8 @@ public class DatosView extends AppCompatActivity implements OnMapReadyCallback, 
 
     @Override
     public void MostrarDatos(JsonArray body) {
-        nombres.setText(metodos.GetIndex(body,"nombres"));
-        apellidos.setText(metodos.GetIndex(body,"apellidos"));
-        direccion.setText(metodos.GetIndex(body,"direccion"));
+        nombres.setText(funciones.GetIndex(body,"nombres"));
+        apellidos.setText(funciones.GetIndex(body,"apellidos"));
+        direccion.setText(funciones.GetIndex(body,"direccion"));
     }
 }

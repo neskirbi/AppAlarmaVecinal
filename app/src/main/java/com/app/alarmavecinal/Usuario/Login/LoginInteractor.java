@@ -3,12 +3,8 @@ package com.app.alarmavecinal.Usuario.Login;
 import android.content.Context;
 import android.util.Log;
 
-import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Models.Usuario;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,11 +14,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginInteractor implements Login.LoginInteractor{
     Context context;
-    Metodos metodos;
+    Funciones metodos;
     LoginPresenter loginPresenter;
     public LoginInteractor(LoginPresenter loginPresenter,Context context) {
         this.context=context;
-        this.metodos=new Metodos(context);
+        this.metodos=new Funciones(context);
         this.loginPresenter=loginPresenter;
     }
 

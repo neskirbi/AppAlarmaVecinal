@@ -7,24 +7,16 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
 
-import com.app.alarmavecinal.Adapters.AdapterAlertas;
 import com.app.alarmavecinal.Adapters.AdapterAvisos;
 import com.app.alarmavecinal.BuildConfig;
-import com.app.alarmavecinal.Estructuras.Alertas;
 import com.app.alarmavecinal.Estructuras.Avisos;
-import com.app.alarmavecinal.Estructuras.Emergencias;
-import com.app.alarmavecinal.FuncionAlertas.NewAlerta;
 import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.R;
 import com.google.android.gms.ads.AdRequest;
@@ -42,8 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;

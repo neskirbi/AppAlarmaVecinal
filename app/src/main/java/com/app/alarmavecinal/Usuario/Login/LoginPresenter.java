@@ -4,25 +4,25 @@ import android.content.Context;
 import android.util.Patterns;
 import android.widget.EditText;
 
-import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Models.Usuario;
 
 public class LoginPresenter implements Login.LoginPresenter{
     Context context;
     LoginView loginView;
     LoginInteractor loginInteractor;
-    Metodos metodos;
+    Funciones funciones;
     public LoginPresenter(LoginView loginView, Context context) {
         this.loginView=loginView;
         this.context=context;
         loginInteractor=new LoginInteractor(this,context);
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
     }
 
 
     @Override
     public void HacerLogin(EditText etmail, EditText etpass) {
-        metodos.Vibrar(metodos.VibrarPush());
+        funciones.Vibrar(funciones.VibrarPush());
         if(loginView!=null){
             String mail=etmail.getText().toString();
             String pass=etpass.getText().toString();

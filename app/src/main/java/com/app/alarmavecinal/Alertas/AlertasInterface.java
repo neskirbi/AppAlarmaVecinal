@@ -1,4 +1,4 @@
-package com.app.alarmavecinal.FuncionAlertas;
+package com.app.alarmavecinal.Alertas;
 
 import com.google.gson.JsonArray;
 
@@ -10,4 +10,7 @@ public interface AlertasInterface {
 
     @POST("api/GetAlertas")
     Call<JsonArray> GetAlertas(@Body JsonArray jsonArray);
+
+    @POST("api/EnviarAlertas")
+    Call<JsonArray> EnviarAlertas(@Body JsonArray jsonArray);
 }

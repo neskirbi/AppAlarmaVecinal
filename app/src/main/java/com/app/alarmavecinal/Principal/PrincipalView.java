@@ -28,13 +28,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.alarmavecinal.BuildConfig;
-import com.app.alarmavecinal.FuncionAlertas.AlertasLista;
+import com.app.alarmavecinal.Alertas.AlertasLista;
 import com.app.alarmavecinal.FuncioneAvisos.AvisosLista;
 import com.app.alarmavecinal.ChatFb.SalaChat;
-import com.app.alarmavecinal.Yo.Datos.DatosView;
-import com.app.alarmavecinal.Estructuras.Emergencias;
+import com.app.alarmavecinal.Models.Ordenes;
 import com.app.alarmavecinal.Funciones;
-import com.app.alarmavecinal.Metodos;
 import com.app.alarmavecinal.Vecinos.GrupoView;
 import com.app.alarmavecinal.Mapas.MapaEmergencia;
 import com.app.alarmavecinal.R;
@@ -66,7 +64,6 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
     ImageButton emergencia;
     long then = 0;
     Funciones funciones;
-    Metodos metodos;
     Boolean vi = false;
     View headerView;
     TextView nombre,nota,direccion;
@@ -89,11 +86,10 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
         setSupportActionBar(toolbar);
         context = this;
         funciones = new Funciones(context);
-        metodos = new Metodos(context);
         bottom_navigation=findViewById(R.id.bottom_navigation);
 
 
-        metodos.PedirPermisoLocation(this);
+        funciones.PedirPermisoLocation(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         nota = findViewById(R.id.nota);
         direccion=findViewById(R.id.direccion);
@@ -126,7 +122,8 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
         VerificandoLogin();
         setNombre();
 
-        metodos.VerificarServicios();
+
+        funciones.VerificarServicios();
 
         emergencia = findViewById(R.id.emergencia);
 
@@ -199,8 +196,8 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
 
                                 //funciones.Conexion("{\"id_usuario\":\""+funciones.GetIdUsuario()+"\",\"id_grupo\":\""+funciones.GetIdGrupo()+"\",\"tipo\":\"1\"}",funciones.GetUrl()+getString(R.string.url_SetEmergencia));
                                 firebaseDatabase = FirebaseDatabase.getInstance();
-                                databaseReference = firebaseDatabase.getReference("EmergenciaVecinos-" + funciones.GetIdGrupo());//Sala de chat
-                                databaseReference.push().setValue(new Emergencias(funciones.GetUIID(), funciones.GetIdUsuario(), funciones.GetNombre(), "Emergencia!!! \n", "{\"direccion\":\"" + funciones.GetDireccion() + "\",\"ubicacion\":\"" + latt + "," + lont + "\"}", funciones.GetDate()));
+                                databaseReference = firebaseDatabase.getReference("Ordenes/" + funciones.GetIdGrupo());//Sala de chat
+                                databaseReference.push().setValue(new Ordenes(1,funciones.GetUIID(), funciones.GetIdUsuario(), funciones.GetNombre(), "Emergencia!!! \n", "{\"direccion\":\"" + funciones.GetDireccion() + "\",\"ubicacion\":\"" + latt + "," + lont + "\"}", funciones.GetDate()));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 funciones.Logo("Errorfb",e.getMessage());

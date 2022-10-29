@@ -3,9 +3,7 @@ package com.app.alarmavecinal.Yo.Pass;
 import android.content.Context;
 import android.util.Log;
 
-import com.app.alarmavecinal.Metodos;
-import com.app.alarmavecinal.Principal.Principal;
-import com.app.alarmavecinal.Yo.Datos.DatosInterface;
+import com.app.alarmavecinal.Funciones;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -18,37 +16,37 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PassInteractor implements Pass.PassInteractor {
     PassPresenter passPresenter;
     Context context;
-    Metodos metodos;
+    Funciones funciones;
 
     public PassInteractor(PassPresenter passPresenter, Context context) {
         this.passPresenter=passPresenter;
         this.context=context;
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
     }
 
     @Override
     public void UpdatePass(String pass, String pass1, String pass2) {
-        metodos.AbrirConexion();
+        funciones.AbrirConexion();
 
         int cont = 0;
         if (pass.length() == 0) {
-            metodos.Toast("Debe ingresar su contraseña.");
+            funciones.Toast("Debe ingresar su contraseña.");
             cont++;
         }
 
         if (pass1.length() == 0) {
-            metodos.Toast( "Debe ingresar el campo nueva contraseña.");
+            funciones.Toast( "Debe ingresar el campo nueva contraseña.");
             cont++;
         }
 
         if (pass2.length() == 0) {
-            metodos.Toast( "Debe ingresar en campo confirmar contraseña.");
+            funciones.Toast( "Debe ingresar en campo confirmar contraseña.");
             cont++;
         }
 
         if (!pass1.equals(pass2)) {
             Log.i("ActualizarPass",pass1 +"!= "+pass2);
-            metodos.Toast( "Las contraseñas deben ser iguales.");
+            funciones.Toast( "Las contraseñas deben ser iguales.");
             cont++;
         }
 
@@ -59,13 +57,13 @@ public class PassInteractor implements Pass.PassInteractor {
             JsonArray jsonArray=new JsonArray();
             JsonObject jsonObject=new JsonObject();
 
-            jsonObject.addProperty("id",metodos.GetIdUsuario());
+            jsonObject.addProperty("id",funciones.GetIdUsuario());
             jsonObject.addProperty("pass",pass);
             jsonObject.addProperty("pass1",pass1);
             jsonArray.add(jsonObject);
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(metodos.GetUrl())
+                    .baseUrl(funciones.GetUrl())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             PassInterface peticion=retrofit.create(PassInterface.class);
@@ -78,23 +76,23 @@ public class PassInteractor implements Pass.PassInteractor {
                     if(response.body()!=null){
                         Log.i("ActualizarPass",response.body().toString());
                         Log.i("ActualizarPass",response.body().get(0).getAsJsonObject().get("status").toString());
-                        if(metodos.IsSuccess(response.body())){
-                            metodos.Toast(metodos.GetMsn(response.body()));
+                        if(funciones.IsSuccess(response.body())){
+                            funciones.Toast(funciones.GetMsn(response.body()));
                             passPresenter.Salir();
                         }else{
-                            metodos.Toast(metodos.GetMsn(response.body()));
+                            funciones.Toast(funciones.GetMsn(response.body()));
                         }
 
 
                     }else{
-                        metodos.Toast("Error de servidor.");
+                        funciones.Toast("Error de servidor.");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<JsonArray> call, Throwable t) {
                     Log.i("ActualizarPass","Erro:"+t.getMessage());
-                    metodos.Toast("Erro:"+t.getMessage());
+                    funciones.Toast("Erro:"+t.getMessage());
                 }
             });
 

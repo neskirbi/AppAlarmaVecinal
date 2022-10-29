@@ -1,4 +1,4 @@
-package com.app.alarmavecinal.FuncionAlertas;
+package com.app.alarmavecinal.Alertas;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,43 +8,20 @@ import android.content.Intent;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 //import android.support.v7.app.AppCompatActivity;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.app.alarmavecinal.Adapters.AdapterAlertas;
 import com.app.alarmavecinal.BuildConfig;
 import com.app.alarmavecinal.Estructuras.Alertas;
-import com.app.alarmavecinal.Estructuras.AlertasL;
-import com.app.alarmavecinal.Estructuras.Mensaje;
 import com.app.alarmavecinal.Funciones;
-import com.app.alarmavecinal.Metodos;
 import com.app.alarmavecinal.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonArray;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
@@ -53,17 +30,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class NewAlerta extends AppCompatActivity implements AdapterAlertas.RecyclerItemClick, com.app.alarmavecinal.FuncionAlertas.Alertas.AlertasView {
+public class NewAlerta extends AppCompatActivity implements AdapterAlertas.RecyclerItemClick, com.app.alarmavecinal.Alertas.Alertas.AlertasView {
     Funciones funciones;
     ImageView agregar;
     RecyclerView alertas_lista;
     ArrayList<Alertas> alertas = new ArrayList();
     AlertasPresenter alertasPresenter;
     Context context;
-    Metodos metodos;
     ProgressDialog dialog;
-    FirebaseDatabase firebaseDatabaseAlerta;
-    DatabaseReference databaseReferenceAlerta;
 
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -76,7 +50,7 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
         setContentView(R.layout.activity_new_alerta);
         context=this;
         funciones=new Funciones(context);
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
         alertasPresenter=new AlertasPresenter(this,context);
 
         AdView m = findViewById(R.id.banner);
@@ -130,7 +104,7 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
     }
 
 
-    public void Pop(final String json) {
+    public void Pop(final Alertas json) {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle("Alerta");
@@ -145,7 +119,7 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
                     public void onClick(DialogInterface dialog, int which) {
                         funciones.Vibrar(funciones.VibrarPush());
 
-                        Enviar(json);
+                        alertasPresenter.EnviarAlerta(json);
 
                     }
                 });
@@ -160,45 +134,20 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
         alertDialog.show();
     }
 
-    public void Enviar(String json){
-        firebaseDatabaseAlerta = FirebaseDatabase.getInstance();
-        databaseReferenceAlerta = firebaseDatabaseAlerta.getReference("Alertas-"+funciones.GetIdGrupo());//Sala de chat
-        try {
 
-            JSONObject jsonObject0=new JSONObject(json);
-            databaseReferenceAlerta.push().setValue(new AlertasL(funciones.GetUIID(),funciones.GetIdUsuario(),jsonObject0.get("imagen").toString(),jsonObject0.get("asunto").toString(),funciones.GetNombre(),funciones.GetDate(),""));
-
-            Log.i("SetAlerta","Alertas-"+funciones.GetIdGrupo());
-            /*String response="", data="{\"id_alerta\":\""+jsonObject0.get("id_alerta").toString()+"\",\"id_grupo\":\""+funciones.GetIdGrupo()+"\",\"id_usuario\":\""+funciones.GetIdUsuario()+"\",\"imagen\":\""+jsonObject0.get("imagen").toString()+"\",\"asunto\":\""+jsonObject0.get("asunto").toString()+"\",\"mensaje\":\"\"}";
-
-            String url =funciones.GetUrl()+getString(R.string.url_SetAlertas);
-            response=funciones.Conexion(data,url,"POST");
-
-            JSONObject jsonObject=new JSONObject(response);
-            if(jsonObject.get("respuesta").toString().contains("1")){
-                Toast.makeText(context, "¡Se envió la alerta!", Toast.LENGTH_SHORT).show();
-                finish();
-            }else{
-                Toast.makeText(context, "¡Error al guardar!", Toast.LENGTH_SHORT).show();
-            }*/
-        } catch (JSONException e) {
-            Log.i("SetAlerta","AError:"+e.getMessage());
-        }
-
-    }
     @Override
     public void itemClick(Alertas alertas) {
         funciones.Vibrar(funciones.VibrarPush());
-        Pop(alertas.getJson());
+        Pop(alertas);
     }
 
 
     @Override
     public void LlenarLista(JsonArray jsonArray) {
 
-        if(metodos.GetData(jsonArray).size()!=0){
-            for (int i =0; i < metodos.GetData(jsonArray).size();i++){
-                alertas.add(new Alertas(metodos.GetIndex2(metodos.GetData(jsonArray),i,"id_alerta"),metodos.GetIndex2(metodos.GetData(jsonArray),i,"imagen") ,metodos.GetIndex2(metodos.GetData(jsonArray),i,"asunto"), metodos.GetIndex2(metodos.GetData(jsonArray),i,"created_at"),metodos.GetData(jsonArray).get(i).toString()));
+        if(funciones.GetData(jsonArray).size()!=0){
+            for (int i =0; i < funciones.GetData(jsonArray).size();i++){
+                alertas.add(new Alertas(funciones.GetIndex2(funciones.GetData(jsonArray),i,"id_alerta"),funciones.GetIndex2(funciones.GetData(jsonArray),i,"imagen") ,funciones.GetIndex2(funciones.GetData(jsonArray),i,"asunto"), funciones.GetIndex2(funciones.GetData(jsonArray),i,"created_at"),funciones.GetData(jsonArray).get(i).toString()));
             }
 
             Cargar();

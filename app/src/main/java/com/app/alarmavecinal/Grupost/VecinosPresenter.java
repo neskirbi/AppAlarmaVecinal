@@ -2,18 +2,18 @@ package com.app.alarmavecinal.Grupost;
 
 import android.content.Context;
 
-import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Funciones;
 import com.google.gson.JsonArray;
 
 public class VecinosPresenter implements Vecinos.VecinosPresenter {
     VecinosView vecinosView;
     VecinosInteractor vecinosInteractor;
     Context context;
-    Metodos metodos;
+    Funciones funciones;
     public VecinosPresenter(VecinosView vecinosView, Context context) {
         this.vecinosView=vecinosView;
         this.context=context;
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
         vecinosInteractor=new VecinosInteractor(this,context);
 
     }

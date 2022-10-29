@@ -2,16 +2,13 @@ package com.app.alarmavecinal.Portada;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Principal.PrincipalView;
 import com.app.alarmavecinal.R;
-import com.app.alarmavecinal.Sqlite.Base;
 import com.app.alarmavecinal.Usuario.Login.LoginView;
 
 public class PortadaView extends AppCompatActivity implements Portada.PortadaView {
@@ -19,13 +16,13 @@ public class PortadaView extends AppCompatActivity implements Portada.PortadaVie
 
     PortadaPresenter portadaPresenter;
     Context context;
-    Metodos metodos;
+    Funciones funciones;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_portada);
         context=this;
-        metodos=new Metodos(this);
+        funciones=new Funciones(this);
         portadaPresenter=new PortadaPresenter(this,context);
         Empezar();
     }
@@ -34,7 +31,7 @@ public class PortadaView extends AppCompatActivity implements Portada.PortadaVie
         new Handler().postDelayed(new Runnable(){
             public void run(){
                 // Cuando pasen los 3 segundos, pasamos a la actividad principal de la aplicación
-                if( metodos.Check_Log()){
+                if( funciones.Check_Log()){
                     portadaPresenter.GetGrupo();
 
                 }else{

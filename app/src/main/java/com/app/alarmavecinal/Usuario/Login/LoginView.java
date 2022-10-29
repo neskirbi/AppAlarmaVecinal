@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Principal.PrincipalView;
 import com.app.alarmavecinal.R;
 import com.app.alarmavecinal.Usuario.Registro.RegistroView;
@@ -18,12 +18,12 @@ public class LoginView extends AppCompatActivity implements Login.LoginView{
     Login.LoginPresenter loginPresenter;
     EditText mail,pass;
     private ProgressDialog dialog;
-    Metodos metodos;
+    Funciones funciones;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        metodos=new Metodos(this);
+        funciones=new Funciones(this);
         mail=findViewById(R.id.mail);
         pass=findViewById(R.id.pass);
         loginPresenter=new LoginPresenter(this,this);
@@ -33,13 +33,13 @@ public class LoginView extends AppCompatActivity implements Login.LoginView{
     }
 
     public void Login(View view){
-        metodos.Vibrar(metodos.VibrarPush());
+        funciones.Vibrar(funciones.VibrarPush());
         ShowDialog();
         loginPresenter.HacerLogin(mail,pass);
     }
 
     public void Registrar(View view){
-        metodos.Vibrar(metodos.VibrarPush());
+        funciones.Vibrar(funciones.VibrarPush());
         startActivity(new Intent(getApplicationContext(), RegistroView.class));
     }
 

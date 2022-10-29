@@ -91,11 +91,11 @@
             android:name=".FuncioneAvisos.AvisosLista"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".FuncionAlertas.NewAlerta"
+            android:name=".Alertas.NewAlerta"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".FuncionAlertas.AlertasMensaje" />
+        <activity android:name=".Alertas.AlertasMensaje" />
         <activity
-            android:name=".FuncionAlertas.AlertasLista"
+            android:name=".Alertas.AlertasLista"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Grupost.Escaner" />
         <activity
@@ -143,6 +143,11 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".Orden.OrdenService"
+            android:enabled="true"
+            android:exported="true" />
 
         <service
             android:name=".Servicios.Emergencia"

@@ -1,8 +1,9 @@
 package com.app.alarmavecinal.Portada;
 
 import android.content.Context;
+import android.util.Log;
 
-import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Funciones;
 
 public class PortadaPresenter implements Portada.PortadaPresenter {
 
@@ -10,12 +11,12 @@ public class PortadaPresenter implements Portada.PortadaPresenter {
     PortadaView portadaView;
     PortadaInteractor portadaInteractor;
     Context context;
-    Metodos metodos;
+    Funciones funciones;
 
     public PortadaPresenter(PortadaView portadaView, Context context) {
         this.portadaView=portadaView;
         this.context=context;
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
         portadaInteractor=new PortadaInteractor(this,context);
     }
 
@@ -27,6 +28,7 @@ public class PortadaPresenter implements Portada.PortadaPresenter {
 
     @Override
     public void IrPrincipal() {
+        Log.i("Logueo","IrPrincipal");
         portadaView.IrPrincipal();
     }
 }

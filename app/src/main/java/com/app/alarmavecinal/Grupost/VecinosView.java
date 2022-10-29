@@ -3,7 +3,6 @@ package com.app.alarmavecinal.Grupost;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 
 import com.app.alarmavecinal.BuildConfig;
 import com.app.alarmavecinal.Funciones;
-import com.app.alarmavecinal.Metodos;
 import com.app.alarmavecinal.Vecinos.GrupoView;
 import com.app.alarmavecinal.R;
 import com.google.android.gms.ads.AdRequest;
@@ -27,7 +25,6 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.gson.JsonArray;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,7 +38,7 @@ public class VecinosView extends AppCompatActivity implements Vecinos.VecinosVie
     VecinosPresenter vecinosPresenter;
     Context context;
     Funciones funciones;
-    Metodos metodos;
+
     FrameLayout opciones,titlebar;
     LinearLayout content,menu,dummy,quitar,bloquear,desbloquear;
     ImageView abrir_menu;
@@ -63,7 +60,7 @@ public class VecinosView extends AppCompatActivity implements Vecinos.VecinosVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_vecinos);
         context=this;
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
         vecinosPresenter=new VecinosPresenter(this,context);
         titlebar=findViewById(R.id.titlebar);
         opciones=findViewById(R.id.opciones);

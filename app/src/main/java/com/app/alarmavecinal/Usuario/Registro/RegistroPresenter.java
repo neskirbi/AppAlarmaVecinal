@@ -2,25 +2,24 @@ package com.app.alarmavecinal.Usuario.Registro;
 
 import android.content.Context;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.EditText;
 
-import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Models.Usuario;
 
 public class RegistroPresenter implements Registro.RegistroPresenter{
     RegistroView registroview;
     RegistroInteractor registroInteractor;
-    Metodos metodos;
+    Funciones funciones;
     public RegistroPresenter(RegistroView registroview, Context context) {
         this.registroview=registroview;
         registroInteractor=new RegistroInteractor(this,context);
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
     }
 
     @Override
     public void Registrar(EditText etnombre, EditText etapellido, EditText etdireccion, EditText etmail, EditText etpass, EditText etpass2) {
-        metodos.Vibrar(metodos.VibrarPush());
+        funciones.Vibrar(funciones.VibrarPush());
         if(registroview!=null){
 
             String nombre=etnombre.getText().toString();

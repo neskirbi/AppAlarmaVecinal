@@ -2,18 +2,18 @@ package com.app.alarmavecinal.Yo.Pass;
 
 import android.content.Context;
 
-import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Funciones;
 
 public class PassPresenter implements Pass.PassPresenter {
     PassView passView;
     PassInteractor passInteractor;
     Context context;
-    Metodos metodos;
+    Funciones funciones;
 
     public PassPresenter(PassView passView, Context context) {
         this.passView=passView;
         this.context=context;
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
         passInteractor=new PassInteractor(this,context);
     }
 

@@ -3,8 +3,7 @@ package com.app.alarmavecinal.Grupost;
 import android.content.Context;
 import android.util.Log;
 
-import com.app.alarmavecinal.Metodos;
-import com.app.alarmavecinal.Yo.Datos.DatosInterface;
+import com.app.alarmavecinal.Funciones;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -17,26 +16,26 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class VecinosInteractor implements Vecinos.VecinosInteractor {
     VecinosPresenter vecinosPresenter;
     Context context;
-    Metodos metodos;
+    Funciones funciones;
     public VecinosInteractor(VecinosPresenter vecinosPresenter, Context context) {
         this.vecinosPresenter=vecinosPresenter;
         this.context=context;
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
     }
 
     @Override
     public void GetVecinos() {
-        metodos.AbrirConexion();
+        funciones.AbrirConexion();
 
 
         JsonArray jsonArray=new JsonArray();
         JsonObject jsonObject=new JsonObject();
 
-        jsonObject.addProperty("id_grupo",metodos.GetIdGrupo());
+        jsonObject.addProperty("id_grupo",funciones.GetIdGrupo());
         jsonArray.add(jsonObject);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(metodos.GetUrl())
+                .baseUrl(funciones.GetUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         VecinosInterface peticion=retrofit.create(VecinosInterface.class);
@@ -49,23 +48,23 @@ public class VecinosInteractor implements Vecinos.VecinosInteractor {
                 if(response.body()!=null){
                     Log.i("GetVecinos",response.body().toString());
                     Log.i("GetVecinos",response.body().get(0).getAsJsonObject().get("status").toString());
-                    if(metodos.IsSuccess(response.body())){
+                    if(funciones.IsSuccess(response.body())){
                         vecinosPresenter.LlenarVecinos(response.body().get(0).getAsJsonObject().get("datos").getAsJsonArray());
 
                     }else{
-                        metodos.Toast(metodos.GetMsn(response.body()));
+                        funciones.Toast(funciones.GetMsn(response.body()));
                     }
 
 
                 }else{
-                    metodos.Toast("Error de servidor.");
+                    funciones.Toast("Error de servidor.");
                 }
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
                 Log.i("GetVecinos","Error:"+t.getMessage());
-                metodos.Toast("Erro:"+t.getMessage());
+                funciones.Toast("Erro:"+t.getMessage());
             }
         });
 
@@ -74,17 +73,17 @@ public class VecinosInteractor implements Vecinos.VecinosInteractor {
     @Override
     public void GetBloqueados() {
 
-        metodos.AbrirConexion();
+        funciones.AbrirConexion();
 
 
         JsonArray jsonArray=new JsonArray();
         JsonObject jsonObject=new JsonObject();
 
-        jsonObject.addProperty("id_grupo",metodos.GetIdGrupo());
+        jsonObject.addProperty("id_grupo",funciones.GetIdGrupo());
         jsonArray.add(jsonObject);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(metodos.GetUrl())
+                .baseUrl(funciones.GetUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         VecinosInterface peticion=retrofit.create(VecinosInterface.class);
@@ -97,23 +96,23 @@ public class VecinosInteractor implements Vecinos.VecinosInteractor {
                 if(response.body()!=null){
                     Log.i("GetBloqueados",response.body().toString());
                     Log.i("GetBloqueados",response.body().get(0).getAsJsonObject().get("status").toString());
-                    if(metodos.IsSuccess(response.body())){
+                    if(funciones.IsSuccess(response.body())){
                         vecinosPresenter.Llenabloqueados(response.body().get(0).getAsJsonObject().get("datos").getAsJsonArray());
 
                     }else{
-                        metodos.Toast(metodos.GetMsn(response.body()));
+                        funciones.Toast(funciones.GetMsn(response.body()));
                     }
 
 
                 }else{
-                    metodos.Toast("Error de servidor.");
+                    funciones.Toast("Error de servidor.");
                 }
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
                 Log.i("GetBloqueados","Error:"+t.getMessage());
-                metodos.Toast("Erro:"+t.getMessage());
+                funciones.Toast("Erro:"+t.getMessage());
             }
         });
 
@@ -122,18 +121,18 @@ public class VecinosInteractor implements Vecinos.VecinosInteractor {
 
     @Override
     public void BloquearVecino(String idv) {
-        metodos.AbrirConexion();
+        funciones.AbrirConexion();
 
 
         JsonArray jsonArray=new JsonArray();
         JsonObject jsonObject=new JsonObject();
 
-        jsonObject.addProperty("id_grupo",metodos.GetIdGrupo());
+        jsonObject.addProperty("id_grupo",funciones.GetIdGrupo());
         jsonObject.addProperty("id_usuario",idv);
         jsonArray.add(jsonObject);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(metodos.GetUrl())
+                .baseUrl(funciones.GetUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         VecinosInterface peticion=retrofit.create(VecinosInterface.class);
@@ -146,42 +145,42 @@ public class VecinosInteractor implements Vecinos.VecinosInteractor {
                 if(response.body()!=null){
                     Log.i("GetBloqueados",response.body().toString());
                     Log.i("GetBloqueados",response.body().get(0).getAsJsonObject().get("status").toString());
-                    if(metodos.IsSuccess(response.body())){
+                    if(funciones.IsSuccess(response.body())){
                         GetVecinos();
                         vecinosPresenter.OcultarOpciones();
 
                     }else{
-                        metodos.Toast(metodos.GetMsn(response.body()));
+                        funciones.Toast(funciones.GetMsn(response.body()));
                     }
 
 
                 }else{
-                    metodos.Toast("Error de servidor.");
+                    funciones.Toast("Error de servidor.");
                 }
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
                 Log.i("GetBloqueados","Error:"+t.getMessage());
-                metodos.Toast("Erro:"+t.getMessage());
+                funciones.Toast("Erro:"+t.getMessage());
             }
         });
     }
 
     @Override
     public void DesbloquearVecino(String idv) {
-        metodos.AbrirConexion();
+        funciones.AbrirConexion();
 
 
         JsonArray jsonArray=new JsonArray();
         JsonObject jsonObject=new JsonObject();
 
-        jsonObject.addProperty("id_grupo",metodos.GetIdGrupo());
+        jsonObject.addProperty("id_grupo",funciones.GetIdGrupo());
         jsonObject.addProperty("id_usuario",idv);
         jsonArray.add(jsonObject);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(metodos.GetUrl())
+                .baseUrl(funciones.GetUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         VecinosInterface peticion=retrofit.create(VecinosInterface.class);
@@ -194,23 +193,23 @@ public class VecinosInteractor implements Vecinos.VecinosInteractor {
                 if(response.body()!=null){
                     Log.i("GetBloqueados",response.body().toString());
                     Log.i("GetBloqueados",response.body().get(0).getAsJsonObject().get("status").toString());
-                    if(metodos.IsSuccess(response.body())){
+                    if(funciones.IsSuccess(response.body())){
                         GetBloqueados();
                         vecinosPresenter.OcultarOpciones();
                     }else{
-                        metodos.Toast(metodos.GetMsn(response.body()));
+                        funciones.Toast(funciones.GetMsn(response.body()));
                     }
 
 
                 }else{
-                    metodos.Toast("Error de servidor.");
+                    funciones.Toast("Error de servidor.");
                 }
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
                 Log.i("GetBloqueados","Error:"+t.getMessage());
-                metodos.Toast("Erro:"+t.getMessage());
+                funciones.Toast("Erro:"+t.getMessage());
             }
         });
     }

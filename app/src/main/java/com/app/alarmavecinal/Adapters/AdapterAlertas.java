@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.alarmavecinal.Estructuras.Alertas;
-import com.app.alarmavecinal.FuncionAlertas.NewAlerta;
 import com.app.alarmavecinal.R;
 import com.squareup.picasso.Picasso;
 

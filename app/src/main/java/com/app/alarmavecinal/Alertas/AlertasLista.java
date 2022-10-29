@@ -1,4 +1,4 @@
-package com.app.alarmavecinal.FuncionAlertas;
+package com.app.alarmavecinal.Alertas;
 
 import android.app.ProgressDialog;
 import android.content.Context;

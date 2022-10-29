@@ -6,7 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-import com.app.alarmavecinal.Metodos;
+import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.R;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -14,7 +14,7 @@ public class PassView extends AppCompatActivity implements Pass.PassView {
 
     PassPresenter passPresenter;
     Context context;
-    Metodos metodos;
+    Funciones funciones;
     TextInputEditText pass,pass1,pass2;
 
     @Override
@@ -22,7 +22,7 @@ public class PassView extends AppCompatActivity implements Pass.PassView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pass_view);
         context=this;
-        metodos=new Metodos(context);
+        funciones=new Funciones(context);
         passPresenter=new PassPresenter(this,context);
         pass=findViewById(R.id.pass);
         pass1=findViewById(R.id.pass1);
