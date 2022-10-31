@@ -13,13 +13,13 @@
             android:icon="@drawable/boton_emergencia"
             android:title="Emergencias" />
         <item
-            android:id="@+id/nav_alertas"
-            android:icon="@drawable/img_menu_alerta"
-            android:title="Alertas" />
-        <item
             android:id="@+id/nav_avisos"
             android:icon="@drawable/img_menu_aviso"
             android:title="Avisos" />
+        <item
+            android:id="@+id/nav_alertas"
+            android:icon="@drawable/img_menu_alerta"
+            android:title="Alertas" />
         <item
             android:id="@+id/nav_grupo"
             android:icon="@drawable/img_menu_grupo"

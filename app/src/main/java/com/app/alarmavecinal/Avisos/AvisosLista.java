@@ -64,6 +64,7 @@ public class AvisosLista extends AppCompatActivity  {
 
 
         avisos_lista=findViewById(R.id.avisos_lista);
+        funciones.GetAvisosServer();
         MobileAds.initialize(this);
         AdView m = findViewById(R.id.banner);
         AdRequest adRequest = null;
@@ -115,6 +116,9 @@ public class AvisosLista extends AppCompatActivity  {
 
             TextView mensaje=item.findViewById(R.id.mensaje);
             mensaje.setText(funciones.GetIndex2(jsonArray,i,"mensaje"));
+
+            TextView nombre=item.findViewById(R.id.titulo);
+            nombre.setText(funciones.GetIndex2(jsonArray,i,"nombre"));
 
             TextView fecha=item.findViewById(R.id.fecha);
             fecha.setText(funciones.GetIndex2(jsonArray,i,"created_at"));

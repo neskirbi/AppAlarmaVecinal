@@ -210,23 +210,22 @@ public class Base extends SQLiteOpenHelper {
             ALERTAS_TABLE_CREATE= "CREATE TABLE IF NOT EXISTS  alertas(" +
                     "id_alerta TEXT not null,"+
                     "id_grupo TEXT not null,"+
-                    "id_usuario TEXT not null,"+
+                    "nombre TEXT not null,"+
                     "imagen TEXT not null,"+
+                    "created_at TEXT not null,"+
                     "asunto TEXT not null,"+
-                    "mensaje TEXT not null,"+
-                    "created_at TEXT not null);" ;
-
-            db.execSQL(ALERTAS_TABLE_CREATE);
+                    "mensaje TEXT not null);" ;
 
             db.execSQL("DROP table avisos");
             AVISOS_TABLE_CREATE= "CREATE TABLE IF NOT EXISTS  avisos(" +
                     "id_aviso TEXT not null,"+
                     "id_grupo TEXT not null,"+
-                    "id_usuario TEXT not null,"+
-                    "imagen TEXT not null,"+
+                    "nombre TEXT not null,"+
+                    "created_at TEXT not null,"+
                     "asunto TEXT not null,"+
-                    "mensaje TEXT not null,"+
-                    "created_at TEXT not null);" ;
+                    "mensaje TEXT not null);" ;
+
+            db.execSQL(ALERTAS_TABLE_CREATE);
 
             db.execSQL(AVISOS_TABLE_CREATE);
 

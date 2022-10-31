@@ -842,7 +842,7 @@ public class Funciones {
         Logo("ListaAlertas","Cont:"+c.getCount());
         if(c.getCount()>0){
             c.moveToFirst();
-            while (!c.isLast()){
+            while (!c.isAfterLast()){
                 JsonObject jsonObject=new JsonObject();
                 try {
                     jsonObject.addProperty("id_alerta", c.getString(c.getColumnIndex("id_alerta")));
@@ -895,12 +895,13 @@ public class Funciones {
         Logo("Avisos","Cont:"+c.getCount());
         if(c.getCount()>0){
             c.moveToFirst();
-            while (!c.isLast()){
+            while (!c.isAfterLast()){
                 JsonObject jsonObject=new JsonObject();
                 try {
                     jsonObject.addProperty("id_alerta", c.getString(c.getColumnIndex("id_aviso")));
                     jsonObject.addProperty("created_at", c.getString(c.getColumnIndex("created_at")));
                     jsonObject.addProperty("asunto", c.getString(c.getColumnIndex("asunto")));
+                    jsonObject.addProperty("nombre", c.getString(c.getColumnIndex("nombre")));
                     jsonObject.addProperty("mensaje", c.getString(c.getColumnIndex("mensaje")));
                     jsonArray.add(jsonObject);
                 } catch (Exception e) {
@@ -1589,7 +1590,7 @@ public class Funciones {
         c.moveToFirst();
         Logo("GuardarAlertas",c.getCount()+"<---Hay");
         if(c.getCount()>0){
-            while(!c.isLast()){
+            while(!c.isAfterLast()){
                 JsonObject jsonObject=new JsonObject();
                 jsonObject.addProperty("id_alerta",c.getString(c.getColumnIndex("id_alerta")));
                 jsonArray.add(jsonObject);
@@ -1617,6 +1618,140 @@ public class Funciones {
         if(c.getCount()>0){
 
             Logo("GuardarAlertas",c.getCount()+"  Si esta:"+id_alerta);
+            return true;
+        }
+
+
+
+        c.close();
+        db.close();
+        return false;
+
+    }
+
+
+
+
+    public void GetAvisosServer() {
+        AbrirConexion();
+
+        JsonArray jsonArray=new JsonArray();
+        JsonObject jsonObject=new JsonObject();
+        jsonObject.addProperty("id_grupo",GetIdGrupo());
+        jsonObject.add("ids",GetIdAvisos());
+        jsonArray.add(jsonObject);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(GetUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        OrdenInterface peticion=retrofit.create(OrdenInterface.class);
+        Call<JsonArray> call= peticion.GetAvisos(jsonArray);
+        Log.i("GetAvisos", jsonArray+"");
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                Log.i("GetAvisos", "Code:"+response.code());
+                if(response.body()!=null) {
+                    Log.i("GetAvisos", response.body().toString());
+                    if(IsSuccess(response.body())) {
+
+                        GuardarAvisos(response.body());
+
+
+                    } else {
+
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                Log.i("GetAvisos","Erro:"+t.getMessage());
+
+            }
+        });
+    }
+
+
+    private void GuardarAvisos(JsonArray body) {
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+        for(int i=0;i<GetData(body).size();i++){
+
+            try{
+
+                if(!EstaAviso(GetIndex2(GetData(body),i,"id_aviso"))){
+                    ContentValues aviso = new ContentValues();
+
+                    aviso.put("id_aviso", GetIndex2(GetData(body),i,"id_aviso"));
+                    aviso.put("id_grupo", GetIndex2(GetData(body),i,"id_grupo"));
+                    aviso.put("nombre", GetIndex2(GetData(body),i,"nombre"));
+                    aviso.put("created_at", GetIndex2(GetData(body),i,"created_at"));
+
+                    aviso.put("asunto", GetIndex2(GetData(body),i,"asunto"));
+                    aviso.put("mensaje", GetIndex2(GetData(body),i,"mensaje"));
+
+
+
+                    db.insert("avisos", null, aviso);
+                    Notificar("Aviso",GetIndex2(GetData(body),i,"asunto")+"\n"+GetIndex2(GetData(body),i,"nombre"), R.drawable.img_menu_aviso,new Intent(context, AlertasLista.class),3);
+                }
+
+            }catch(Exception e){
+                Logo("GuardarAvisos",e.getMessage());
+            }
+
+
+        }
+        db.close();
+
+    }
+
+    private JsonArray GetIdAvisos() {
+
+
+        JsonArray jsonArray=new JsonArray();
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+
+
+        Cursor c =  db.rawQuery("SELECT * from avisos ",null);
+        c.moveToFirst();
+        Logo("GetAvisos",c.getCount()+"<---");
+        if(c.getCount()>0){
+            while(!c.isAfterLast()){
+                JsonObject jsonObject=new JsonObject();
+                jsonObject.addProperty("id_aviso",c.getString(c.getColumnIndex("id_aviso")));
+                Logo("GetAvisos","--->"+c.getString(c.getColumnIndex("id_aviso")));
+                jsonArray.add(jsonObject);
+                c.moveToNext();
+
+            }
+        }
+
+
+
+        c.close();
+        db.close();
+        return jsonArray;
+
+    }
+
+    private boolean EstaAviso(String id_aviso) {
+
+
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+
+
+
+
+        Cursor c =  db.rawQuery("SELECT * from avisos where id_aviso='"+id_aviso+"' ",null);
+
+        if(c.getCount()>0){
+            Logo("GuardarAvisos","Esta id: "+id_aviso+" "+c.getCount());
             return true;
         }
 
@@ -1807,76 +1942,7 @@ public class Funciones {
 
 
 
-    public class Enviador extends AsyncTask {
 
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            EnviarGrupo();
-            CheckGrupo();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-        }
-    }
-
-    public void ForzarEnviador(){
-        new Enviador().executeOnExecutor(threadPoolExecutor);
-
-    }
-
-    public void CorrerVerificarEnviado(View viewById){
-        new VerificarEnviado(viewById).executeOnExecutor(threadPoolExecutor);
-    }
-
-
-
-    public class VerificarEnviado extends AsyncTask {
-        boolean Flag=true;
-
-        View viewById;
-
-        public VerificarEnviado(View viewById) {
-            this.viewById=viewById;
-        }
-
-        @Override
-        protected void onProgressUpdate(Object[] values) {
-            super.onProgressUpdate(values);
-            if(IsGrupoEnviado()){
-                viewById.setVisibility(View.GONE);
-                Logo("VerificarEnviado","si");
-                Flag=false;
-            }else{
-                viewById.setVisibility(View.VISIBLE);
-                Logo("VerificarEnviado","no");
-                ForzarEnviador();
-            }
-
-
-        }
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            while (Flag){
-               publishProgress();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-        }
-    }
 
 
 

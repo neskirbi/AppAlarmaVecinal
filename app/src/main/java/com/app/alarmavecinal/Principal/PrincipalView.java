@@ -56,7 +56,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class PrincipalView extends AppCompatActivity implements OnMapReadyCallback,NavigationView.OnNavigationItemSelectedListener, Principal.PrincipalView {
+public class PrincipalView extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, Principal.PrincipalView {
     NavigationView navigationView;
     Menu nav_Menu;
     Toolbar toolbar;
@@ -71,11 +71,10 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
     double lat=0,lon=0;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    GoogleMap googleMap;
 
-    LocationManager mLocationManager = null;
+
+
     LocationListener locationListener = null;
-    private String proovedor;
     BottomNavigationView bottom_navigation;
 
     @Override
@@ -89,7 +88,7 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
         bottom_navigation=findViewById(R.id.bottom_navigation);
 
 
-        funciones.PedirPermisoLocation(this);
+        //funciones.PedirPermisoLocation(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         nota = findViewById(R.id.nota);
         direccion=findViewById(R.id.direccion);
@@ -260,7 +259,6 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        funciones.ForzarEnviador();
     }
 
 
@@ -268,8 +266,7 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
     @Override
     protected void onPause() {
         super.onPause();
-        if (locationListener != null)
-            mLocationManager.removeUpdates(locationListener);
+
     }
 
     @Override
@@ -383,24 +380,6 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
 
 
 
-    @Override
-    public void onMapReady(GoogleMap map) {
-        googleMap = map;
-
-        UiSettings set=googleMap.getUiSettings();
-        set.setZoomControlsEnabled(true);
-
-        Log.i("Moviendo", "Mapa listo");
-        googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-
-                Log.i("Moviendo", cameraPosition+"");
-            }
-        });
-
-
-    }
 
 
 
