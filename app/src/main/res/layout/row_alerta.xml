@@ -46,11 +46,11 @@
                     android:textSize="18dp"
                     android:textStyle="bold" />
 
-                <!--<TextView
+                <TextView
                     android:id="@+id/nombre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nombre" />-->
+                    android:text="Nombre" />
 
                 <TextView
                     android:id="@+id/fecha"

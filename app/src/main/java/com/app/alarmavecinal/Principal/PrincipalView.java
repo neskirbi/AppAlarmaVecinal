@@ -197,6 +197,7 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
                                 //funciones.Conexion("{\"id_usuario\":\""+funciones.GetIdUsuario()+"\",\"id_grupo\":\""+funciones.GetIdGrupo()+"\",\"tipo\":\"1\"}",funciones.GetUrl()+getString(R.string.url_SetEmergencia));
                                 firebaseDatabase = FirebaseDatabase.getInstance();
                                 databaseReference = firebaseDatabase.getReference("Ordenes/" + funciones.GetIdGrupo());//Sala de chat
+                                databaseReference.setValue("");
                                 databaseReference.push().setValue(new Ordenes(1,funciones.GetUIID(), funciones.GetIdUsuario(), funciones.GetNombre(), "Emergencia!!! \n", "{\"direccion\":\"" + funciones.GetDireccion() + "\",\"ubicacion\":\"" + latt + "," + lont + "\"}", funciones.GetDate()));
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -400,6 +401,8 @@ public class PrincipalView extends AppCompatActivity implements OnMapReadyCallba
 
 
     }
+
+
 
 
 

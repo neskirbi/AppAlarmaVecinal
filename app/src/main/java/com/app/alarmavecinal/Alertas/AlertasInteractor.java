@@ -75,8 +75,10 @@ public class AlertasInteractor implements Alertas.AlertasInteractor {
         try {
 
             //JSONObject jsonObject0=new JSONObject(json);
-            databaseReferenceAlerta.setValue(new Ordenes(i,id_alerta,"","","","",""));
+            databaseReferenceAlerta.setValue("");
+            databaseReferenceAlerta.push().setValue(new Ordenes(i,id_alerta,"","","","",""));
 
+            alertasPresenter.Salir();
 
 
         } catch (Exception e) {
@@ -134,4 +136,6 @@ public class AlertasInteractor implements Alertas.AlertasInteractor {
         });
 
     }
+
+
 }

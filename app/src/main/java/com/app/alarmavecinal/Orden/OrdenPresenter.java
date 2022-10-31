@@ -53,7 +53,8 @@ public class OrdenPresenter implements Orden.OrdenPresenter {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Ordenes orden=snapshot.getValue(Ordenes.class);
 
-                funciones.Logo("Emergencialistener", "Val:"+snapshot.getValue());
+
+                funciones.Logo("GetOrdenes", "Val:"+snapshot.getValue());
 
                 switch (orden.getOrden()){
                     case 1://Emergencia
@@ -83,33 +84,7 @@ public class OrdenPresenter implements Orden.OrdenPresenter {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Ordenes orden=snapshot.getValue(Ordenes.class);
 
-                funciones.Logo("Emergencialistener", "Val:"+snapshot.getValue());
-
-                switch (orden.getOrden()){
-                    case 1://Emergencia
-                        funciones.Logo("Emergencialistener","Iniciando Emergencia");
-                        Emergencia(orden);
-                        break;
-
-
-                    case 2://Avisos
-
-                        ordenInteractor.GetAvisos();
-                        break;
-
-
-                    case 3://Alertas
-                        ordenInteractor.GetAlerta();
-                        break;
-
-
-
-                    case 4://Chat
-                        //Emergencia(orden);
-                        break;
-                }
             }
 
             @Override

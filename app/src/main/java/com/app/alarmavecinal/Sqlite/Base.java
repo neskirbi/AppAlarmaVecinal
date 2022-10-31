@@ -45,7 +45,7 @@ public class Base extends SQLiteOpenHelper {
         ALERTAS_TABLE_CREATE= "CREATE TABLE IF NOT EXISTS  alertas(" +
                 "id_alerta TEXT not null,"+
                 "id_grupo TEXT not null,"+
-                "id_usuario TEXT not null,"+
+                "nombre TEXT not null,"+
                 "imagen TEXT not null,"+
                 "created_at TEXT not null,"+
                 "asunto TEXT not null,"+
@@ -54,7 +54,7 @@ public class Base extends SQLiteOpenHelper {
         AVISOS_TABLE_CREATE= "CREATE TABLE IF NOT EXISTS  avisos(" +
                 "id_aviso TEXT not null,"+
                 "id_grupo TEXT not null,"+
-                "id_usuario TEXT not null,"+
+                "nombre TEXT not null,"+
                 "created_at TEXT not null,"+
                 "asunto TEXT not null,"+
                 "mensaje TEXT not null);" ;

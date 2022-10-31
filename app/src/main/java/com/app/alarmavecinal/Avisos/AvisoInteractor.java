@@ -17,6 +17,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
 public class AvisoInteractor implements Aviso.AvisosInterface {
 
     AvisoPresenter avisoPresenter;
@@ -85,7 +86,8 @@ public class AvisoInteractor implements Aviso.AvisosInterface {
         try {
 
             //JSONObject jsonObject0=new JSONObject(json);
-            databaseReferenceAlerta.setValue(new Ordenes(i,"","","","","",""));
+            databaseReferenceAlerta.setValue("");
+            databaseReferenceAlerta.push().setValue(new Ordenes(i,"","","","","",""));
 
 
 

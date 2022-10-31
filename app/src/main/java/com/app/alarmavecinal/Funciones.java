@@ -40,8 +40,10 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
+import com.app.alarmavecinal.Alertas.AlertasLista;
 import com.app.alarmavecinal.Models.Grupo;
 import com.app.alarmavecinal.Models.Usuario;
+import com.app.alarmavecinal.Orden.OrdenInterface;
 import com.app.alarmavecinal.Orden.OrdenService;
 import com.app.alarmavecinal.Vecinos.GrupoView;
 import com.app.alarmavecinal.Servicios.Emergencia;
@@ -85,6 +87,12 @@ import java.util.concurrent.TimeUnit;
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.graphics.Color.rgb;
 import static java.lang.StrictMath.abs;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Funciones {
     Context context;
@@ -840,6 +848,7 @@ public class Funciones {
                     jsonObject.addProperty("id_alerta", c.getString(c.getColumnIndex("id_alerta")));
                     jsonObject.addProperty("created_at", c.getString(c.getColumnIndex("created_at")));
                     jsonObject.addProperty("asunto", c.getString(c.getColumnIndex("asunto")));
+                    jsonObject.addProperty("nombre", c.getString(c.getColumnIndex("nombre")));
                     jsonObject.addProperty("imagen", c.getString(c.getColumnIndex("imagen")));
                     jsonArray.add(jsonObject);
                 } catch (Exception e) {
@@ -856,6 +865,23 @@ public class Funciones {
         c.close();
         db.close();
         return jsonArray;
+    }
+
+    public int GetNumAlertas(){
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+
+
+        Cursor c =  db.rawQuery("SELECT * from alertas order by created_at desc ",null);
+        Logo("ListaAlertas","Cont:"+c.getCount());
+       int num=c.getCount();
+
+
+
+
+        c.close();
+        db.close();
+        return num;
     }
 
 
@@ -892,6 +918,24 @@ public class Funciones {
         db.close();
         return jsonArray;
     }
+
+    public int GetNumAvisos(){
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+
+
+        Cursor c =  db.rawQuery("SELECT * from avisos order by created_at desc ",null);
+        Logo("ListaAlertas","Cont:"+c.getCount());
+        int num=c.getCount();
+
+
+
+
+        c.close();
+        db.close();
+        return num;
+    }
+
     public void Logo(String tag,String men)
     {
         if(BuildConfig.DEBUG){
@@ -1452,6 +1496,136 @@ public class Funciones {
         db.insert("grupo", null, grupo);
 
         db.close();
+    }
+
+    public void GetAlertasServer() {
+        AbrirConexion();
+
+        JsonArray jsonArray=new JsonArray();
+        JsonObject jsonObject=new JsonObject();
+        jsonObject.addProperty("id_grupo",GetIdGrupo());
+        jsonObject.add("ids",GetIdAlertas());
+        jsonArray.add(jsonObject);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(GetUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        OrdenInterface peticion=retrofit.create(OrdenInterface.class);
+        Call<JsonArray> call= peticion.GetAlertas(jsonArray);
+        Log.i("GetAlertas", jsonArray+"");
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                Log.i("GetAlertas", "Code:"+response.code());
+                if(response.body()!=null) {
+                    Log.i("GetAlertas", response.body().toString());
+                    if(IsSuccess(response.body())) {
+
+                        GuardarAlertas(response.body());
+
+
+                    } else {
+
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                Log.i("GetAlertas","Erro:"+t.getMessage());
+
+            }
+        });
+    }
+
+
+    private void GuardarAlertas(JsonArray body) {
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+        for(int i=0;i<GetData(body).size();i++){
+
+
+            try{
+                if(!EstaAlerta(GetIndex2(GetData(body),i,"id_alerta"))){
+                    ContentValues alerta = new ContentValues();
+
+                    alerta.put("id_alerta", GetIndex2(GetData(body),i,"id_alerta"));
+                    alerta.put("id_grupo", GetIndex2(GetData(body),i,"id_grupo"));
+                    alerta.put("nombre", GetIndex2(GetData(body),i,"nombre"));
+                    alerta.put("imagen", GetIndex2(GetData(body),i,"imagen"));
+
+                    alerta.put("asunto", GetIndex2(GetData(body),i,"asunto"));
+                    alerta.put("mensaje", GetIndex2(GetData(body),i,"mensaje"));
+
+                    alerta.put("created_at", GetIndex2(GetData(body),i,"created_at"));
+
+
+
+                    db.insert("alertas", null, alerta);
+                    Notificar("Alerta",GetIndex2(GetData(body),i,"asunto")+"\n"+GetIndex2(GetData(body),i,"nombre"),R.drawable.boton_alerta,new Intent(context, AlertasLista.class),3);
+                }
+
+            }catch(Exception e){
+                Logo("GuardarAlertas","Error:"+e.getMessage());
+            }
+
+
+        }
+        db.close();
+
+    }
+
+    private JsonArray GetIdAlertas() {
+
+
+        JsonArray jsonArray=new JsonArray();
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+
+
+        Cursor c =  db.rawQuery("SELECT * from alertas ",null);
+        c.moveToFirst();
+        Logo("GuardarAlertas",c.getCount()+"<---Hay");
+        if(c.getCount()>0){
+            while(!c.isLast()){
+                JsonObject jsonObject=new JsonObject();
+                jsonObject.addProperty("id_alerta",c.getString(c.getColumnIndex("id_alerta")));
+                jsonArray.add(jsonObject);
+                c.moveToNext();
+            }
+        }
+
+
+
+        c.close();
+        db.close();
+        return jsonArray;
+
+    }
+
+
+    private boolean EstaAlerta(String id_alerta) {
+
+
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+
+        Cursor c =  db.rawQuery("SELECT * from alertas where id_alerta='"+id_alerta+"' ",null);
+
+        if(c.getCount()>0){
+
+            Logo("GuardarAlertas",c.getCount()+"  Si esta:"+id_alerta);
+            return true;
+        }
+
+
+
+        c.close();
+        db.close();
+        return false;
+
     }
 
 

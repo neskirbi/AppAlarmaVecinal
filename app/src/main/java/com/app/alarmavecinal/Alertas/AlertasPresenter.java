@@ -32,4 +32,10 @@ public class AlertasPresenter implements Alertas.AlertasPresenter {
     public void EnviarAlerta(com.app.alarmavecinal.Estructuras.Alertas json) {
         alertasInteractor.EnviarAlerta(json);
     }
+
+    @Override
+    public void Salir() {
+        newAlerta.Salir();
+    }
+
 }

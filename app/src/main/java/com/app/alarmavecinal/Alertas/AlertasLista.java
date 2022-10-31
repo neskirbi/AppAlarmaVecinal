@@ -47,8 +47,8 @@ import java.util.concurrent.TimeUnit;
 public class AlertasLista extends AppCompatActivity {
     Funciones funciones;
     ImageView agregar;
-    LinearLayout alertas_lista;
-    ArrayList<AlertasL> alertas = new ArrayList();
+
+
     Context context;
 
 
@@ -65,6 +65,7 @@ public class AlertasLista extends AppCompatActivity {
 
         avisos_lista=findViewById(R.id.avisos_lista);
 
+        funciones.GetAlertasServer();
         AdView m = findViewById(R.id.banner);
         AdRequest adRequest = null;
         if (BuildConfig.DEBUG) {
@@ -82,11 +83,12 @@ public class AlertasLista extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        alertas.clear();
+
         Cargar();
     }
 
     private void Cargar() {
+        avisos_lista.removeAllViews();
         JsonArray jsonArray=funciones.GetAlertas();
         funciones.Logo("ListaAlertas",jsonArray+"");
         for (int i=0;i<jsonArray.size();i++){
@@ -96,6 +98,9 @@ public class AlertasLista extends AppCompatActivity {
 
             TextView titulo=item.findViewById(R.id.titulo);
             titulo.setText(funciones.GetIndex2(jsonArray,i,"asunto"));
+
+            TextView nombre=item.findViewById(R.id.nombre);
+            nombre.setText(funciones.GetIndex2(jsonArray,i,"nombre"));
 
 
 

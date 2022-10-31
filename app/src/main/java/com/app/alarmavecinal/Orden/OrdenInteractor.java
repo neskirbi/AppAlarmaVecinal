@@ -139,134 +139,13 @@ public class OrdenInteractor  implements Orden.OrdenInteractor {
 
     @Override
     public void GetAlerta() {
-        funciones.AbrirConexion();
-
-        JsonArray jsonArray=new JsonArray();
-        JsonObject jsonObject=new JsonObject();
-        jsonObject.addProperty("id_grupo",funciones.GetIdGrupo());
-        jsonObject.add("ids",GetIdAlertas());
-        jsonArray.add(jsonObject);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(funciones.GetUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        OrdenInterface peticion=retrofit.create(OrdenInterface.class);
-        Call<JsonArray> call= peticion.GetAlertas(jsonArray);
-        Log.i("GetAlertas", jsonArray+"");
-        call.enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                Log.i("GetAlertas", "Code:"+response.code());
-                if(response.body()!=null) {
-                    Log.i("GetAlertas", response.body().toString());
-                    if(funciones.IsSuccess(response.body())) {
-
-                        GuardarAlertas(response.body());
-
-
-                    } else {
-
-                    }
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-                Log.i("GetAlertas","Erro:"+t.getMessage());
-
-            }
-        });
+        funciones.GetAlertasServer();
     }
 
 
 
-    private void GuardarAlertas(JsonArray body) {
-        Base base = new Base(context);
-        SQLiteDatabase db = base.getWritableDatabase();
-        for(int i=0;i<body.size();i++){
-            //funciones.Logo("GuardarAlertas",funciones.GetIndex2(funciones.GetData(body),i,"id_alerta"));
-
-            try{
-                if(!EstaAlerta(funciones.GetIndex2(funciones.GetData(body),i,"id_alerta"))){
-                    ContentValues alerta = new ContentValues();
-
-                    alerta.put("id_alerta", funciones.GetIndex2(funciones.GetData(body),i,"id_alerta"));
-                    alerta.put("id_grupo", funciones.GetIndex2(funciones.GetData(body),i,"id_grupo"));
-                    alerta.put("id_usuario", funciones.GetIndex2(funciones.GetData(body),i,"id_usuario"));
-                    alerta.put("imagen", funciones.GetIndex2(funciones.GetData(body),i,"imagen"));
-
-                    alerta.put("asunto", funciones.GetIndex2(funciones.GetData(body),i,"asunto"));
-                    alerta.put("mensaje", funciones.GetIndex2(funciones.GetData(body),i,"mensaje"));
-
-                    alerta.put("created_at", funciones.GetIndex2(funciones.GetData(body),i,"created_at"));
 
 
-
-                    db.insert("alertas", null, alerta);
-                }
-
-            }catch(Exception e){
-                funciones.Logo("GuardarAlertas","Error:"+e.getMessage());
-            }
-
-
-        }
-        db.close();
-
-    }
-
-    private JsonArray GetIdAlertas() {
-
-
-        JsonArray jsonArray=new JsonArray();
-        Base base = new Base(context);
-        SQLiteDatabase db = base.getWritableDatabase();
-
-
-        Cursor c =  db.rawQuery("SELECT * from alertas ",null);
-        c.moveToFirst();
-        funciones.Logo("GuardarAlertas",c.getCount()+"<---");
-        if(c.getCount()>0){
-            while(!c.isLast()){
-                JsonObject jsonObject=new JsonObject();
-                jsonObject.addProperty("id_alerta",c.getString(c.getColumnIndex("id_alerta")));
-                jsonArray.add(jsonObject);
-                c.moveToNext();
-            }
-        }
-
-
-
-        c.close();
-        db.close();
-        return jsonArray;
-
-    }
-
-    private boolean EstaAlerta(String id_alerta) {
-
-
-        Base base = new Base(context);
-        SQLiteDatabase db = base.getWritableDatabase();
-
-
-
-
-        Cursor c =  db.rawQuery("SELECT * from alertas where id_alerta='"+id_alerta+"' ",null);
-
-        if(c.getCount()>0){
-           return true;
-        }
-
-
-
-        c.close();
-        db.close();
-        return false;
-
-    }
 
     private boolean EstaAviso(String id_aviso) {
 

@@ -154,4 +154,9 @@ public class NewAlerta extends AppCompatActivity implements AdapterAlertas.Recyc
 
         }
     }
+
+    @Override
+    public void Salir() {
+        //finish();
+    }
 }

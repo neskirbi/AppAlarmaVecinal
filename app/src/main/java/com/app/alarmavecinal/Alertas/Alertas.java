@@ -6,12 +6,16 @@ public interface Alertas {
 
     interface AlertasView{
         void LlenarLista(JsonArray jsonArray);
+
+        void Salir();
     }
 
     interface AlertasPresenter{
         void GetPreAlertas();
         void LlenarLista(JsonArray jsonArray);
         void EnviarAlerta(com.app.alarmavecinal.Estructuras.Alertas json);
+
+        void Salir();
     }
 
     interface AlertasInteractor{
