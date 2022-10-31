@@ -104,6 +104,7 @@ public class AvisosLista extends AppCompatActivity  {
 
 
     private void Cargar() {
+        avisos_lista.removeAllViews();
         JsonArray jsonArray=funciones.GetAvisos();
         funciones.Logo("Avisos",jsonArray+"");
         for (int i=0;i<jsonArray.size();i++){
