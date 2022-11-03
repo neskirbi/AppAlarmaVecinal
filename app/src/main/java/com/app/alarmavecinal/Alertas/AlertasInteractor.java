@@ -71,7 +71,7 @@ public class AlertasInteractor implements Alertas.AlertasInteractor {
 
     public void EnviarOrdenAlerta(int i, String id_alerta){
         firebaseDatabaseAlerta = FirebaseDatabase.getInstance();
-        databaseReferenceAlerta = firebaseDatabaseAlerta.getReference("Ordenes/"+funciones.GetIdGrupo());//Sala de chat
+        databaseReferenceAlerta = firebaseDatabaseAlerta.getReference(funciones.GetIdGrupo()+"/Oredenes");//Sala de chat
         try {
 
             //JSONObject jsonObject0=new JSONObject(json);

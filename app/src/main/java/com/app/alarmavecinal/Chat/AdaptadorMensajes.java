@@ -1,4 +1,4 @@
-package com.app.alarmavecinal.ChatFb;
+package com.app.alarmavecinal.Chat;
 
 import android.content.Context;
 import android.view.LayoutInflater;

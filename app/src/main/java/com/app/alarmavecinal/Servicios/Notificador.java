@@ -9,7 +9,7 @@ import android.os.PowerManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.app.alarmavecinal.ChatFb.SalaChat;
+import com.app.alarmavecinal.Chat.ChatView;
 import com.app.alarmavecinal.Estructuras.AlertasL;
 import com.app.alarmavecinal.Estructuras.Avisos;
 import com.app.alarmavecinal.Estructuras.Mensaje;
@@ -167,7 +167,7 @@ public class Notificador extends Service {
                     funciones.GuardarIdMensaje(mensaje.getId_mensaje());
                     if(!funciones.GetCurrentActivity().contains("SalaChat")){
                         if(!mensaje.getId_usuario().contains(funciones.GetIdUsuario())){
-                            funciones.Notificar(funciones.GetNombreGrupo(),mensaje.getNombre()+":\n"+mensaje.getMensaje(), R.drawable.sobre,new Intent(context, SalaChat.class),3);
+                            funciones.Notificar(funciones.GetNombreGrupo(),mensaje.getNombre()+":\n"+mensaje.getMensaje(), R.drawable.sobre,new Intent(context, ChatView.class),3);
                         }
                     }
                 }

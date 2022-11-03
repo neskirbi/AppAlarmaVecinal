@@ -58,7 +58,7 @@
 
         <activity android:name=".Mapas.MapaEmergencia" />
         <activity
-            android:name=".ChatFb.SalaChat"
+            android:name=".Chat.ChatView"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Transmision.ListaTransmision"
@@ -80,7 +80,7 @@
         <activity android:name=".AnunciosLocales.VerAnuncios" />
         <activity android:name=".Debug.VisorTexto" />
         <activity
-            android:name=".Chat.ChatWindow"
+            android:name=".ChatOld.ChatWindow"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Yo.Datos.DatosView" />
         <activity android:name=".Avisos.AvisosMensaje" />

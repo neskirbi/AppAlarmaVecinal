@@ -1,4 +1,4 @@
-package com.app.alarmavecinal.ChatFb;
+package com.app.alarmavecinal.Chat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,7 +60,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class SalaChat extends AppCompatActivity {
+public class ChatView extends AppCompatActivity implements Chat.ChatView {
     private static final int SELECT_FILE =0 ;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -99,12 +99,15 @@ public class SalaChat extends AppCompatActivity {
     private View cancel_img;
     private double porcentaje=0.20;
 
+    ChatPresenter chatPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sala_chat);
         context=this;
         funciones=new Funciones(context);
+        chatPresenter= new ChatPresenter(this,context);
         id_grupo=funciones.GetIdGrupo();
         id_usuario=funciones.GetIdUsuario();
         nombre=funciones.GetNombre();
@@ -291,7 +294,7 @@ public class SalaChat extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 funciones.Vibrar(funciones.VibrarPush());
-                if(funciones.PedirPermisoArchivos(SalaChat.this)){
+                if(funciones.PedirPermisoArchivos(ChatView.this)){
                     AbrirGaleria();
                 }
 

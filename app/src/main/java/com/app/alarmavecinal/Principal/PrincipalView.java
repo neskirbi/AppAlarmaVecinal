@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
@@ -30,7 +28,7 @@ import android.widget.Toast;
 import com.app.alarmavecinal.BuildConfig;
 import com.app.alarmavecinal.Alertas.AlertasLista;
 import com.app.alarmavecinal.Avisos.AvisosLista;
-import com.app.alarmavecinal.ChatFb.SalaChat;
+import com.app.alarmavecinal.Chat.ChatView;
 import com.app.alarmavecinal.Models.Ordenes;
 import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Vecinos.GrupoView;
@@ -43,10 +41,6 @@ import com.app.alarmavecinal.Yo.YoView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
@@ -140,7 +134,7 @@ public class PrincipalView extends AppCompatActivity implements NavigationView.O
                     case R.id.chat:
                         if (funciones.GetIdGrupo() != "") {
                             //startActivity(new Intent(context, ChatWindow.class));
-                            startActivity(new Intent(context, SalaChat.class));
+                            startActivity(new Intent(context, ChatView.class));
                         } else {
                             funciones.SinGrupo();
                         }
@@ -195,7 +189,7 @@ public class PrincipalView extends AppCompatActivity implements NavigationView.O
 
                                 //funciones.Conexion("{\"id_usuario\":\""+funciones.GetIdUsuario()+"\",\"id_grupo\":\""+funciones.GetIdGrupo()+"\",\"tipo\":\"1\"}",funciones.GetUrl()+getString(R.string.url_SetEmergencia));
                                 firebaseDatabase = FirebaseDatabase.getInstance();
-                                databaseReference = firebaseDatabase.getReference("Ordenes/" + funciones.GetIdGrupo());//Sala de chat
+                                databaseReference = firebaseDatabase.getReference(funciones.GetIdGrupo()+"/Oredenes");//Sala de chat
                                 databaseReference.setValue("");
                                 databaseReference.push().setValue(new Ordenes(1,funciones.GetUIID(), funciones.GetIdUsuario(), funciones.GetNombre(), "Emergencia!!! \n", "{\"direccion\":\"" + funciones.GetDireccion() + "\",\"ubicacion\":\"" + latt + "," + lont + "\"}", funciones.GetDate()));
                             } catch (JSONException e) {

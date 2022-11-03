@@ -1,14 +1,11 @@
 package com.app.alarmavecinal.Notificaciones;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.app.alarmavecinal.ChatFb.SalaChat;
 import com.app.alarmavecinal.Funciones;
-import com.app.alarmavecinal.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 

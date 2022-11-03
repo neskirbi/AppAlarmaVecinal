@@ -82,7 +82,7 @@ public class AvisoInteractor implements Aviso.AvisosInterface {
 
     private void EnviarOrdenAviso(int i) {
         firebaseDatabaseAlerta = FirebaseDatabase.getInstance();
-        databaseReferenceAlerta = firebaseDatabaseAlerta.getReference("Ordenes/"+funciones.GetIdGrupo());//Sala de chat
+        databaseReferenceAlerta = firebaseDatabaseAlerta.getReference(funciones.GetIdGrupo()+"/Oredenes");//Sala de chat
         try {
 
             //JSONObject jsonObject0=new JSONObject(json);

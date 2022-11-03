@@ -45,9 +45,9 @@ public class OrdenPresenter implements Orden.OrdenPresenter {
 
     @Override
     public void IniciarListener() {
-        funciones.Logo("Emergencialistener", "Ordenes/"+funciones.GetIdGrupo());
+        funciones.Logo("Emergencialistener", funciones.GetIdGrupo()+"/Oredenes");
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("Ordenes/"+funciones.GetIdGrupo());//Sala de chat
+        databaseReference = firebaseDatabase.getReference(funciones.GetIdGrupo()+"/Oredenes");//Sala de chat
         listener=new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
