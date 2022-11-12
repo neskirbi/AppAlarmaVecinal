@@ -63,8 +63,6 @@ public class PrincipalView extends AppCompatActivity implements NavigationView.O
     TextView nombre,nota,direccion;
     Context context;
     double lat=0,lon=0;
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
 
 
 
@@ -188,10 +186,7 @@ public class PrincipalView extends AppCompatActivity implements NavigationView.O
 
 
                                 //funciones.Conexion("{\"id_usuario\":\""+funciones.GetIdUsuario()+"\",\"id_grupo\":\""+funciones.GetIdGrupo()+"\",\"tipo\":\"1\"}",funciones.GetUrl()+getString(R.string.url_SetEmergencia));
-                                firebaseDatabase = FirebaseDatabase.getInstance();
-                                databaseReference = firebaseDatabase.getReference(funciones.GetIdGrupo()+"/Oredenes");//Sala de chat
-                                databaseReference.setValue("");
-                                databaseReference.push().setValue(new Ordenes(1,funciones.GetUIID(), funciones.GetIdUsuario(), funciones.GetNombre(), "Emergencia!!! \n", "{\"direccion\":\"" + funciones.GetDireccion() + "\",\"ubicacion\":\"" + latt + "," + lont + "\"}", funciones.GetDate()));
+                              funciones.EnviarOrden(new Ordenes(1,funciones.GetUIID(), funciones.GetIdUsuario(), funciones.GetNombre(), "Emergencia!!! \n", "{\"direccion\":\"" + funciones.GetDireccion() + "\",\"ubicacion\":\"" + latt + "," + lont + "\"}", funciones.GetDate()));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 funciones.Logo("Errorfb",e.getMessage());

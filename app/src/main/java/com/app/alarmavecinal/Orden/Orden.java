@@ -7,6 +7,8 @@ public interface Orden {
         void IniciarListener();
 
         void DetenerListener();
+
+        void IniciarEnviador();
     }
 
     interface OrdenInteractor{

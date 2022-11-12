@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.app.alarmavecinal.Alertas.AlertasInteractor;
 import com.app.alarmavecinal.BuildConfig;
+import com.app.alarmavecinal.Chat.ChatView;
 import com.app.alarmavecinal.Estructuras.Emergencias;
 import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Mapas.MapaEmergencia;
@@ -45,9 +48,9 @@ public class OrdenPresenter implements Orden.OrdenPresenter {
 
     @Override
     public void IniciarListener() {
-        funciones.Logo("Emergencialistener", funciones.GetIdGrupo()+"/Oredenes");
+        funciones.Logo("Emergencialistener", funciones.GetIdGrupo()+"/Ordenes");
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference(funciones.GetIdGrupo()+"/Oredenes");//Sala de chat
+        databaseReference = firebaseDatabase.getReference(funciones.GetIdGrupo()+"/Ordenes");//Sala de chat
         listener=new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -76,7 +79,10 @@ public class OrdenPresenter implements Orden.OrdenPresenter {
 
 
                     case 4://Chat
-                        //Emergencia(orden);
+                        if(!funciones.GetIdUsuario().equals(orden.getId_usuario())){
+                            funciones.Notificar(orden.getNombre(),"Nuevo Mensaje",R.drawable.sobre,new Intent(context, ChatView.class),4);
+                        }
+
                     break;
                 }
 
@@ -110,6 +116,18 @@ public class OrdenPresenter implements Orden.OrdenPresenter {
         if(databaseReference!=null){
             databaseReference.removeEventListener(listener);
         }
+    }
+
+    @Override
+    public void IniciarEnviador() {
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                funciones.EnviarMensajes();
+               handler.postDelayed(this,10000);
+            }
+        }, 10000);
     }
 
     void Emergencia(Ordenes orden){

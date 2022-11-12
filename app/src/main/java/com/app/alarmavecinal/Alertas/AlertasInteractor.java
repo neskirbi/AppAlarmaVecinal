@@ -69,23 +69,6 @@ public class AlertasInteractor implements Alertas.AlertasInteractor {
     }
 
 
-    public void EnviarOrdenAlerta(int i, String id_alerta){
-        firebaseDatabaseAlerta = FirebaseDatabase.getInstance();
-        databaseReferenceAlerta = firebaseDatabaseAlerta.getReference(funciones.GetIdGrupo()+"/Oredenes");//Sala de chat
-        try {
-
-            //JSONObject jsonObject0=new JSONObject(json);
-            databaseReferenceAlerta.setValue("");
-            databaseReferenceAlerta.push().setValue(new Ordenes(i,id_alerta,"","","","",""));
-
-            alertasPresenter.Salir();
-
-
-        } catch (Exception e) {
-            Log.i("SetAlerta","AError:"+e.getMessage());
-        }
-
-    }
     @Override
     public void EnviarAlerta(com.app.alarmavecinal.Estructuras.Alertas json) {
         funciones.AbrirConexion();
@@ -119,7 +102,8 @@ public class AlertasInteractor implements Alertas.AlertasInteractor {
                     if(funciones.IsSuccess(response.body())) {
                         //alertasPresenter.LlenarLista(response.body());
 
-                        EnviarOrdenAlerta(3,json.getId_alerta());
+                        funciones.EnviarOrden(new Ordenes(3,json.getId_alerta(),funciones.GetIdUsuario(),funciones.GetNombre(),"","",""));
+                        alertasPresenter.Salir();
 
                     } else {
                         funciones.Toast(funciones.GetMsn(response.body()));

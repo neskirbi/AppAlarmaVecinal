@@ -16,18 +16,9 @@ public class ChatPresenter implements Chat.ChatPresenter{
         chatInteractor=new ChatInteractor(this,context);
     }
 
-    @Override
-    public void EnviarTexto(String msn) {
-
-    }
 
     @Override
-    public void EnviarAudio(String url) {
-
-    }
-
-    @Override
-    public void EnviarImagen(String msn, String url) {
-
+    public void GardarMensaje(String mensaje, String imagen, String audio, String video) {
+        chatInteractor.GardarMensaje(mensaje,imagen,audio,video);
     }
 }

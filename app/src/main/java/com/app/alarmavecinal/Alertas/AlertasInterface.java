@@ -13,4 +13,6 @@ public interface AlertasInterface {
 
     @POST("api/EnviarAlertas")
     Call<JsonArray> EnviarAlertas(@Body JsonArray jsonArray);
+
+
 }

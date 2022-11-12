@@ -23,8 +23,6 @@ public class AvisoInteractor implements Aviso.AvisosInterface {
     AvisoPresenter avisoPresenter;
     Context context;
     Funciones funciones;
-    FirebaseDatabase firebaseDatabaseAlerta;
-    DatabaseReference databaseReferenceAlerta;
     public AvisoInteractor(AvisoPresenter avisoPresenter, Context context) {
         this.avisoPresenter=avisoPresenter;
         this.context=context;
@@ -63,7 +61,8 @@ public class AvisoInteractor implements Aviso.AvisosInterface {
                     if(funciones.IsSuccess(response.body())) {
                         //alertasPresenter.LlenarLista(response.body());
 
-                        EnviarOrdenAviso(2);
+
+                        funciones.EnviarOrden(new Ordenes(2,"",funciones.GetIdUsuario(),funciones.GetNombre(),"","",""));
 
                     } else {
                         funciones.Toast(funciones.GetMsn(response.body()));
@@ -80,21 +79,5 @@ public class AvisoInteractor implements Aviso.AvisosInterface {
         });
     }
 
-    private void EnviarOrdenAviso(int i) {
-        firebaseDatabaseAlerta = FirebaseDatabase.getInstance();
-        databaseReferenceAlerta = firebaseDatabaseAlerta.getReference(funciones.GetIdGrupo()+"/Oredenes");//Sala de chat
-        try {
 
-            //JSONObject jsonObject0=new JSONObject(json);
-            databaseReferenceAlerta.setValue("");
-            databaseReferenceAlerta.push().setValue(new Ordenes(i,"","","","","",""));
-
-
-
-        } catch (Exception e) {
-            Log.i("SetAlerta","AError:"+e.getMessage());
-        }
-
-
-    }
 }

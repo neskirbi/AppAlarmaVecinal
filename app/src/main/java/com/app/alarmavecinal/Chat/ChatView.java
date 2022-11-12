@@ -526,7 +526,8 @@ public class ChatView extends AppCompatActivity implements Chat.ChatView {
 
 
     private void EnviaTexto() {
-        databaseReference.push().setValue(new Mensaje(funciones.GetUIID(),id_usuario,nombre,mensaje.getText().toString(),"","","","","",funciones.GetDate()));
+        chatPresenter.GardarMensaje(mensaje.getText().toString(),"","","");
+        //databaseReference.push().setValue(new Mensaje(funciones.GetUIID(),id_usuario,nombre,mensaje.getText().toString(),"","","","","",funciones.GetDate()));
         mensaje.setText("");
         //EnviarNotification();
     }

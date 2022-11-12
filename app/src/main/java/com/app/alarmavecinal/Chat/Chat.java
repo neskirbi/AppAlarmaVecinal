@@ -6,14 +6,10 @@ public interface Chat {
     }
 
     interface ChatPresenter{
-        void EnviarTexto(String msn);
-        void EnviarAudio(String url);
-        void EnviarImagen(String msn,String url);
+        void GardarMensaje(String mensaje,String imagen,String audio,String video);
     }
 
     interface ChatInteractor{
-        void EnviarTexto(String msn);
-        void EnviarAudio(String audio);
-        void EnviarImagen(String msn,String imagen);
+        void GardarMensaje(String mensaje,String imagen,String audio,String video);
     }
 }

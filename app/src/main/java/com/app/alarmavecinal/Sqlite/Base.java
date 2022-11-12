@@ -13,9 +13,9 @@ public class Base extends SQLiteOpenHelper {
     private static String ADD_COLUM_LOGIN ="" ;
     private static  String CHAT_TABLE_CREATE = "";
     private static  String CHAT_IN_TABLE_CREATE ="" ;
-    private static  String LOGIN_TABLE_CREATE= "",GRUPO_TABLE_CREATE= "",ALERTAS_TABLE_CREATE= "",AVISOS_TABLE_CREATE= "",AVISO_NOTIFICA ="",ALERTA_NOTIFICA ="",CHAT_NOTIFICA="",EMERGENCIA_NOTIFICA="";
+    private static  String MENSAJES_TABLE_CREATE="",LOGIN_TABLE_CREATE= "",GRUPO_TABLE_CREATE= "",ALERTAS_TABLE_CREATE= "",AVISOS_TABLE_CREATE= "",AVISO_NOTIFICA ="",ALERTA_NOTIFICA ="",CHAT_NOTIFICA="",EMERGENCIA_NOTIFICA="";
     private static  String DB_NAME = "alerta.sqlite";
-    private static  int DB_VERSION = 8;
+    private static  int DB_VERSION = 7;
 
 
 
@@ -59,6 +59,18 @@ public class Base extends SQLiteOpenHelper {
                 "asunto TEXT not null,"+
                 "mensaje TEXT not null);" ;
 
+        MENSAJES_TABLE_CREATE= "CREATE TABLE IF NOT EXISTS  mensajes(" +
+                "id_mensaje TEXT default '' ,"+
+                "id_grupo TEXT default '' ,"+
+                "id_usuario TEXT default '' ,"+
+                "imagen TEXT default '' ,"+
+                "mensaje TEXT default '' ,"+
+                "audio TEXT default '' ,"+
+                "video TEXT default '' ,"+
+                "enviado integer default 0 ,"+
+                "updated_at datetime default '',"+
+                "created_at datetime default '' );" ;
+
 
 
 
@@ -68,6 +80,7 @@ public class Base extends SQLiteOpenHelper {
 
 
 
+        db.execSQL(MENSAJES_TABLE_CREATE);
         db.execSQL(LOGIN_TABLE_CREATE);
         db.execSQL(GRUPO_TABLE_CREATE);
         db.execSQL(ALERTAS_TABLE_CREATE);
@@ -228,6 +241,22 @@ public class Base extends SQLiteOpenHelper {
             db.execSQL(ALERTAS_TABLE_CREATE);
 
             db.execSQL(AVISOS_TABLE_CREATE);
+
+            MENSAJES_TABLE_CREATE= "CREATE TABLE IF NOT EXISTS  mensajes(" +
+                    "id_mensaje TEXT default '' ,"+
+                    "id_grupo TEXT default '' ,"+
+                    "id_usuario TEXT default '' ,"+
+                    "imagen TEXT default '' ,"+
+                    "mensaje TEXT default '' ,"+
+                    "audio TEXT default '' ,"+
+                    "video TEXT default '' ,"+
+                    "enviado integer default 0 ,"+
+                    "updated_at datetime default '',"+
+                    "created_at datetime default '' );" ;
+            db.execSQL(MENSAJES_TABLE_CREATE);
+
+
+
 
             db.execSQL("DROP table chat_notifica");
 

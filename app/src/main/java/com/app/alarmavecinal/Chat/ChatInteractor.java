@@ -1,11 +1,17 @@
 package com.app.alarmavecinal.Chat;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.app.alarmavecinal.Alertas.AlertasInterface;
+import com.app.alarmavecinal.Alertas.AlertasLista;
 import com.app.alarmavecinal.Estructuras.Mensaje;
 import com.app.alarmavecinal.Funciones;
+import com.app.alarmavecinal.R;
+import com.app.alarmavecinal.Sqlite.Base;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonArray;
@@ -22,8 +28,7 @@ public class ChatInteractor implements Chat.ChatInteractor{
     Context context;
     Funciones funciones;
 
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
+
 
     public ChatInteractor(ChatPresenter chatPresenter, Context context) {
         this.chatPresenter=chatPresenter;
@@ -32,62 +37,43 @@ public class ChatInteractor implements Chat.ChatInteractor{
     }
 
     @Override
-    public void EnviarTexto(String msn) {
-        funciones.AbrirConexion();
-        String id= funciones.GetUIID();
-        String nombre = funciones.GetNombre();
-        String id_usuario= funciones.GetIdUsuario();
-        JsonArray jsonArray=new JsonArray();
-        JsonObject jsonObject=new JsonObject();
-        jsonObject.addProperty("id_usuario",id_usuario);
-        jsonObject.addProperty("nombre",nombre);
-        jsonObject.addProperty("msn",msn);
-        jsonArray.add(jsonObject);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(funciones.GetUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        AlertasInterface peticion=retrofit.create(AlertasInterface.class);
-        Call<JsonArray> call= peticion.GetPreAlertas(jsonArray);
-        Log.i("SetMensaje", jsonArray.toString());
-        call.enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                Log.i("SetMensaje", response.body().toString());
-                if(response.body()!=null) {
-                    if(funciones.IsSuccess(response.body())) {
-                        EnviarMensaje(new Mensaje(id,id_usuario,nombre,msn,"","","","","",funciones.GetDate()));
+    public void GardarMensaje(String mensaje,String imagen,String audio,String video) {
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+        try{
 
-                    } else {
-                        funciones.Toast(funciones.GetMsn(response.body()));
-                    }
-                }
 
-            }
+            String id_mensaje= funciones.GetUIID();
+            String id_grupo= funciones.GetIdGrupo();
+            String id_usuario= funciones.GetIdUsuario();
 
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-                Log.i("SetMensaje","Erro:"+t.getMessage());
 
-            }
-        });
+            ContentValues mensajes = new ContentValues();
+
+            mensajes.put("id_mensaje", id_mensaje);
+            mensajes.put("id_grupo", id_grupo);
+            mensajes.put("id_usuario", id_usuario);
+            mensajes.put("imagen", imagen);
+            mensajes.put("mensaje", mensaje);
+            mensajes.put("audio", audio);
+            mensajes.put("video", video);
+            mensajes.put("enviado", 0);
+            mensajes.put("created_at", funciones.GetDate());
+            mensajes.put("updated_at", funciones.GetDate());
+
+
+            db.insert("mensajes", null, mensajes);
+
+            funciones.Toast("Mensaje Guardado");
+        }catch(Exception e){
+            funciones.Toast(e.getMessage());
+        }
+
+
+
+        db.close();
 
     }
 
-    @Override
-    public void EnviarAudio(String audio) {
 
-    }
-
-    @Override
-    public void EnviarImagen(String msn, String imagen) {
-
-    }
-
-    void EnviarMensaje(Mensaje mensaje){
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference(funciones.GetIdGrupo()+"/Chat");
-        databaseReference.push().setValue(mensaje);
-
-    }
 }

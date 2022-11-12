@@ -39,9 +39,12 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
+import com.app.alarmavecinal.Alertas.AlertasInterface;
 import com.app.alarmavecinal.Alertas.AlertasLista;
 import com.app.alarmavecinal.Models.Grupo;
+import com.app.alarmavecinal.Models.Ordenes;
 import com.app.alarmavecinal.Models.Usuario;
 import com.app.alarmavecinal.Orden.OrdenInterface;
 import com.app.alarmavecinal.Orden.OrdenService;
@@ -49,6 +52,8 @@ import com.app.alarmavecinal.Vecinos.GrupoView;
 import com.app.alarmavecinal.Servicios.Emergencia;
 import com.app.alarmavecinal.Servicios.Notificador;
 import com.app.alarmavecinal.Sqlite.Base;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -313,10 +318,14 @@ public class Funciones {
 
             Intent service1 = new Intent(context, OrdenService.class);
             service1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(service1);
+                ContextCompat.startForegroundService(context,service1);
+            }else{
+
+                context.startService(service1);
             }
-            context.startService(service1);
+
 
 
         }
@@ -1763,7 +1772,6 @@ public class Funciones {
 
     }
 
-
     class DescargaAsynk extends AsyncTask {
         String urls;
         String path;
@@ -2242,9 +2250,14 @@ public class Funciones {
     }
 
     public boolean IsSuccess(JsonArray body) {
-        if(Integer.parseInt(body.get(0).getAsJsonObject().get("status").toString())==1) {
-            return true;
+        try{
+            if(Integer.parseInt(body.get(0).getAsJsonObject().get("status").toString())==1) {
+                return true;
+            }
+        }catch(Exception e){
+            return false;
         }
+
 
         return false;
     }
@@ -2285,6 +2298,125 @@ public class Funciones {
 
     public JsonArray GetData(JsonArray jsonArray) {
         return jsonArray.get(0).getAsJsonObject().get("datos").getAsJsonArray();
+    }
+
+
+
+    public void EnviarMensajes() {
+
+        try {
+            Base base = new Base(context);
+            SQLiteDatabase db = base.getWritableDatabase();
+
+
+
+            JsonArray mensajes=new JsonArray();
+            Cursor c =  db.rawQuery("SELECT * from mensajes where enviado=0",null);
+            c.moveToFirst();
+            while (!c.isAfterLast()){
+                JsonObject jsonObject=new JsonObject();
+
+
+                jsonObject.addProperty("id_mensaje",c.getString(c.getColumnIndex("id_mensaje")));
+                jsonObject.addProperty("id_usuario",c.getString(c.getColumnIndex("id_usuario")));
+                jsonObject.addProperty("id_grupo",c.getString(c.getColumnIndex("id_grupo")));
+                jsonObject.addProperty("imagen",c.getString(c.getColumnIndex("imagen")));
+                jsonObject.addProperty("mensaje",c.getString(c.getColumnIndex("mensaje")));
+                jsonObject.addProperty("audio",c.getString(c.getColumnIndex("audio")));
+                jsonObject.addProperty("video",c.getString(c.getColumnIndex("video")));
+                jsonObject.addProperty("enviado",c.getString(c.getColumnIndex("enviado")));
+                jsonObject.addProperty("created_at",c.getString(c.getColumnIndex("created_at")));
+                jsonObject.addProperty("updated_at",c.getString(c.getColumnIndex("updated_at")));
+
+                mensajes.add(jsonObject);
+
+                c.moveToNext();
+            }
+
+            c.close();
+            db.close();
+            Logo("Mensajes",mensajes+"");
+            if(mensajes.size()>0){
+                EnviarMensajes2(mensajes);
+            }
+
+        }catch (Exception e){
+            Toast(e.getMessage());
+        }
+
+
+
+    }
+
+
+
+    public void EnviarMensajes2(JsonArray mensajes) {
+        AbrirConexion();
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(GetUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        Interface peticion=retrofit.create(Interface.class);
+        Call<JsonArray> call= peticion.GuardarMensaje(mensajes);
+        Log.i("Mensajes", mensajes.toString());
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                try {
+                    if(response.code()==500){
+                        Log.i("Mensajes", response.code()+"---"+response.errorBody().string());
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(response.body()!=null) {
+                Log.i("Mensajes", response.body().toString());
+                    if(IsSuccess(response.body())) {
+                        PonerEnviados();
+                        EnviarOrden(new Ordenes(4,"",GetIdUsuario(),GetNombre(),"","",""));
+
+                    } else {
+                        Toast(GetMsn(response.body()));
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                Log.i("Mensajes","Erro:"+t.getMessage());
+
+            }
+        });
+
+    }
+
+    private void PonerEnviados() {
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+
+        db.execSQL("UPDATE mensajes SET enviado=1 ");
+
+        db.close();
+    }
+
+    public void EnviarOrden(Ordenes ordenes){
+        FirebaseDatabase firebaseDatabaseAlerta = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReferenceAlerta = firebaseDatabaseAlerta.getReference(GetIdGrupo() + "/Ordenes");//Sala de chat
+        try {
+
+            //JSONObject jsonObject0=new JSONObject(json);
+            databaseReferenceAlerta.setValue("");
+            databaseReferenceAlerta.push().setValue(ordenes);
+
+
+        } catch (Exception e) {
+            Log.i("EnviarOrdenes","Error:"+e.getMessage());
+        }
+
     }
 
 
