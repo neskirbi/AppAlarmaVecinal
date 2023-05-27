@@ -43,6 +43,7 @@ import androidx.core.content.ContextCompat;
 
 import com.app.alarmavecinal.Alertas.AlertasInterface;
 import com.app.alarmavecinal.Alertas.AlertasLista;
+import com.app.alarmavecinal.Avisos.AvisoInterface;
 import com.app.alarmavecinal.Models.Grupo;
 import com.app.alarmavecinal.Models.Ordenes;
 import com.app.alarmavecinal.Models.Usuario;
@@ -1772,6 +1773,78 @@ public class Funciones {
 
     }
 
+    public void ActualizarMensajes() {
+
+        //Obteniendo id que ya tenemos de mensages
+        JsonArray jsonArray=new JsonArray();
+
+        try {
+            Base base = new Base(context);
+            SQLiteDatabase db = base.getWritableDatabase();
+
+            Cursor c =  db.rawQuery("SELECT id_mensaje,created_at from mensajes order by created_at desc limit 0,1",null);
+
+            if(c.getCount()>0){
+                c.moveToFirst();
+                while (!c.isAfterLast()){
+
+                    JsonObject jsonObject=new JsonObject();
+                    jsonObject.addProperty("id",c.getString(c.getColumnIndex("id_mensaje")));
+                    jsonObject.addProperty("id_grupo",GetIdGrupo());
+                    jsonObject.addProperty("created_at",c.getString(c.getColumnIndex("created_at")));
+                    jsonArray.add(jsonObject);
+                    c.moveToNext();
+                }
+
+
+            }
+            c.close();
+            db.close();
+        }catch (Exception e){
+
+            Log.i("idsss",e.getMessage());
+        }
+        Log.i("idsss",jsonArray.toString());
+
+
+        //Pidiendo nuevos mensajes
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(GetUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        Interface peticion=retrofit.create(Interface.class);
+        Call<JsonArray> call= peticion.ActualizarMensajes(jsonArray);
+        Log.i("ActualizarMensajes", GetUrl()+"/api/ActualizarMensajes");
+        Log.i("ActualizarMensajes", jsonArray.toString());
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                Log.i("ActualizarMensajes", response.code()+"");
+                if(response.body()!=null) {
+                    Log.i("ActualizarMensajes", response.body()+"");
+                    if(IsSuccess(response.body())) {
+                        //alertasPresenter.LlenarLista(response.body());
+
+
+
+
+                    } else {
+                        Toast(GetMsn(response.body()));
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                Log.i("ActualizarMensajes","Error:"+t.getMessage());
+
+            }
+        });
+
+    }
+
     class DescargaAsynk extends AsyncTask {
         String urls;
         String path;
@@ -2304,6 +2377,7 @@ public class Funciones {
 
     public void EnviarMensajes() {
 
+        String id="";
         try {
             Base base = new Base(context);
             SQLiteDatabase db = base.getWritableDatabase();
@@ -2311,12 +2385,14 @@ public class Funciones {
 
 
             JsonArray mensajes=new JsonArray();
-            Cursor c =  db.rawQuery("SELECT * from mensajes where enviado=0",null);
+            Cursor c =  db.rawQuery("SELECT * from mensajes where enviado=0 order by created_at asc limit 0,1 ",null);
             c.moveToFirst();
+
             while (!c.isAfterLast()){
                 JsonObject jsonObject=new JsonObject();
 
 
+                id=c.getString(c.getColumnIndex("id_mensaje"));
                 jsonObject.addProperty("id_mensaje",c.getString(c.getColumnIndex("id_mensaje")));
                 jsonObject.addProperty("id_usuario",c.getString(c.getColumnIndex("id_usuario")));
                 jsonObject.addProperty("id_grupo",c.getString(c.getColumnIndex("id_grupo")));
@@ -2337,7 +2413,7 @@ public class Funciones {
             db.close();
             Logo("Mensajes",mensajes+"");
             if(mensajes.size()>0){
-                EnviarMensajes2(mensajes);
+                EnviarMensajes2(id,mensajes);
             }
 
         }catch (Exception e){
@@ -2350,7 +2426,7 @@ public class Funciones {
 
 
 
-    public void EnviarMensajes2(JsonArray mensajes) {
+    public void EnviarMensajes2(String id , JsonArray mensajes) {
         AbrirConexion();
 
 
@@ -2375,7 +2451,7 @@ public class Funciones {
                 if(response.body()!=null) {
                 Log.i("Mensajes", response.body().toString());
                     if(IsSuccess(response.body())) {
-                        PonerEnviados();
+                        PonerEnviados(id);
                         EnviarOrden(new Ordenes(4,"",GetIdUsuario(),GetNombre(),"","",""));
 
                     } else {
@@ -2394,11 +2470,11 @@ public class Funciones {
 
     }
 
-    private void PonerEnviados() {
+    private void PonerEnviados(String id) {
         Base base = new Base(context);
         SQLiteDatabase db = base.getWritableDatabase();
 
-        db.execSQL("UPDATE mensajes SET enviado=1 ");
+        db.execSQL("UPDATE mensajes SET enviado=1 where id_mensaje='"+id+"' ");
 
         db.close();
     }

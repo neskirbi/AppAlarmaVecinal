@@ -107,6 +107,7 @@ public class ChatView extends AppCompatActivity implements Chat.ChatView {
         setContentView(R.layout.activity_sala_chat);
         context=this;
         funciones=new Funciones(context);
+        funciones.ActualizarMensajes();
         chatPresenter= new ChatPresenter(this,context);
         id_grupo=funciones.GetIdGrupo();
         id_usuario=funciones.GetIdUsuario();

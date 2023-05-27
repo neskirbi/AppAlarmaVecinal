@@ -32,12 +32,18 @@ public class OrdenInteractor  implements Orden.OrdenInteractor {
     }
 
 
+
+
+
     @Override
     public void GetAvisos() {
         funciones.GetAvisosServer();
     }
 
-
+    @Override
+    public void ActualizarMensajes() {
+        funciones.ActualizarMensajes();
+    }
 
 
     @Override

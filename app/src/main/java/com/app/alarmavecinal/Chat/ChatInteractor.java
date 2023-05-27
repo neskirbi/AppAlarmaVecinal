@@ -10,6 +10,7 @@ import com.app.alarmavecinal.Alertas.AlertasInterface;
 import com.app.alarmavecinal.Alertas.AlertasLista;
 import com.app.alarmavecinal.Estructuras.Mensaje;
 import com.app.alarmavecinal.Funciones;
+import com.app.alarmavecinal.Models.Ordenes;
 import com.app.alarmavecinal.R;
 import com.app.alarmavecinal.Sqlite.Base;
 import com.google.firebase.database.DatabaseReference;
@@ -64,7 +65,10 @@ public class ChatInteractor implements Chat.ChatInteractor{
 
             db.insert("mensajes", null, mensajes);
 
-            funciones.Toast("Mensaje Guardado");
+            funciones.Toast("Mensaje Enviado");
+            funciones.EnviarMensajes();
+
+            //funciones.EnviarOrden(new Ordenes(4,id_mensaje,funciones.GetIdUsuario(),funciones.GetNombre(),"","",""));
         }catch(Exception e){
             funciones.Toast(e.getMessage());
         }

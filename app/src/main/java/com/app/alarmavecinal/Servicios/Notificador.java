@@ -55,9 +55,9 @@ public class Notificador extends Service {
         wakeLock.acquire();
         id_grupo=funciones.GetIdGrupo();
 
-        NotificarChat();
-        NotificarAlerta();
-        NotificarAviso();
+        //NotificarChat();
+        ////NotificarAlerta();
+        //NotificarAviso();
 
 
         return START_STICKY;

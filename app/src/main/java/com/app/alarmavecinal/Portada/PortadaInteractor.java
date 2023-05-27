@@ -33,6 +33,8 @@ public class PortadaInteractor implements Portada.PortadaInteractor {
         JsonObject jsonObject=new JsonObject();
         jsonObject.addProperty("id_usuario",funciones.GetIdUsuario());
         jsonArray.add(jsonObject);
+
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(funciones.GetUrl())
                 .addConverterFactory(GsonConverterFactory.create())

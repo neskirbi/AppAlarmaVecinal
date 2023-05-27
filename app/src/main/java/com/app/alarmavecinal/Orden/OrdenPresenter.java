@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -79,8 +80,10 @@ public class OrdenPresenter implements Orden.OrdenPresenter {
 
 
                     case 4://Chat
+                        ordenInteractor.ActualizarMensajes();
                         if(!funciones.GetIdUsuario().equals(orden.getId_usuario())){
                             funciones.Notificar(orden.getNombre(),"Nuevo Mensaje",R.drawable.sobre,new Intent(context, ChatView.class),4);
+
                         }
 
                     break;
@@ -125,7 +128,7 @@ public class OrdenPresenter implements Orden.OrdenPresenter {
             @Override
             public void run() {
                 funciones.EnviarMensajes();
-               handler.postDelayed(this,10000);
+                handler.postDelayed(this,10000);
             }
         }, 10000);
     }

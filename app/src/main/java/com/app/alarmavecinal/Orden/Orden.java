@@ -15,6 +15,7 @@ public interface Orden {
 
         void GetAlerta();
         void GetAvisos();
+        void ActualizarMensajes();
 
     }
 }

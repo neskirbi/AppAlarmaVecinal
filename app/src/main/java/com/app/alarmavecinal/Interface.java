@@ -11,4 +11,7 @@ public interface Interface {
 
     @POST("api/GuardarMensaje")
     Call<JsonArray> GuardarMensaje(@Body JsonArray jsonArray);
+
+    @POST("api/ActualizarMensajes")
+    Call<JsonArray> ActualizarMensajes(@Body JsonArray jsonArray);
 }
