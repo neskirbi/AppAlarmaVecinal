@@ -3,6 +3,7 @@ package com.app.alarmavecinal.Chat;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -47,6 +48,7 @@ public class ChatInteractor implements Chat.ChatInteractor{
             String id_mensaje= funciones.GetUIID();
             String id_grupo= funciones.GetIdGrupo();
             String id_usuario= funciones.GetIdUsuario();
+            String nombre= funciones.GetNombre();
 
 
             ContentValues mensajes = new ContentValues();
@@ -54,6 +56,7 @@ public class ChatInteractor implements Chat.ChatInteractor{
             mensajes.put("id_mensaje", id_mensaje);
             mensajes.put("id_grupo", id_grupo);
             mensajes.put("id_usuario", id_usuario);
+            mensajes.put("nombre", nombre);
             mensajes.put("imagen", imagen);
             mensajes.put("mensaje", mensaje);
             mensajes.put("audio", audio);
@@ -77,6 +80,92 @@ public class ChatInteractor implements Chat.ChatInteractor{
 
         db.close();
 
+    }
+
+    @Override
+    public void GetMensajes(String id_mensaje_ultimo) {
+        Log.i("Pintar","GetMensajes");
+        JsonArray jsonArray=new JsonArray();
+
+        try {
+            Base base = new Base(context);
+            SQLiteDatabase db = base.getWritableDatabase();
+
+            Cursor c =  db.rawQuery("SELECT * from mensajes order by created_at desc limit 0,25",null);
+
+            if(c.getCount()>0){
+                c.moveToFirst();
+                while (!c.isAfterLast()){
+
+                    JsonObject jsonObject=new JsonObject();
+                    jsonObject.addProperty("id_mensaje",c.getString(c.getColumnIndex("id_mensaje")));
+                    jsonObject.addProperty("id_usuario",c.getString(c.getColumnIndex("id_usuario")));
+                    jsonObject.addProperty("id_grupo",c.getString(c.getColumnIndex("id_grupo")));
+                    jsonObject.addProperty("nombre",c.getString(c.getColumnIndex("nombre")));
+                    jsonObject.addProperty("imagen",c.getString(c.getColumnIndex("imagen")));
+                    jsonObject.addProperty("mensaje",c.getString(c.getColumnIndex("mensaje")));
+                    jsonObject.addProperty("audio",c.getString(c.getColumnIndex("audio")));
+                    jsonObject.addProperty("video",c.getString(c.getColumnIndex("video")));
+                    jsonObject.addProperty("enviado",c.getString(c.getColumnIndex("enviado")));
+                    jsonObject.addProperty("created_at",(c.getString(c.getColumnIndex("created_at"))));
+                    jsonObject.addProperty("updated_at",c.getString(c.getColumnIndex("updated_at")));
+                    jsonArray.add(jsonObject);
+                    c.moveToNext();
+                }
+
+
+            }
+            c.close();
+            db.close();
+
+            chatPresenter.PintarPrimera(jsonArray);
+        }catch (Exception e){
+
+            Log.i("Pintar",e.getMessage());
+        }
+    }
+
+    @Override
+    public void GetNuevos(String fecha ) {
+        Log.i("Pintar","GetMensajes");
+        JsonArray jsonArray=new JsonArray();
+
+        try {
+            Base base = new Base(context);
+            SQLiteDatabase db = base.getWritableDatabase();
+
+            Cursor c =  db.rawQuery("SELECT * from mensajes where created_at>'"+fecha+"' order by created_at ",null);
+
+            if(c.getCount()>0){
+                c.moveToFirst();
+                while (!c.isAfterLast()){
+
+                    JsonObject jsonObject=new JsonObject();
+                    jsonObject.addProperty("id_mensaje",c.getString(c.getColumnIndex("id_mensaje")));
+                    jsonObject.addProperty("id_usuario",c.getString(c.getColumnIndex("id_usuario")));
+                    jsonObject.addProperty("id_grupo",c.getString(c.getColumnIndex("id_grupo")));
+                    jsonObject.addProperty("nombre",c.getString(c.getColumnIndex("nombre")));
+                    jsonObject.addProperty("imagen",c.getString(c.getColumnIndex("imagen")));
+                    jsonObject.addProperty("mensaje",c.getString(c.getColumnIndex("mensaje")));
+                    jsonObject.addProperty("audio",c.getString(c.getColumnIndex("audio")));
+                    jsonObject.addProperty("video",c.getString(c.getColumnIndex("video")));
+                    jsonObject.addProperty("enviado",c.getString(c.getColumnIndex("enviado")));
+                    jsonObject.addProperty("created_at",(c.getString(c.getColumnIndex("created_at"))));
+                    jsonObject.addProperty("updated_at",c.getString(c.getColumnIndex("updated_at")));
+                    jsonArray.add(jsonObject);
+                    c.moveToNext();
+                }
+
+
+            }
+            c.close();
+            db.close();
+
+            chatPresenter.PintaNuevos(jsonArray);
+        }catch (Exception e){
+
+            Log.i("Pintar",e.getMessage());
+        }
     }
 
 

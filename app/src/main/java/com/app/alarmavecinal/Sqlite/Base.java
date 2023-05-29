@@ -63,6 +63,7 @@ public class Base extends SQLiteOpenHelper {
                 "id_mensaje TEXT default '' ,"+
                 "id_grupo TEXT default '' ,"+
                 "id_usuario TEXT default '' ,"+
+                "nombre TEXT NOT NULL," +
                 "imagen TEXT default '' ,"+
                 "mensaje TEXT default '' ,"+
                 "audio TEXT default '' ,"+
@@ -246,6 +247,7 @@ public class Base extends SQLiteOpenHelper {
                     "id_mensaje TEXT default '' ,"+
                     "id_grupo TEXT default '' ,"+
                     "id_usuario TEXT default '' ,"+
+                    "nombre TEXT NOT NULL," +
                     "imagen TEXT default '' ,"+
                     "mensaje TEXT default '' ,"+
                     "audio TEXT default '' ,"+

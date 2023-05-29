@@ -21,6 +21,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -49,6 +51,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.JsonArray;
 
 
 import java.io.File;
@@ -75,6 +78,9 @@ public class ChatView extends AppCompatActivity implements Chat.ChatView {
     ArrayList<Mensaje> mensajes=new ArrayList<Mensaje>();
     LinearLayout chat;
 
+    String id_mensaje_ultimo="",fechaultima="",fechaprimera="",created_at_ultimo="";
+
+
 
 
     boolean corriendo=true,sienvia=false;
@@ -98,8 +104,12 @@ public class ChatView extends AppCompatActivity implements Chat.ChatView {
     private String Imagen_url="";
     private View cancel_img;
     private double porcentaje=0.20;
-
+    String fechaglobo="";
     ChatPresenter chatPresenter;
+
+
+
+    int primera=0,nmensajes=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,84 +158,9 @@ public class ChatView extends AppCompatActivity implements Chat.ChatView {
         }
         m.loadAd(adRequest);
 
-        if (id_grupo!=""){
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            databaseReference = firebaseDatabase.getReference("chat-"+id_grupo);//Sala de chat
-
-            databaseReference.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    Mensaje mensaje=snapshot.getValue(Mensaje.class);
-                    mensajes.add(new Mensaje(mensaje.getId_mensaje(),mensaje.getId_usuario(),mensaje.getNombre(),mensaje.getMensaje(),mensaje.getAudio(),mensaje.getImagen(),mensaje.getFile(),mensaje.getNombrefile(),mensaje.getUbicacion(),mensaje.getFecha()));
-
-                    //adaptadorMensajes=new AdaptadorMensajes(context,mensajes);
-
-                    LayoutInflater inflater_contenedor = getLayoutInflater();
-                    View item =null;
-                    if(!mensajes.get(position).getId_usuario().contains(id_usuario)){
-                        item = inflater_contenedor.inflate(R.layout.dialogo1, null);
-                    }else{
-                        item = inflater_contenedor.inflate(R.layout.dialogo2, null);
+        IniciarPintador();
 
 
-                    }
-
-
-                    TextView textView1 = item.findViewById(R.id.nombre);
-                    textView1.setText(mensajes.get(position).getNombre());
-
-                    LinearLayout contenedor = item.findViewById(R.id.contenedor);
-
-                    TextView textView3 = item.findViewById(R.id.hora);
-                    textView3.setText(mensajes.get(position).getFecha());
-                    View vista=null;
-
-                    if(mensajes.get(position).getMensaje().length()>0 && mensajes.get(position).getAudio().length()==0 && mensajes.get(position).getImagen().length()==0){
-                        vista=PintarMensaje();
-                    }else if(mensajes.get(position).getAudio().length()>0){
-                        vista=PintarAudio();
-                    }else if(mensajes.get(position).getImagen().length()>0){
-                        vista=PintarImagen();
-                    }
-
-                    contenedor.addView(vista);
-
-                    chat.addView(item);
-
-
-
-                    //chat.setAdapter(adaptadorMensajes);
-
-                    position++;
-                    scroll.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            scroll.fullScroll(ScrollView.FOCUS_DOWN);
-                        }
-                    });
-                }
-
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
 
 
         mensaje.addTextChangedListener(new TextWatcher() {
@@ -308,7 +243,7 @@ public class ChatView extends AppCompatActivity implements Chat.ChatView {
                 funciones.Vibrar(funciones.VibrarPush());
                 FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) preview_imagen.getLayoutParams();
                 params.height = 0;
-// existing height is ok as is, no need to edit it
+                // existing height is ok as is, no need to edit it
                 preview_imagen.setLayoutParams(params);
                 cancel_img.setVisibility(View.GONE);
                 cam.setVisibility(View.VISIBLE);
@@ -323,7 +258,170 @@ public class ChatView extends AppCompatActivity implements Chat.ChatView {
         });
 
 
+        chatPresenter.GetMensajes(id_mensaje_ultimo);
+    }
 
+
+    public void IniciarPintador() {
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handler.postDelayed(this,500);
+                chatPresenter.GetNuevos(created_at_ultimo);
+            }
+        }, 500);
+    }
+
+
+    @Override
+    public void PintarPrimera(JsonArray mensajes){
+        if (id_grupo!=""){
+            LayoutInflater inflater_contenedor = getLayoutInflater();
+            View item =null;
+            String fechatemp="";
+            for(int i=0; i<mensajes.size();i++){
+
+
+                funciones.Logo("Pintar",funciones.GetIndex2(mensajes,i,"id_usuario"));
+
+
+
+                if(!funciones.GetIndex2(mensajes,i,"id_usuario").contains(id_usuario)){
+                    item = inflater_contenedor.inflate(R.layout.dialogo1, null);
+                }else{
+                    item = inflater_contenedor.inflate(R.layout.dialogo2, null);
+                }
+                LinearLayout contenedor = item.findViewById(R.id.contenedor);
+
+                String DT[]=(funciones.GetTime(funciones.GetIndex2(mensajes,i,"created_at")));
+
+                if(fechaglobo.equals("")){
+                    fechaultima=funciones.GetIndex2(mensajes,i,"created_at");
+                    created_at_ultimo=funciones.GetIndex2(mensajes,i,"created_at");
+                    fechatemp=funciones.GetIndex2(mensajes,i,"created_at");
+                }
+
+                if(!fechaglobo.contains(DT[0]) && !fechaglobo.equals("") ){
+                    funciones.Logo("FechaSeparador",DT[0]);
+                    View item2 = inflater_contenedor.inflate(R.layout.fechaglobo, null);
+                    TextView tfecha = item2.findViewById(R.id.fecha);
+                    tfecha.setText(fechaglobo);
+
+                    chat.addView(item2,0);
+                }
+                fechaglobo=DT[0];
+
+                fechaprimera=funciones.GetIndex2(mensajes,i,"created_at");
+
+
+
+                TextView textView1 = item.findViewById(R.id.nombre);
+                textView1.setText(funciones.GetIndex2(mensajes,i,"nombre"));
+
+                
+
+                TextView textView3 = item.findViewById(R.id.hora);
+
+                textView3.setText(DT[1]);
+                View vista=null;
+
+                if(funciones.GetIndex2(mensajes,i,"mensaje").length()>0 && funciones.GetIndex2(mensajes,i,"audio").length()==0 && funciones.GetIndex2(mensajes,i,"imagen").length()==0){
+                    LayoutInflater inflater_texto = getLayoutInflater();
+                    vista = inflater_texto.inflate(R.layout.texto_globo, null);
+                    TextView textView2 = vista.findViewById(R.id.mensaje);
+                    textView2.setText(funciones.GetIndex2(mensajes,i,"mensaje"));
+                }else if(funciones.GetIndex2(mensajes,i,"audio").length()>0){
+                    vista=PintarAudio();
+                }else if(funciones.GetIndex2(mensajes,i,"imagen").length()>0){
+                    vista=PintarImagen();
+                }
+
+                contenedor.addView(vista);
+
+                chat.addView(item,0);
+
+
+                scroll.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scroll.fullScroll(ScrollView.FOCUS_DOWN);
+                    }
+                });
+
+            }
+
+
+            fechaglobo=fechatemp;
+            IniciarPintador();
+
+
+
+
+        }
+    }
+
+    @Override
+    public void PintaNuevos(JsonArray mensajes) {
+        LayoutInflater inflater_contenedor = getLayoutInflater();
+        View item =null;
+        for(int i=0; i<mensajes.size();i++){
+
+
+            funciones.Logo("Pintar",funciones.GetIndex2(mensajes,i,"id_usuario"));
+
+
+
+            if(!funciones.GetIndex2(mensajes,i,"id_usuario").contains(id_usuario)){
+                item = inflater_contenedor.inflate(R.layout.dialogo1, null);
+            }else{
+                item = inflater_contenedor.inflate(R.layout.dialogo2, null);
+            }
+            LinearLayout contenedor = item.findViewById(R.id.contenedor);
+
+            String DT[]=(funciones.GetTime(funciones.GetIndex2(mensajes,i,"created_at")));
+
+
+            if(!fechaglobo.contains(DT[0]) ){
+                funciones.Logo("FechaSeparador",DT[0]);
+                View item2 = inflater_contenedor.inflate(R.layout.fechaglobo, null);
+                TextView tfecha = item2.findViewById(R.id.fecha);
+                tfecha.setText(DT[0]);
+
+                chat.addView(item2);
+            }
+            fechaglobo=DT[0];
+            fechaultima=DT[0];
+            created_at_ultimo=funciones.GetIndex2(mensajes,i,"created_at");
+
+
+            TextView textView1 = item.findViewById(R.id.nombre);
+            textView1.setText(funciones.GetIndex2(mensajes,i,"nombre"));
+
+
+
+            TextView textView3 = item.findViewById(R.id.hora);
+
+            textView3.setText(DT[1]);
+            View vista=null;
+
+            if(funciones.GetIndex2(mensajes,i,"mensaje").length()>0 && funciones.GetIndex2(mensajes,i,"audio").length()==0 && funciones.GetIndex2(mensajes,i,"imagen").length()==0){
+                LayoutInflater inflater_texto = getLayoutInflater();
+                vista = inflater_texto.inflate(R.layout.texto_globo, null);
+                TextView textView2 = vista.findViewById(R.id.mensaje);
+                textView2.setText(funciones.GetIndex2(mensajes,i,"mensaje"));
+            }else if(funciones.GetIndex2(mensajes,i,"audio").length()>0){
+                vista=PintarAudio();
+            }else if(funciones.GetIndex2(mensajes,i,"imagen").length()>0){
+                vista=PintarImagen();
+            }
+
+            contenedor.addView(vista);
+
+            chat.addView(item);
+
+
+        }
     }
 
 

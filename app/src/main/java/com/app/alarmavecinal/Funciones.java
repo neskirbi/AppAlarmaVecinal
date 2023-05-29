@@ -41,17 +41,13 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
-import com.app.alarmavecinal.Alertas.AlertasInterface;
 import com.app.alarmavecinal.Alertas.AlertasLista;
-import com.app.alarmavecinal.Avisos.AvisoInterface;
 import com.app.alarmavecinal.Models.Grupo;
 import com.app.alarmavecinal.Models.Ordenes;
 import com.app.alarmavecinal.Models.Usuario;
 import com.app.alarmavecinal.Orden.OrdenInterface;
 import com.app.alarmavecinal.Orden.OrdenService;
 import com.app.alarmavecinal.Vecinos.GrupoView;
-import com.app.alarmavecinal.Servicios.Emergencia;
-import com.app.alarmavecinal.Servicios.Notificador;
 import com.app.alarmavecinal.Sqlite.Base;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -80,6 +76,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -1405,6 +1403,26 @@ public class Funciones {
         return bandera;
     }
 
+    public String[] GetTime(String str){
+        String[] DT=null;
+        try{
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+            ZonedDateTime result = ZonedDateTime.parse(str, formatter);
+
+
+            DT = result.toString().split("T");
+            Logo("Tiempo",DT[1]);
+            DT[0] = DT[0].replace("Z","");
+            DT[1] = DT[1].replace("Z","");
+
+            return DT;
+
+        }catch(Exception e){}
+
+
+        return DT;
+    }
+
     public void NotificarPicasso(String title, String body, int icono,Intent intent, int id) {
 
 
@@ -1791,12 +1809,16 @@ public class Funciones {
                     JsonObject jsonObject=new JsonObject();
                     jsonObject.addProperty("id",c.getString(c.getColumnIndex("id_mensaje")));
                     jsonObject.addProperty("id_grupo",GetIdGrupo());
-                    jsonObject.addProperty("created_at",c.getString(c.getColumnIndex("created_at")));
                     jsonArray.add(jsonObject);
                     c.moveToNext();
                 }
 
 
+            }else{
+                JsonObject jsonObject=new JsonObject();
+                jsonObject.addProperty("id","");
+                jsonObject.addProperty("id_grupo",GetIdGrupo());
+                jsonArray.add(jsonObject);
             }
             c.close();
             db.close();
@@ -1824,9 +1846,7 @@ public class Funciones {
                 if(response.body()!=null) {
                     Log.i("ActualizarMensajes", response.body()+"");
                     if(IsSuccess(response.body())) {
-                        //alertasPresenter.LlenarLista(response.body());
-
-
+                        GuardarMensajes(response.body());
 
 
                     } else {
@@ -2396,6 +2416,7 @@ public class Funciones {
                 jsonObject.addProperty("id_mensaje",c.getString(c.getColumnIndex("id_mensaje")));
                 jsonObject.addProperty("id_usuario",c.getString(c.getColumnIndex("id_usuario")));
                 jsonObject.addProperty("id_grupo",c.getString(c.getColumnIndex("id_grupo")));
+                jsonObject.addProperty("nombre",c.getString(c.getColumnIndex("nombre")));
                 jsonObject.addProperty("imagen",c.getString(c.getColumnIndex("imagen")));
                 jsonObject.addProperty("mensaje",c.getString(c.getColumnIndex("mensaje")));
                 jsonObject.addProperty("audio",c.getString(c.getColumnIndex("audio")));
@@ -2477,6 +2498,51 @@ public class Funciones {
         db.execSQL("UPDATE mensajes SET enviado=1 where id_mensaje='"+id+"' ");
 
         db.close();
+    }
+
+
+    private void GuardarMensajes(JsonArray body) {
+        Base base = new Base(context);
+        SQLiteDatabase db = base.getWritableDatabase();
+        for(int i=0;i<GetData(body).size();i++){
+
+
+            try{
+                if(!EstaAlerta(GetIndex2(GetData(body),i,"id_alerta"))){
+
+
+
+                    ContentValues mensajes = new ContentValues();
+
+                    mensajes.put("id_mensaje",GetIndex2(GetData(body),i,"id_mensaje"));
+                    mensajes.put("id_grupo",GetIndex2(GetData(body),i,"id_grupo"));
+                    mensajes.put("id_usuario",GetIndex2(GetData(body),i,"id_usuario"));
+                    mensajes.put("nombre",GetIndex2(GetData(body),i,"nombre"));
+                    mensajes.put("imagen",GetIndex2(GetData(body),i,"imagen"));
+                    mensajes.put("mensaje",GetIndex2(GetData(body),i,"mensaje"));
+                    mensajes.put("audio",GetIndex2(GetData(body),i,"audio"));
+                    mensajes.put("video",GetIndex2(GetData(body),i,"video"));
+                    mensajes.put("enviado",1);
+                    mensajes.put("created_at",GetIndex2(GetData(body),i,"created_at"));
+                    mensajes.put("updated_at",GetIndex2(GetData(body),i,"updated_at"));
+
+
+                    db.insert("mensajes", null, mensajes);
+
+
+
+
+                }
+
+            }catch(Exception e){
+                Logo("GuardarAlertas","Error:"+e.getMessage());
+            }
+
+
+        }
+        //Toast.makeText(context, "# Mensajes:"+GetData(body).size(), Toast.LENGTH_SHORT).show();
+        db.close();
+
     }
 
     public void EnviarOrden(Ordenes ordenes){

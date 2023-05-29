@@ -130,7 +130,7 @@ public class OrdenPresenter implements Orden.OrdenPresenter {
                 funciones.EnviarMensajes();
                 handler.postDelayed(this,10000);
             }
-        }, 10000);
+        }, 2000);
     }
 
     void Emergencia(Ordenes orden){
