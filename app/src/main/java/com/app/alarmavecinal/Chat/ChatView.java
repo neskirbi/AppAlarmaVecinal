@@ -30,6 +30,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -319,7 +320,7 @@ public class ChatView extends AppCompatActivity implements Chat.ChatView {
                 TextView textView1 = item.findViewById(R.id.nombre);
                 textView1.setText(funciones.GetIndex2(mensajes,i,"nombre"));
 
-                
+
 
                 TextView textView3 = item.findViewById(R.id.hora);
 
@@ -349,7 +350,27 @@ public class ChatView extends AppCompatActivity implements Chat.ChatView {
                     }
                 });
 
+                funciones.Logo("PAaaa","Poniendo anteriores1");
+
             }
+
+
+            funciones.Logo("PAaaa","Poniendo anteriores2");
+
+            View anteriores = inflater_contenedor.inflate(R.layout.anteriores, null);
+            anteriores.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CargaAnteriores(v);
+                }
+            });
+
+            chat.addView(anteriores,0);
+
+
+
+
+
 
 
             fechaglobo=fechatemp;
@@ -360,6 +381,7 @@ public class ChatView extends AppCompatActivity implements Chat.ChatView {
 
         }
     }
+
 
     @Override
     public void PintaNuevos(JsonArray mensajes) {
@@ -418,10 +440,25 @@ public class ChatView extends AppCompatActivity implements Chat.ChatView {
 
             contenedor.addView(vista);
 
-            chat.addView(item);
+            chat.addView(contenedor);
+
 
 
         }
+
+
+
+    }
+
+    private void CargaAnteriores(View _this) {
+        funciones.Vibrar(funciones.VibrarPush());
+        chatPresenter.CargaAnteriores(id_mensaje_ultimo);
+    }
+
+
+    @Override
+    public void PintaAnteriores(JsonArray jsonArray) {
+        funciones.Logo("anteriores",jsonArray+"");
     }
 
 
@@ -496,7 +533,7 @@ public class ChatView extends AppCompatActivity implements Chat.ChatView {
         return vista;
     }
 
-    private View PintarMensaje() {
+    private View GetAnteriores() {
         LayoutInflater inflater_texto = getLayoutInflater();
         View item2 = inflater_texto.inflate(R.layout.texto_globo, null);
         TextView textView2 = item2.findViewById(R.id.mensaje);

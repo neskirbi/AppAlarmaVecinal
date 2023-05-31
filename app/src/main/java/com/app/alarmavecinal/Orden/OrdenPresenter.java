@@ -1,5 +1,8 @@
 package com.app.alarmavecinal.Orden;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -81,7 +84,10 @@ public class OrdenPresenter implements Orden.OrdenPresenter {
 
                     case 4://Chat
                         ordenInteractor.ActualizarMensajes();
-                        if(!funciones.GetIdUsuario().equals(orden.getId_usuario())){
+                        //ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+                        //ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
+                        //funciones.Logo("actividad",cn+"");
+                        if(!funciones.GetIdUsuario().equals(orden.getId_usuario()) ){
                             funciones.Notificar(orden.getNombre(),"Nuevo Mensaje",R.drawable.sobre,new Intent(context, ChatView.class),4);
 
                         }

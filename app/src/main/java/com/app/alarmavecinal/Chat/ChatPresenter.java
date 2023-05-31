@@ -43,4 +43,14 @@ public class ChatPresenter implements Chat.ChatPresenter{
     public void PintaNuevos(JsonArray mensajes) {
         chatView.PintaNuevos(mensajes);
     }
+
+    @Override
+    public void CargaAnteriores(String id_mensaje_ultimo) {
+        chatInteractor.CargaAnteriores(id_mensaje_ultimo);
+    }
+
+    @Override
+    public void PintaAnteriores(JsonArray jsonArray) {
+        chatView.PintaAnteriores(jsonArray);
+    }
 }
