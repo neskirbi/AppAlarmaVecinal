@@ -42,7 +42,7 @@ public class LoginPresenter implements Login.LoginPresenter{
                 return;
             }
 
-            loginInteractor.HacerLogin(new Usuario("","","","","",mail,pass,"","","",""));
+            loginInteractor.HacerLogin(mail,pass);
         }
     }
 
@@ -58,5 +58,10 @@ public class LoginPresenter implements Login.LoginPresenter{
         if(loginView!=null){
             loginView.LoginError(error);
         }
+    }
+
+    @Override
+    public void CerrarDialogo() {
+        loginView.CerrarDialogo();
     }
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.app.alarmavecinal.BuildConfig;
 import com.app.alarmavecinal.Funciones;
 import com.app.alarmavecinal.Principal.PrincipalView;
 import com.app.alarmavecinal.R;
@@ -28,6 +29,10 @@ public class LoginView extends AppCompatActivity implements Login.LoginView{
         pass=findViewById(R.id.pass);
         loginPresenter=new LoginPresenter(this,this);
 
+        if(BuildConfig.DEBUG){
+            mail.setText("neskirbi@gmail.com");
+            pass.setText("a");
+        }
 
 
     }
@@ -66,7 +71,12 @@ public class LoginView extends AppCompatActivity implements Login.LoginView{
 
     @Override
     public void LoginError(String error) {
-        dialog.dismiss();
+
         Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void CerrarDialogo() {
+        dialog.dismiss();
     }
 }

@@ -10,6 +10,6 @@ import retrofit2.http.POST;
 public interface Peticiones {
 
     @POST("api/Login")
-    Call<Usuario> Login(@Body Usuario usuario);
+    Call<JsonArray> Login(@Body JsonArray usuario);
 
 }

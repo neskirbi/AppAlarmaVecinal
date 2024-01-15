@@ -815,30 +815,7 @@ public class Funciones {
     }
 
 
-    public void CreaLogin(JSONObject jsonObject) {
 
-        try {
-            Base base = new Base(context);
-            SQLiteDatabase db = base.getWritableDatabase();
-
-            String id_usuario=jsonObject.get("id_usuario").toString();
-            String nombre=jsonObject.get("nombres").toString()+" "+jsonObject.get("apellidos").toString();
-            String direccion=jsonObject.get("direccion").toString();
-            ContentValues login = new ContentValues();
-            login.put("id_usuario", id_usuario);
-            login.put("nombre",nombre);
-            login.put("direccion",direccion);
-
-
-            db.insert("login", null, login);
-
-            db.close();
-
-        } catch (Exception e) {
-            Logo("login",e.getMessage());
-        }
-
-    }
 
     public JsonArray GetAlertas(){
         Base base = new Base(context);
@@ -1511,21 +1488,7 @@ public class Funciones {
         return "No se pudo obtener la dirección.";
     }
 
-    public void GuardarGrupoLogin(String id_grupo, String id_usuario_grupo, String nombre_grupo) {
-        Base base = new Base(context);
-        SQLiteDatabase db = base.getWritableDatabase();
 
-        ContentValues grupo = new ContentValues();
-        grupo.put("id_grupo",id_grupo);
-        grupo.put("id_usuario",id_usuario_grupo);
-        grupo.put("nombre", nombre_grupo);
-        grupo.put("enviado", 1);
-
-
-        db.insert("grupo", null, grupo);
-
-        db.close();
-    }
 
     public void GetAlertasServer() {
         AbrirConexion();
@@ -2132,14 +2095,11 @@ public class Funciones {
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
-    public void GuardarGrupoLogin(Usuario usuario) {
+    public void GuardarGrupoLogin(String id_grupo,String id_usuario,String nombre) {
         try {
             Base base = new Base(context);
             SQLiteDatabase db = base.getWritableDatabase();
 
-            String id_usuario=usuario.getId_usuario();
-            String id_grupo=usuario.getId_grupo();
-            String nombre=usuario.getNombre();
             int enviado=1;
             ContentValues grupo = new ContentValues();
 

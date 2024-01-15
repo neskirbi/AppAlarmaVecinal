@@ -9,14 +9,16 @@ public interface Login {
         void ErrorMail();
         void ErrorPass();
         void LoginOk();
+        void CerrarDialogo();
         void LoginError(String error);
     }
     interface LoginPresenter{
         void HacerLogin(EditText mail,EditText pass);
         void LoginOk();
+        void CerrarDialogo();
         void LoginError(String error);
     }
     interface LoginInteractor{
-        void HacerLogin(Usuario usuario);
+        void HacerLogin(String mail,String pass);
     }
 }
